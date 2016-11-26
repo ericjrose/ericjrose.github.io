@@ -69,7 +69,7 @@ var Level2 = {
 
 
     game.camera.bounds = null;
-    game.camera.y = -screen1Height/2;
+    game.camera.y = -screen1Height/1.5;
     cursors = game.input.keyboard.createCursorKeys();
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SHIFT]);
@@ -85,7 +85,7 @@ var Level2 = {
     boostMeter.fixedToCamera = true;
     boostMeter.lineStyle(4, 0x000000, 1);
     boostMeter.beginFill(0x000000);
-    boostMeter.drawRect(screen1Width*.82,screen1Height*.1,screen1Width*.08,screen1Height*0.04);
+    boostMeter.drawRect(screen1Width*.8,screen1Height*.1,screen1Width*.1,screen1Height*0.04);
     boostMeter.endFill();
 
     boostFill = game.add.graphics(0,0);
@@ -121,7 +121,7 @@ var Level2 = {
     game.world.scale.setTo(zoom);
     background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
     game.camera.x = squirrelX*zoom - 100;
-    game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
+    game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 
     s = Math.round((timerEvent.delay - timer.ms) / 1000);
     var minutes = "0" + Math.floor(s / 60);
@@ -145,7 +145,7 @@ var Level2 = {
     boostFill.fixedToCamera = true;
     boostFill.lineStyle(1, 0xFF0000, 1);
     boostFill.beginFill(0xFF0000);
-    boostFill.drawRect(screen1Width*0.82,screen1Height*0.1, screen1Width*0.08*boostTimer/boostRecharge,screen1Height*0.04);
+    boostFill.drawRect(screen1Width*0.80,screen1Height*0.1, screen1Width*0.1*boostTimer/boostRecharge,screen1Height*0.04);
     boostFill.endFill();
     boostFill.scale.setTo(1/zoom);
 
@@ -276,7 +276,7 @@ var Level2_2 = {
     boostMeter2.fixedToCamera = true;
     boostMeter2.lineStyle(4, 0x000000, 1);
     boostMeter2.beginFill(0x000000);
-    boostMeter2.drawRect(screen2Width*0.82,screen2Height*0.1,screen2Width*0.08,screen2Height*0.04);
+    boostMeter2.drawRect(screen2Width*0.8,screen2Height*0.1,screen2Width*0.1,screen2Height*0.04);
     boostMeter2.endFill();
 
     boostFill2 = game.add.graphics(0,0);
@@ -309,7 +309,7 @@ var Level2_2 = {
     boostFill2.fixedToCamera = true;
     boostFill2.lineStyle(1, 0xFF0000, 1);
     boostFill2.beginFill(0xFF0000);
-    boostFill2.drawRect(screen2Width*0.82,screen2Height*0.1, screen2Width*0.08*boostTimer2/boostRecharge, screen2Height*0.04);
+    boostFill2.drawRect(screen2Width*0.8,screen2Height*0.1, screen2Width*0.1*boostTimer2/boostRecharge, screen2Height*0.04);
     boostFill2.endFill();
 
     boostFill2.scale.setTo(1/zoom2);

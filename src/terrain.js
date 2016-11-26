@@ -4,11 +4,11 @@ function Terrain(game, level, scenery, player, snake) {
   this.knotsX = [0];
   this.knotsY = [10];
   if (player == 1){
-    this.maxKnotBuffer = 170;
-    this.maxKnotAlarm = 150;
+    this.maxKnotBuffer = 120;
+    this.maxKnotAlarm = 100;
   } else{
-    this.maxKnotBuffer = 130;
-    this.maxKnotAlarm = 110;
+    this.maxKnotBuffer = 100;
+    this.maxKnotAlarm = 80;
   };
   this.minKnotTrim = -15;
   this.minKnotAlarm = -30;

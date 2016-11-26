@@ -67,7 +67,7 @@ var Level1 = {
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
-    game.camera.y = -screen1Height/2;
+    game.camera.y = -screen1Height/1.5;
     cursors = game.input.keyboard.createCursorKeys();
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
@@ -108,7 +108,7 @@ var Level1 = {
     background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
     game.camera.x = squirrelX*zoom - 100;
     //game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
-    game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
+    game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 
     s = Math.round((timerEvent.delay - timer.ms) / 1000);
     var minutes = "0" + Math.floor(s / 60);

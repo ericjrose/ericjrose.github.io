@@ -93,7 +93,7 @@ var Level3 = {
     squirrel.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
 
     game.camera.bounds = null;
-    game.camera.y = -screen1Height/2;
+    game.camera.y = -screen1Height/1.5;
     cursors = game.input.keyboard.createCursorKeys();
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SHIFT]);
@@ -201,7 +201,7 @@ var Level3 = {
       game.world.scale.setTo(zoom);
       background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
       game.camera.x = squirrelX*zoom - 100;
-      game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
+      game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 
       text.scale.setTo(1/zoom);
       trainingText.scale.setTo(1/zoom);
