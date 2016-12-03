@@ -5,18 +5,13 @@ var restitution = 0;
 var PTM = 15.0; // conversion ratio
 var cursors;
 var background;
-var background2;
 var squirrelSprite;
 var squirrel;
-var squirrel2;
 var terrain;
-var terrain2;
 var player;
-var player2;
 var features;
 var text;
 var snakeText;
-var snakeText2;
 
 var squirrelAlive;
 var squirrelHasCollided;
@@ -24,14 +19,7 @@ var squirrelDeadX;
 var squirrelDeadY;
 var timeInvin = 0;
 
-var squirrel2Alive;
-var squirrel2HasCollided;
-var squirrel2DeadX;
-var squirrel2DeadY;
-var timeInvin2 = 0;
-
 var downArrow;
-var downArrow2;
 
 var timer;
 var timerEvent;
@@ -44,18 +32,11 @@ var boostMeter;
 var boostRecharge = 400;
 var boostTimer = boostRecharge;
 
-var boostAvail2 = true;
-var boostMeter2;
-var boostTimer2 = boostRecharge;
-
 var paraAvail = true;
 var paraMeter;
 var paraRecharge = 400;
 var paraTimer = paraRecharge;
 
-var paraAvail2 = true;
-var paraMeter2;
-var paraTimer2 = paraRecharge;
 
 //var machine;
 var isDiving = 0;
@@ -196,7 +177,6 @@ var Level = {
     var seconds = "0" + (s - minutes * 60);
     if (s == 0){
       squirrelProgress.destroy();
-      squirrelProgress2.destroy();
       game.state.start('levelFailed');
       game2.state.start('levelFailed');
       game3.state.start('levelFailed');
@@ -297,32 +277,8 @@ var Level = {
       squirrelProgress.endFill();
       squirrelProgress.scale.setTo(1/zoom);
 
-    };
-
-    if (squirrel2 != null){
-      squirrel2X = squirrel2.getPositionX();
-      squirrel2Y = squirrel2.getPositionY();
-      squirrelProgress2.destroy();
-      squirrelProgress2 = game.add.graphics(0,0);
-      squirrelProgress2.fixedToCamera = true;
-      squirrelProgress2.beginFill(0x0000ff);
-      squirrelProgress2.drawCircle(.1*screen1Width + .8*screen1Width*squirrel2X/levelLength, .05*screen1Height, 20);
-      squirrelProgress2.endFill();
-      squirrelProgress2.scale.setTo(1/zoom);
-
-      if (squirrel2X > levelLength){
-        squirrelProgress.destroy();
-        squirrelProgress2.destroy();
-        game.state.start('levelFailed');
-        game2.state.start('levelFailed');
-        game3.state.start('levelFailed');
-      };
-    };
-
-    if (squirrelAlive){
       if (squirrelX > levelLength){
         squirrelProgress.destroy();
-        squirrelProgress2.destroy();
         game.state.start('levelComplete');
         game2.state.start('levelComplete');
         game3.state.start('levelComplete');
@@ -334,216 +290,83 @@ var Level = {
       if (training){
         currFeatures = player.stateToFeatures();
         machine.learn(currFeatures, isDiving);
+        predict = machine.classify(currFeatures);
         X.push(currFeatures);
+        totalFrames  += 1;
+        if (isDiving == 1){
+          actualYes += 1;
+        } else{
+          actualNo += 1;
+        }
+        if (predict != 0){
+          predictYes += 1;
+        }
+        if (predict == isDiving){
+          numCorrect += 1;
+          if (isDiving == 0){
+            trueNegative += 1;
+          } else{
+            truePositive += 1;
+          }
+        }else{
+          if(isDiving == 0){
+            falsePositive += 1;
+          } else{
+            falseNegative += 1;
+          }
+        }
+        missRate = 1 - numCorrect/totalFrames;
+        tpRate = truePositive/actualYes;
+        fpRate = falsePositive/actualNo;
+        specificity = 1 - fpRate;
+        precision = truePositive/predictYes;
+        prevalence = actualYes/totalFrames;
       };
 
-      //game.camera.x = squirrelX - 100;
-
-    };
-  },
-  render: function(){
-    //game.debug.box2dWorld();
-    //game.debug.cameraInfo(game.camera, 32, 32);
-  }
-};
-
-var Level_2 = {
-  preload: function(){
-    game2.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
-    game2.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
-    game2.load.image('Rainforest','imgs/Flying Squirrel Rainforest L3.png')
-    game2.load.image('Squirrel', 'imgs/Squirrel Cape 01.png')
-    game2.load.image('Arrow', 'imgs/downArrow.png');
-    game2.load.image('Snake', 'imgs/Snake.png');
-  },
-  create: function(){
-    levelLength = 5000 + 2000*(level-3);
-
-    game2.stage.backgroundColor = '#000000';
-
-    if (scenery == 3){
-      background2 = game2.add.tileSprite(0, 0, 4608, 2307,'Rainforest'); //Image is 4808x2307
-    } else if(scenery == 2){
-      background2 = game2.add.tileSprite(0, 0, 4608, 2307,'Desert');
-    } else{
-      background2 = game2.add.tileSprite(0, 0, 4608, 2307,'Forest');
-    };
-    background2.scale.setTo(screen2Width/4608,screen2Height/2307);
-    background2.fixedToCamera = true;
-
-
-    game2.physics.startSystem(Phaser.Physics.BOX2D);
-    game2.physics.box2d.gravity.y = gravity;
-    game2.physics.box2d.restitution = restitution;
-    //game.physics.box2d.setBoundsToWorld();
-
-
-    squirrel2 = new Squirrel(game2, 'Squirrel', 10, 10);
-    terrain2 = new Terrain(game2, level, scenery, 2, 'Snake');
-    player2 = new Player(game2, squirrel2, terrain2);
-
-    squirrel2Alive = true;
-    squirrel2HasCollided = false;
-
-    squirrel2.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
-
-    //squirrelSprite = game.add.sprite(startX, startY, 'Squirrel');
-
-    game2.camera.bounds = null;
-    game2.camera.y = -screen2Height/2.2;
-    cursors = game2.input.keyboard.createCursorKeys();
-
-    boostMeter2 = game2.add.graphics(0,0);
-    boostMeter2.fixedToCamera = true;
-    boostMeter2.lineStyle(4, 0x000000, 1);
-    boostMeter2.beginFill(0x000000);
-    boostMeter2.drawRect(screen2Width*0.82,screen2Height*0.1,screen2Width*0.08,screen2Height*0.04);
-    boostMeter2.endFill();
-
-    boostFill2 = game2.add.graphics(0,0);
-    boostFill2.fixedToCamera = true;
-
-    paraMeter2 = game2.add.graphics(0,0);
-    paraMeter2.fixedToCamera = true;
-    paraMeter2.lineStyle(4, 0x000000, 1);
-    paraMeter2.beginFill(0x000000);
-    paraMeter2.drawRect(screen2Width*0.82,screen2Height*0.16,screen2Width*0.08,screen2Height*0.04);
-    paraMeter2.endFill();
-
-    paraFill2 = game2.add.graphics(0,0);
-    paraFill2.fixedToCamera = true;
-
-    squirrelProgress2 = game.add.graphics(0,0);
-    squirrelProgress2.fixedToCamera = true;
-
-    downArrow2 = game2.add.sprite(screen2Width*.925,screen2Height*.08, 'Arrow');
-    downArrow2.scale.setTo(24/786,30/1024);
-    downArrow2.fixedToCamera = true;
-
-  },
-  snakeCollision: function(){
-    if ((squirrel2Alive) & (timeInvin2 > 5)){
-      timeInvin2 = 0
-      squirrel2HasCollided = true;
-      squirrel2Alive = false;
-      squirrel2DeadX = squirrel2.getPositionX();
-      squirrel2DeadY = squirrel2.getPositionY();
-      squirrel2.squirrelSprite.kill();
-      snakeText2 = game2.add.text(screen2Width*0.3,screen2Height*.4, 'You Died!', {fontSize: '80px', fill: '0x000000'});
-      snakeText2.fixedToCamera = true;
-      game2.time.events.add(Phaser.Timer.SECOND * 3, this.respawnSquirrel, this);
-    };
-  },
-  respawnSquirrel: function (){
-    console.log('Respawn');
-    snakeText2.destroy();
-    squirrel2.squirrelSprite.reset(squirrel2DeadX, squirrel2DeadY - 200);
-    squirrel2.updatePosition();
-    //squirrel.setPositionX = squirrelDeadX;
-    //squirrel.setPositionY = squirrelDeadY - 100;
-    console.log(squirrel)
-    //squirrel.respawn(squirrelDeadX, squirrelDeadY - 80, 'Squirrel');
-    //squirrel.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
-    squirrel2Alive = true;
-  },
-  update: function(){
-    if (squirrel2Alive){
-      squirrel2X = squirrel2.getPositionX();
-      squirrel2Y = squirrel2.getPositionY();
-
-      zoom2 = Math.min(1, Math.pow((screen2Height-30)/(250-squirrel2Y),0.75));
-
-      game2.world.scale.setTo(zoom2);
-      background2.scale.setTo((1/zoom2)*screen2Width/4608,(1/zoom2)*screen2Height/2307);
-      game2.camera.x = squirrel2X*zoom2 - 100;
-      game2.camera.y = -screen2Height/2.2 - screen2Height + screen2Height*zoom2;
-
-      timeInvin2 = timeInvin2 + 1;
-
-      boostMeter2.scale.setTo(1/zoom2);
-      paraMeter2.scale.setTo(1/zoom2);
-
-      boostFill2.destroy();
-      boostFill2 = game2.add.graphics(0,0);
-      boostFill2.fixedToCamera = true;
-      boostFill2.lineStyle(1, 0xFF0000, 1);
-      boostFill2.beginFill(0xFF0000);
-      boostFill2.drawRect(screen2Width*0.82,screen2Height*0.1, screen2Width*0.08*boostTimer2/boostRecharge, screen2Height*0.04);
-      boostFill2.endFill();
-      boostFill2.scale.setTo(1/zoom2);
-
-      paraFill2.destroy();
-      paraFill2 = game2.add.graphics(0,0);
-      paraFill2.fixedToCamera = true;
-      paraFill2.lineStyle(1, 0x0000ff, 1);
-      paraFill2.beginFill(0x0000ff);
-      paraFill2.drawRect(screen2Width*0.82,screen2Height*0.16,screen2Width*0.08*paraTimer2/paraRecharge,screen2Height*0.04);
-      paraFill2.endFill();
-      paraFill2.scale.setTo(1/zoom2);
-
-      if (boostTimer2 < boostRecharge){
-        boostTimer2 += 1;
-      }
-      if (boostTimer2 == boostRecharge){
-        boostAvail2 = true;
-      }
-
-      if (paraTimer2 < paraRecharge){
-        paraTimer2 += 1;
-      }
-      if (paraTimer2 == paraRecharge){
-        paraAvail2 = true;
-      }
-
-      // squirrelProgress2.destroy();
-      // squirrelProgress2 = game.add.graphics(0,0);
-      // squirrelProgress2.fixedToCamera = true;
-      // squirrelProgress2.beginFill(0x0000ff);
-      // squirrelProgress2.drawCircle(100 + 800*squirrel2X/level3Length, 25, 20);
-      // squirrelProgress2.endFill();
-
-      terrain2.updateKnots(squirrel2X/PTM);
-
-      squirrel2.updatePosition();
-
-      currFeatures2 = player2.stateToFeatures();
-      if (machine != null){
-        dive = machine.classify(currFeatures2);
-      } else{
-        dive = 0;
-      };
-
-      velY2 = squirrel2.getVelocityY();
-      if ((velY2 > 0)&(dive == 3)&(paraAvail2)){
-        squirrel2.parachute();
-        paraTimer2 = 0;
-        paraAvail2 = false;
-      } else if ((dive == 2) & (boostAvail2)){
-        squirrel2.boost();
-        boostTimer2 = 0;
-        boostAvail2 = false;
-      } else if (dive == 1) {
-          squirrel2.dive();
-      };
-
-      if (dive == 1){
-        downArrow2.destroy();
-        downArrow2 = game2.add.sprite(screen2Width*.925,screen2Height*0.08, 'Arrow');
-        downArrow2.scale.setTo(24/(zoom2*786),30/(zoom2*1024));
-        downArrow2.fixedToCamera = true;
-      } else {
-        downArrow2.destroy();
-      };
-
-      //game2.camera.x = squirrel2X - 100;
       //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
     };
   },
   render: function(){
-    //game2.debug.box2dWorld();
-    //game2.debug.cameraInfo(game2.camera, 32, 32);
+      //game.debug.box2dWorld();
+      //game.debug.cameraInfo(game.camera, 32, 32);
   }
-};
+  };
+
+  var Level_2 = {
+    preload: function(){
+    },
+    create: function(){
+      game2.stage.backgroundColor = '#ffffff';
+      rateText = game2.add.text(screen2Width*0.1, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px', fill: '0xffffff'});
+      tpText = game2.add.text(screen2Width*0.1, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
+      fpText = game2.add.text(screen2Width*0.1, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
+      specText = game2.add.text(screen2Width*0.1, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fill: '0xffffff'});
+      precText = game2.add.text(screen2Width*0.1, screen2Height*0.5, 'Precision:', {fontSize: '14px', fill: '0xffffff'});
+      prevText = game2.add.text(screen2Width*0.1, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fill: '0xffffff'});
+    },
+    update: function(){
+      if (counter % 100 == 0){
+        mr = missRate.toFixed(3);
+        tp = tpRate.toFixed(3);
+        fp = fpRate.toFixed(3);
+        spec = specificity.toFixed(3);
+        prec = precision.toFixed(3);
+        prev = prevalence.toFixed(3);
+        rateText.text = 'Misclassification Rate: '+ mr;
+        tpText.text = 'True Positive Rate: ' + tp;
+        fpText.text = 'False Positive Rate: ' + fp;
+        specText.text = 'Specificity: ' + spec;
+        precText.text = 'Precision: ' + prec;
+        prevText.text = 'Prevalence: ' + prev;
+      }
+      //game2.camera.x = squirrel2X - 100;
+      //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
+    },
+    render: function(){
+      //game2.debug.box2dWorld();
+      //.debug.cameraInfo(game2.camera, 32, 32);
+    }
+  };
 
 var Level_3 = {
   preload: function(){
@@ -666,14 +489,14 @@ var Level_3 = {
       pc2 = pcaReduce(pc, 2);
       col0 = pc2.map(function(value,index) { return value[0]; });
       col1 = pc2.map(function(value,index) { return value[1]; });
-      dim0 = numeric.dot(col0, currFeatures2);
-      dim1 = numeric.dot(col1, currFeatures2);
-      console.log(currFeatures2);
+      dim0 = numeric.dot(col0, currFeatures);
+      dim1 = numeric.dot(col1, currFeatures);
+      console.log(currFeatures);
       console.log([dim0,dim1]);
       points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
       points.endFill();
 
-      neighbors = machine.nearest(currFeatures2);
+      neighbors = machine.nearest(currFeatures);
       console.log(neighbors);
       console.log(neighbors.length);
       for (i = 0; i < neighbors.length; i++){

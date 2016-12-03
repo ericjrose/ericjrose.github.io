@@ -5,19 +5,14 @@ var restitution = 0;
 var PTM = 15.0; // conversion ratio
 var cursors;
 var background;
-var background2;
 var squirrelSprite;
 var squirrel;
-var squirrel2;
 var terrain;
-var terrain2;
 var player;
-var player2;
 var features;
 var text;
 
 var downArrow;
-var downArrow2;
 
 var timer;
 var timerEvent;
@@ -38,6 +33,22 @@ var X = [];
 
 var covarNames;
 var neighbors;
+var predict;
+var totalFrames = 0;
+var actualYes = 0;
+var actualNo = 0;
+var predictYes = 0;
+var numCorrect = 0;
+var truePositive = 0;
+var trueNegative = 0;
+var falsePositive = 0;
+var falseNegative = 0;
+var missRate;
+var tpRate;
+var fpRate;
+var specificity;
+var precision;
+var prevalence;
 
 var Level1 = {
   preload: function(){
@@ -115,7 +126,6 @@ var Level1 = {
     var seconds = "0" + (s - minutes * 60);
     if (s == 0){
       squirrelProgress.destroy();
-      squirrelProgress2.destroy();
       game.state.start('levelFailed');
       game2.state.start('levelFailed');
       game3.state.start('levelFailed');
@@ -155,34 +165,11 @@ var Level1 = {
     squirrelProgress.endFill();
     squirrelProgress.scale.setTo(1/zoom);
 
-    if (squirrel2 != null){
-      squirrel2X = squirrel2.getPositionX();
-      squirrel2Y = squirrel2.getPositionY();
-      squirrelProgress2.destroy();
-      squirrelProgress2 = game.add.graphics(0,0);
-      squirrelProgress2.fixedToCamera = true;
-      squirrelProgress2.beginFill(0x0000ff);
-      squirrelProgress2.drawCircle(.1*screen1Width + .8*screen1Width*squirrel2X/levelLength, .05*screen1Height, 20);
-      squirrelProgress2.endFill();
-      squirrelProgress2.scale.setTo(1/zoom);
-    };
-
     if (squirrelX > levelLength){
       squirrelProgress.destroy();
-      squirrelProgress2.destroy();
       game.state.start('level1Complete');
       game2.state.start('level1Complete');
       game3.state.start('level1Complete');
-    };
-
-    if (squirrel2 != null){
-      if (squirrel2X > levelLength){
-        squirrelProgress.destroy();
-        squirrelProgress2.destroy();
-        game.state.start('levelFailed');
-        game2.state.start('levelFailed');
-        game3.state.start('levelFailed');
-      };
     };
 
     terrain.updateKnots(squirrelX/PTM);
@@ -192,7 +179,37 @@ var Level1 = {
     if (training){
       currFeatures = player.stateToFeatures();
       machine.learn(currFeatures, isDiving);
+      predict = machine.classify(currFeatures);
       X.push(currFeatures);
+      totalFrames  += 1;
+      if (isDiving == 1){
+        actualYes += 1;
+      } else{
+        actualNo += 1;
+      }
+      if (predict != 0){
+        predictYes += 1;
+      }
+      if (predict == isDiving){
+        numCorrect += 1;
+        if (isDiving == 0){
+          trueNegative += 1;
+        } else{
+          truePositive += 1;
+        }
+      }else{
+        if(isDiving == 0){
+          falsePositive += 1;
+        } else{
+          falseNegative += 1;
+        }
+      }
+      missRate = 1 - numCorrect/totalFrames;
+      tpRate = truePositive/actualYes;
+      fpRate = falsePositive/actualNo;
+      specificity = 1 - fpRate;
+      precision = truePositive/predictYes;
+      prevalence = actualYes/totalFrames;
     };
 
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
@@ -205,82 +222,31 @@ var Level1 = {
 
 var Level1_2 = {
   preload: function(){
-    game2.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
-    game2.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
-    game2.load.image('Arrow', 'imgs/downArrow.png');
   },
   create: function(){
-    game2.stage.backgroundColor = '#000000';
-
-    background2 = game2.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
-    background2.scale.setTo(screen2Width/4608,screen2Height/2307);
-    background2.fixedToCamera = true;
-
-
-    game2.physics.startSystem(Phaser.Physics.BOX2D);
-    game2.physics.box2d.gravity.y = gravity;
-    game2.physics.box2d.restitution = restitution;
-    //game.physics.box2d.setBoundsToWorld();
-
-    squirrel2 = new Squirrel(game2, 'Squirrel');
-    terrain2 = new Terrain(game2, 1, 1, 2);
-    player2 = new Player(game2, squirrel2, terrain2);
-
-    game2.camera.bounds = null;
-    game2.camera.y = -screen2Height/2.2;
-    cursors = game2.input.keyboard.createCursorKeys();
-
-    squirrelProgress2 = game.add.graphics(0,0);
-    squirrelProgress2.fixedToCamera = true;
-
-    downArrow2 = game2.add.sprite(screen2Width*.925,screen2Height*.08, 'Arrow');
-    downArrow2.scale.setTo(24/786,30/1024);
-    downArrow2.fixedToCamera = true;
-
+    game2.stage.backgroundColor = '#ffffff';
+    rateText = game2.add.text(screen2Width*0.1, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px', fill: '0xffffff'});
+    tpText = game2.add.text(screen2Width*0.1, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
+    fpText = game2.add.text(screen2Width*0.1, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
+    specText = game2.add.text(screen2Width*0.1, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fill: '0xffffff'});
+    precText = game2.add.text(screen2Width*0.1, screen2Height*0.5, 'Precision:', {fontSize: '14px', fill: '0xffffff'});
+    prevText = game2.add.text(screen2Width*0.1, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fill: '0xffffff'});
   },
   update: function(){
-    squirrel2X = squirrel2.getPositionX();
-    squirrel2Y = squirrel2.getPositionY();
-
-    zoom2 = Math.min(1, Math.pow((screen2Height-30)/(250-squirrel2Y),0.75));
-
-    game2.world.scale.setTo(zoom2);
-    background2.scale.setTo((1/zoom2)*screen2Width/4608,(1/zoom2)*screen2Height/2307);
-    game2.camera.x = squirrel2X*zoom2 - 100;
-    game2.camera.y = -screen2Height/2.2 - screen2Height + screen2Height*zoom2;
-
-    // squirrelProgress2.destroy();
-    // squirrelProgress2 = game.add.graphics(0,0);
-    // squirrelProgress2.fixedToCamera = true;
-    // squirrelProgress2.beginFill(0x0000ff);
-    // squirrelProgress2.drawCircle(100 + 800*squirrel2X/levelLength, 25, 20);
-    // squirrelProgress2.endFill();
-
-    terrain2.updateKnots(squirrel2X/PTM);
-
-    squirrel2.updatePosition();
-
-    currFeatures2 = player2.stateToFeatures();
-
-    if (machine != null){
-      dive = machine.classify(currFeatures2);
-    } else{
-      dive = 0;
-    };
-    if (dive) {
-        squirrel2.dive();
-    };
-
-    if (dive == 1){
-      downArrow2.destroy();
-      downArrow2 = game2.add.sprite(screen2Width*.925, screen2Height*.08, 'Arrow');
-      downArrow2.scale.setTo(24/(zoom2*786),30/(zoom2*1024));
-      downArrow2.fixedToCamera = true;
-    } else {
-      downArrow2.destroy();
-    };
-
-
+    if (counter % 100 == 0){
+      mr = missRate.toFixed(3);
+      tp = tpRate.toFixed(3);
+      fp = fpRate.toFixed(3);
+      spec = specificity.toFixed(3);
+      prec = precision.toFixed(3);
+      prev = prevalence.toFixed(3);
+      rateText.text = 'Misclassification Rate: '+ mr;
+      tpText.text = 'True Positive Rate: ' + tp;
+      fpText.text = 'False Positive Rate: ' + fp;
+      specText.text = 'Specificity: ' + spec;
+      precText.text = 'Precision: ' + prec;
+      prevText.text = 'Prevalence: ' + prev;
+    }
     //game2.camera.x = squirrel2X - 100;
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
   },
@@ -411,14 +377,14 @@ var Level1_3 = {
       pc2 = pcaReduce(pc, 2);
       col0 = pc2.map(function(value,index) { return value[0]; });
       col1 = pc2.map(function(value,index) { return value[1]; });
-      dim0 = numeric.dot(col0, currFeatures2);
-      dim1 = numeric.dot(col1, currFeatures2);
-      console.log(currFeatures2);
+      dim0 = numeric.dot(col0, currFeatures);
+      dim1 = numeric.dot(col1, currFeatures);
+      console.log(currFeatures);
       console.log([dim0,dim1]);
       points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
       points.endFill();
 
-      neighbors = machine.nearest(currFeatures2);
+      neighbors = machine.nearest(currFeatures);
       console.log(neighbors);
       console.log(neighbors.length);
       for (i = 0; i < neighbors.length; i++){

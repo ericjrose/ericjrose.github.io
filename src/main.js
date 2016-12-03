@@ -1,8 +1,6 @@
 var game;
-var game2;
-var game3;
-var screen1Height = 720;
-var screen1Width = 854;
+var screen1Height = 720; //720
+var screen1Width = 854;  //854
 var screen2Height = 360;
 var screen2Width = 427;
 var screen3Height = 360;
@@ -62,6 +60,6 @@ game.state.start('menu');
 game2.state.start('menu');
 game3.state.start('menu');
 
-// game.state.start('Level3');
-// game2.state.start('Level3_2');
-// game3.state.start('Level3_3');
+//game.state.start('Level3');
+//game2.state.start('Level3_2');
+//game3.state.start('Level3_3');
