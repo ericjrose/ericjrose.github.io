@@ -275,41 +275,41 @@ var Level3 = {
 
       squirrel.updatePosition();
 
-      if (training){
-        currFeatures = player.stateToFeatures();
-        machine.learn(currFeatures, isDiving);
-        predict = machine.classify(currFeatures);
-        X.push(currFeatures);
-        totalFrames  += 1;
-        if (isDiving == 1){
-          actualYes += 1;
-        } else{
-          actualNo += 1;
-        }
-        if (predict != 0){
-          predictYes += 1;
-        }
-        if (predict == isDiving){
-          numCorrect += 1;
-          if (isDiving == 0){
-            trueNegative += 1;
-          } else{
-            truePositive += 1;
-          }
-        }else{
-          if(isDiving == 0){
-            falsePositive += 1;
-          } else{
-            falseNegative += 1;
-          }
-        }
-        missRate = 1 - numCorrect/totalFrames;
-        tpRate = truePositive/actualYes;
-        fpRate = falsePositive/actualNo;
-        specificity = 1 - fpRate;
-        precision = truePositive/predictYes;
-        prevalence = actualYes/totalFrames;
-      };
+      // if (training){
+      //   currFeatures = player.stateToFeatures();
+      //   machine.learn(currFeatures, isDiving);
+      //   predict = machine.classify(currFeatures);
+      //   X.push(currFeatures);
+      //   totalFrames  += 1;
+      //   if (isDiving == 1){
+      //     actualYes += 1;
+      //   } else{
+      //     actualNo += 1;
+      //   }
+      //   if (predict != 0){
+      //     predictYes += 1;
+      //   }
+      //   if (predict == isDiving){
+      //     numCorrect += 1;
+      //     if (isDiving == 0){
+      //       trueNegative += 1;
+      //     } else{
+      //       truePositive += 1;
+      //     }
+      //   }else{
+      //     if(isDiving == 0){
+      //       falsePositive += 1;
+      //     } else{
+      //       falseNegative += 1;
+      //     }
+      //   }
+      //   missRate = 1 - numCorrect/totalFrames;
+      //   tpRate = truePositive/actualYes;
+      //   fpRate = falsePositive/actualNo;
+      //   specificity = 1 - fpRate;
+      //   precision = truePositive/predictYes;
+      //   prevalence = actualYes/totalFrames;
+      // };
 
       //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
     };
