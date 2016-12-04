@@ -5,7 +5,7 @@ var screen2Height = 360;
 var screen2Width = 427;
 var screen3Height = 360;
 var screen3Width = 427;
-var gravity = 250;
+var gravity = 200;
 var friction = 0.15;
 
 game = new Phaser.Game(screen1Width, screen1Height, Phaser.CANVAS, 'game');

@@ -43,7 +43,7 @@ Squirrel.prototype.updatePosition = function () {
 
 Squirrel.prototype.dive = function () {
     //this._body.applyForce(2.0, 10.0);
-    this.squirrelSprite.body.applyForce(2.0, 10.0);
+    this.squirrelSprite.body.applyForce(2.0, 8.0);
 
     //this.squirrelSprite.body.applyForce(2.0, -10.0);
 };
