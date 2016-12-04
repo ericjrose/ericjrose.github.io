@@ -11,6 +11,7 @@ var terrain;
 var player;
 var features;
 var text;
+var isPaused = false;
 
 var downArrow;
 
@@ -98,6 +99,8 @@ var Level1 = {
     trainingText.fixedToCamera = true;
     keyE = game.input.keyboard.addKey(Phaser.Keyboard.E);
     keyE.onDown.add(chngEvalStatus, this);
+    keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
+    keyP.onDown.add(pause, this);
 
     timer = game.time.create();
     //timerEvent = timer.add(Phaser.Timer.MINUTE*1 + Phaser.Timer.SECOND*30,this.endTimer,this);
@@ -463,3 +466,17 @@ function chngEvalStatus(){
     trainingText.text = 'Training';
   };
 };
+
+function pause(){
+  if (isPaused){
+    isPaused = false;
+    game.paused = false;
+    game2.paused = false;
+    game3.paused = false;
+  } else{
+    isPaused = true;
+    game.paused = true;
+    game2.paused = true;
+    game3.paused = true;
+  }
+}

@@ -127,6 +127,8 @@ var Level = {
     trainingText.fixedToCamera = true;
     keyE = game.input.keyboard.addKey(Phaser.Keyboard.E);
     keyE.onDown.add(chngEvalStatus, this);
+    keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
+    keyP.onDown.add(pause, this);
 
     timer = game.time.create();
     timerEvent = timer.add(Phaser.Timer.MINUTE*2 + Phaser.Timer.SECOND*0);
