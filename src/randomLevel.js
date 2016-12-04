@@ -75,7 +75,7 @@ var Level = {
 
     squirrel = new Squirrel(game, 'Squirrel', startX, startY);
     terrain = new Terrain(game, level, scenery, 1, 'Snake');
-    player = new Player(game, squirrel, terrain);
+    player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
 
     squirrelAlive = true;

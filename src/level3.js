@@ -24,7 +24,7 @@ var downArrow;
 var timer;
 var timerEvent;
 
-var level = 3;
+var level;
 var level3Length = 30000; //30000
 
 var boostAvail = true;
@@ -51,6 +51,7 @@ var Level3 = {
   },
   create: function(){
     game.stage.backgroundColor = '#000000';
+    level = 3;
 
     background = game.add.tileSprite(0, 0, 4608, 2307,'Rainforest'); //Image is 4808x2307
     background.scale.setTo(screen1Width/4608,screen1Height/2307);
@@ -64,7 +65,7 @@ var Level3 = {
 
     squirrel = new Squirrel(game, 'Squirrel', startX, startY);
     terrain = new Terrain(game, 3, 3, 1, 'Snake');
-    player = new Player(game, squirrel, terrain);
+    player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
 
     squirrelAlive = true;
@@ -368,7 +369,7 @@ var Level3 = {
 
 var Level3_3 = {
   preload: function(){
-    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex"];
+    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake"];
   },
   create: function(){
     game3.stage.backgroundColor = '#ffffff';

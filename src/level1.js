@@ -18,7 +18,7 @@ var downArrow;
 var timer;
 var timerEvent;
 
-var level = 1;
+var level;
 var levelLength = 25000;
 var timeRemaining = 90.0;
 
@@ -60,6 +60,7 @@ var Level1 = {
   },
   create: function(){
     game.stage.backgroundColor = '#000000';
+    level = 1;
 
     background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
     background.scale.setTo(screen1Width/4608,screen1Height/2307);
@@ -71,10 +72,9 @@ var Level1 = {
     game.physics.box2d.restitution = restitution;
     //game.physics.box2d.setBoundsToWorld();
 
-
     squirrel = new Squirrel(game, 'Squirrel');
     terrain = new Terrain(game, 1, 1, 1);
-    player = new Player(game, squirrel, terrain);
+    player = new Player(game, squirrel, terrain, level);
     machine = new kNear(5);
 
     game.camera.bounds = null;
@@ -264,7 +264,7 @@ var Level1_2 = {
 
 var Level1_3 = {
   preload: function(){
-    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex"];
+    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake"];
   },
   create: function(){
     game3.stage.backgroundColor = '#ffffff';

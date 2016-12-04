@@ -1,7 +1,8 @@
-function Player(game, squirrel, terrain){
+function Player(game, squirrel, terrain, level){
   this.game = game;
   this.squirrel = squirrel;
   this.terrain = terrain;
+  this.level = level;
 };
 
 Player.prototype.stateToFeatures = function() {
@@ -61,6 +62,22 @@ Player.prototype.stateToFeatures = function() {
   };
 
   features.push(distToVall, distToApex);
+
+  distToSnake = 0;
+  if (this.level > 2){
+    if (this.terrain.snakes.length != 0){
+      nearestSnake = 0
+      while((this.terrain.snakes[nearestSnake].position.x < squirrelX)&(this.terrain.snakes.length > nearestSnake + 1)){
+        nearestSnake += 1;
+      };
+      if (this.terrain.snakes[nearestSnake].position.x < squirrelX){
+        distToSnake = 0;
+      } else{
+        distToSnake = Math.sqrt(Math.pow(this.terrain.snakes[nearestSnake].position.x - squirrelX,2) + Math.pow(this.terrain.snakes[nearestSnake].position.y - squirrelY,2));
+      }
+    };
+  };
+  features.push(distToSnake);
 
   return features;
 
