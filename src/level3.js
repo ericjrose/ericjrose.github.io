@@ -37,7 +37,7 @@ var paraMeter;
 var paraRecharge = 400;
 var paraTimer = paraRecharge;
 
-var machine;
+//var machine;
 var isDiving = 0;
 var k = 5;
 
@@ -65,7 +65,7 @@ var Level3 = {
     squirrel = new Squirrel(game, 'Squirrel', startX, startY);
     terrain = new Terrain(game, 3, 3, 1, 'Snake');
     player = new Player(game, squirrel, terrain);
-    machine = new kNear(5);
+    //machine = new kNear(5);
 
     squirrelAlive = true;
     squirrelHasCollided = false;
@@ -125,18 +125,18 @@ var Level3 = {
     downArrow.fixedToCamera = true;
   },
   snakeCollision: function(){
-    console.log('Collision');
-    console.log(timeInvin);
+    //console.log('Collision');
+    //console.log(timeInvin);
     if ((squirrelAlive) & (timeInvin > 5)){
       timeInvin = 0
       squirrelHasCollided = true;
       squirrelAlive = false;
       squirrelDeadX = squirrel.getPositionX();
       squirrelDeadY = squirrel.getPositionY();
-      console.log(squirrelDeadX);
-      console.log(squirrelDeadY);
-      console.log(terrain.snakes);
-      console.log(squirrel);
+      //console.log(squirrelDeadX);
+      //console.log(squirrelDeadY);
+      //console.log(terrain.snakes);
+      //console.log(squirrel);
       squirrel.squirrelSprite.kill();
       snakeText = game.add.text(screen1Width*0.3,screen2Height*0.4, 'You Died!', {fontSize: '80px', fill: '0x000000'});
       snakeText.fixedToCamera = true;
@@ -144,13 +144,13 @@ var Level3 = {
     };
   },
   respawnSquirrel: function(){
-    console.log('Respawn');
+    //console.log('Respawn');
     snakeText.destroy();
     squirrel.squirrelSprite.reset(squirrelDeadX, squirrelDeadY - 200);
     squirrel.updatePosition();
     //squirrel.setPositionX = squirrelDeadX;
     //squirrel.setPositionY = squirrelDeadY - 100;
-    console.log(squirrel)
+    //console.log(squirrel)
     //squirrel.respawn(squirrelDeadX, squirrelDeadY - 80, 'Squirrel');
     //squirrel.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
     squirrelAlive = true;
@@ -244,6 +244,14 @@ var Level3 = {
       } else{
         currFeatures = player.stateToFeatures();
         isDiving = machine.classify(currFeatures);
+        //console.log(isDiving)
+        if (isDiving == 3){
+          squirrel,parachute();
+        } else if (isDiving == 2){
+          squirrel.boost();
+        } else if(isDiving == 1){
+          squirrel.dive();
+        }
       }
 
       if (isDiving == 1){
@@ -479,19 +487,19 @@ var Level3_3 = {
       col1 = pc2.map(function(value,index) { return value[1]; });
       dim0 = numeric.dot(col0, currFeatures);
       dim1 = numeric.dot(col1, currFeatures);
-      console.log(currFeatures);
-      console.log([dim0,dim1]);
+      //console.log(currFeatures);
+      //console.log([dim0,dim1]);
       points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
       points.endFill();
 
       neighbors = machine.nearest(currFeatures);
-      console.log(neighbors);
-      console.log(neighbors.length);
+      //console.log(neighbors);
+      //console.log(neighbors.length);
       for (i = 0; i < neighbors.length; i++){
           dim0 = numeric.dot(col0, neighbors[i].v);
           dim1 = numeric.dot(col1, neighbors[i].v);
           dive = neighbors[i].lab;
-          console.log(dive);
+          //console.log(dive);
           if (dive==0){
             points.beginFill(0x00ff00);
             points.lineStyle(2, 0x00ff00 , 1);
@@ -503,7 +511,7 @@ var Level3_3 = {
             points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
             points.endFill();
           };
-          console.log([dim0,dim1]);
+          //console.log([dim0,dim1]);
       };
 
       circleGraphics = game3.add.graphics(0,0);

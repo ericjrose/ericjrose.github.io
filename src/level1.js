@@ -146,6 +146,9 @@ var Level1 = {
     } else{
       currFeatures = player.stateToFeatures();
       isDiving = machine.classify(currFeatures);
+      if (isDiving == 1){
+        squirrel.dive();
+      };
     };
 
     if (isDiving == 1){
@@ -379,19 +382,19 @@ var Level1_3 = {
       col1 = pc2.map(function(value,index) { return value[1]; });
       dim0 = numeric.dot(col0, currFeatures);
       dim1 = numeric.dot(col1, currFeatures);
-      console.log(currFeatures);
-      console.log([dim0,dim1]);
+      //console.log(currFeatures);
+      //console.log([dim0,dim1]);
       points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
       points.endFill();
 
       neighbors = machine.nearest(currFeatures);
-      console.log(neighbors);
-      console.log(neighbors.length);
+      //console.log(neighbors);
+      //console.log(neighbors.length);
       for (i = 0; i < neighbors.length; i++){
           dim0 = numeric.dot(col0, neighbors[i].v);
           dim1 = numeric.dot(col1, neighbors[i].v);
           dive = neighbors[i].lab;
-          console.log(dive);
+          //console.log(dive);
           if (dive==0){
             points.beginFill(0x00ff00);
             points.lineStyle(2, 0x00ff00 , 1);
@@ -403,7 +406,7 @@ var Level1_3 = {
             points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
             points.endFill();
           };
-          console.log([dim0,dim1]);
+          //console.log([dim0,dim1]);
       };
 
       circleGraphics = game3.add.graphics(0,0);
