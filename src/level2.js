@@ -35,7 +35,8 @@ var trainingText;
 
 var Level2 = {
   preload: function(){
-    game.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
+    //game.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
+    game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 72ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel JetPack 02.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
 
@@ -44,8 +45,10 @@ var Level2 = {
     game.stage.backgroundColor = '#000000';
     level = 2;
 
-    background = game.add.tileSprite(0, 0, 4608, 2307,'Desert'); //Image is 4808x2307
-    background.scale.setTo(screen1Width/4608,screen1Height/2307);
+    //background = game.add.tileSprite(0, 0, 4608, 2307,'Desert'); //Image is 4808x2307
+    //background.scale.setTo(screen1Width/4608,screen1Height/2307);
+    background = game.add.tileSprite(0, 0, 656, 554,'Desert'); //Image is 656x554
+    background.scale.setTo(screen1Width/656,screen1Height/554);
     background.fixedToCamera = true;
 
 
@@ -113,7 +116,8 @@ var Level2 = {
     zoom = Math.min(1, Math.pow((screen1Height-30)/(250-squirrelY),0.75));
 
     game.world.scale.setTo(zoom);
-    background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
+    //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
+    background.scale.setTo((1/zoom)*screen1Width/656,(1/zoom)*screen1Height/554);
     game.camera.x = squirrelX*zoom - 100;
     game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 

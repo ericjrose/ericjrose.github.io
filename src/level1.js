@@ -53,17 +53,21 @@ var prevalence;
 
 var Level1 = {
   preload: function(){
-    game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
+    //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
+    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
 
   },
   create: function(){
+    game.time.advancedTiming = true;
     game.stage.backgroundColor = '#000000';
     level = 1;
 
-    background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
-    background.scale.setTo(screen1Width/4608,screen1Height/2307);
+    //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
+    //background.scale.setTo(screen1Width/4608,screen1Height/2307);
+    background = game.add.tileSprite(0, 0, 656, 554,'Forest'); //Image is 656x554
+    background.scale.setTo(screen1Width/656,screen1Height/554);
     background.fixedToCamera = true;
 
 
@@ -119,7 +123,8 @@ var Level1 = {
     zoom = Math.min(1, Math.pow((screen1Height-30)/(250-squirrelY),0.75));
 
     game.world.scale.setTo(zoom);
-    background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
+    //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
+    background.scale.setTo((1/zoom)*screen1Width/656,(1/zoom)*screen1Height/554);
     game.camera.x = squirrelX*zoom - 100;
     //game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
     game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
@@ -223,6 +228,7 @@ var Level1 = {
   render: function(){
     //game.debug.box2dWorld();
     //game.debug.cameraInfo(game.camera, 32, 32);
+    game.debug.text(game.time.fps,2,14,'#00ff00')
   }
 };
 
