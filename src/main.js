@@ -1,21 +1,18 @@
 var game;
+var game2;
+var game3;
 var screen1Height = 720; //720
 var screen1Width = 854;  //854
 var screen2Height = 360;
 var screen2Width = 427;
 var screen3Height = 360;
 var screen3Width = 427;
-var gravity = 200;
+var gravity = 400;
 var friction = 0.15;
 
 game = new Phaser.Game(screen1Width, screen1Height, Phaser.CANVAS, 'game');
-
 game2 = new Phaser.Game(screen2Width, screen2Height, Phaser.CANVAS, 'game2');
 game3 = new Phaser.Game(screen3Width, screen3Height, Phaser.CANVAS, 'game3');
-
-//game.resolution = 1;
-//game.antialias = false;
-//game.clearBeforeRender = false;
 
 game.state.add('Game', Game);
 game2.state.add('Game2', Game2);

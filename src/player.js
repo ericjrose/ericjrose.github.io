@@ -1,3 +1,8 @@
+var futureSquirrelX;
+var futureSquirrelY;
+var futureHillY;
+var t;
+
 function Player(game, squirrel, terrain, level){
   this.game = game;
   this.squirrel = squirrel;
@@ -78,6 +83,26 @@ Player.prototype.stateToFeatures = function() {
     };
   };
   features.push(distToSnake);
+
+  // console.log(squirrelX);
+  // console.log(squirrelY);
+  // console.log(velY);
+  // futureSquirrelY = squirrelY;
+  // futureHillY = futureSquirrelY + 10;
+  // t = 0
+  // console.log(futureSquirrelY);
+  // console.log(futureHillY);
+  // while(futureSquirrelY < futureHillY){
+  //   t += 1;
+  //   console.log(t)
+  //   futureSquirrelX = 0.5*2*Math.pow(t,2) + velX*t + squirrelX;
+  //   futureSquirrelY = 0.5*2*Math.pow(t,2) + velY*t + squirrelY;
+  //   futureHillY = this.terrain.hillFn.at(futureSquirrelX/PTM)*PTM;
+  // };
+  // console.log(futureSquirrelX);
+  // console.log(futureSquirrelY);
+  // console.log(this.terrain.hillFn.at(futureSquirrelX/PTM)*PTM);
+  //diveLandingPoint =
 
   return features;
 

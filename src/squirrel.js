@@ -37,7 +37,7 @@ Squirrel.prototype.updatePosition = function () {
     this._currPosition = {x: this.squirrelSprite.body.x, y: this.squirrelSprite.body.y};
     this.squirrelSprite.body.velocity.x = Math.max(this.squirrelSprite.body.velocity.x, this.squirrelSprite._minXVel);
     angle = Math.atan(this.squirrelSprite.body.velocity.y/this.squirrelSprite.body.velocity.x);
-    this.squirrelSprite.body.angle = angle*(180/Math.PI) - 40;
+    this.squirrelSprite.body.angle = angle*(180/Math.PI) - 45;
 
 };
 

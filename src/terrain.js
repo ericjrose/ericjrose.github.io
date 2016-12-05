@@ -4,8 +4,8 @@ function Terrain(game, level, scenery, player, snake) {
   this.knotsX = [0];
   this.knotsY = [10];
   if (player == 1){
-    this.maxKnotBuffer = 130; //120
-    this.maxKnotAlarm = 110; //100
+    this.maxKnotBuffer = 140; //120
+    this.maxKnotAlarm = 120; //100
   } else{
     this.maxKnotBuffer = 100; //100
     this.maxKnotAlarm = 80; //80
@@ -15,7 +15,7 @@ function Terrain(game, level, scenery, player, snake) {
   this.pointsX = [0];
   this.pointsY = [10];
   this.high = false;
-  this.pointsPerMeter = 5.0;
+  this.pointsPerMeter = 1.0;
   //this.hillPoints = [{'x': terrain.pointsX, 'y': terrain.pointsY}];
   //this.hillKnots = [{'x': terrain.knotsX, 'y': terrain.knotsY}];
   this.hillFn = null;
@@ -138,7 +138,7 @@ Terrain.prototype.fill = function (x) {
     newPointsX = numeric.linspace(minX, maxX, spanX);
     //console.log(minX)
     //console.log(maxX)
-    //console.log(newPointsX)
+    console.log(this.knotsX)
     newPointsY = this.hillFn.at(newPointsX);
     //console.log(newPointsY)
 
