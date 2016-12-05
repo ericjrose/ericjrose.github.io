@@ -15,7 +15,7 @@ game3 = new Phaser.Game(screen3Width, screen3Height, Phaser.CANVAS, 'game3');
 
 //game.resolution = 1;
 //game.antialias = false;
-game.clearBeforeRender = false;
+//game.clearBeforeRender = false;
 
 game.state.add('Game', Game);
 game2.state.add('Game2', Game2);
