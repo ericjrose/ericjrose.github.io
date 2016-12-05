@@ -245,6 +245,7 @@ var Level2 = {
   render: function(){
     //game.debug.box2dWorld();
     //game.debug.cameraInfo(game.camera, 32, 32);
+    game.debug.text(game.time.fps,2,14,'#00ff00')
   }
 };
 
