@@ -80,7 +80,7 @@ var Level1 = {
     squirrel = new Squirrel(game, 'Squirrel');
     terrain = new Terrain(game, 1, 1, 1);
     player = new Player(game, squirrel, terrain, level);
-    machine = new kNear(7);
+    machine = new kNear(5);
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
@@ -296,13 +296,13 @@ var Level1_2 = {
   },
   render: function(){
     //game2.debug.box2dWorld();
-    //.debug.cameraInfo(game2.camera, 32, 32);
+    //game2.debug.cameraInfo(game2.camera, 32, 32);
   }
 };
 
 var Level1_3 = {
   preload: function(){
-    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake"];
+    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake","Chng X Dive"];
   },
   create: function(){
     game3.stage.backgroundColor = '#ffffff';

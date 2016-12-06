@@ -16,14 +16,15 @@ Player.prototype.stateToFeatures = function() {
   squirrelX = this.squirrel.getPositionX();
   squirrelY = this.squirrel.getPositionY();
 
-  hillY = this.terrain.hillFn.at(squirrelX/PTM);
+  hillY = this.terrain.hillFn.at((squirrelX-300)/PTM);
 
   //console.log(game.physics.arcade.collide(this.squirrel, this.terrain));
   //console.log('HillY: ' + hillY);
   //console.log('SqY: ' + squirrelY/PTM);
 
   // Adjusted for radius of squirrel
-  if (squirrelY/PTM + 3 < hillY){
+  y = 10 - squirrelY/PTM;
+  if (y - 2 > hillY){
     grounded = 0;
   }
   else{
@@ -83,6 +84,32 @@ Player.prototype.stateToFeatures = function() {
     };
   };
   features.push(distToSnake);
+
+  //In air Dive
+  //futureSquirrelXVel = 2*t + velX
+  //Inair don't dive
+  //futureSquirrelXVel = velX
+
+  hillDeriv = this.terrain.hillFn.diff().at((squirrelX-300)/PTM);
+  //hillDeriv = this.terrain.hillFn.diff().at(squirrelX/PTM);
+  theta = Math.atan(hillDeriv);
+  sinTheta = -Math.sin(theta);
+  // console.log('Deriv ' + hillDeriv);
+  // console.log('Theta ' + theta);
+  // console.log('Sine ' + sinTheta);
+
+
+  if (grounded == 0){
+     chngXDive = 2;
+     chngXNoDive = 0;
+  } else {
+    chngXDive = (gravity/PTM+8)*sinTheta;
+    chngXNoDive = (gravity/PTM)*sinTheta;
+  }
+  diffDiveX = chngXDive - chngXNoDive;
+  features.push(diffDiveX);
+
+  //On ground
 
   // console.log(squirrelX);
   // console.log(squirrelY);
