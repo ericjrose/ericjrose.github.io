@@ -117,3 +117,66 @@ kNear.prototype.nearest = function(v){
   });
   return near;
 };
+
+// kNear.prototype.clean = function(){
+//   toClean = [];
+//   //console.log(X);
+//   //console.log("Length:" + X.length);
+//   for (i = 1; i < X.length; i++){
+//       prevXVel =  X[i-1][1];
+//       currXVel = X[i][1];
+//       if (currXVel - prevXVel < -5){
+//         toClean.push(i);
+//       }
+//    }
+//    console.log(toClean);
+//   // for (i = 1; i < this.training.length; i++){
+//   //    prevXVel = this.training[i-1].v[1];
+//   //    currXVel = this.training[i].v[1];
+//   //    if (currXVel - prevXVel < -5){
+//   //      toClean.push(i);
+//   //    }
+//   //  }
+//   for (i = toClean.length-1; i > -1; i--){
+//     delNum = toClean[i] - toClean[i-1];
+//     if (delNum > 60){
+//       delNum = 60;
+//     }
+//     //console.log(X)
+//     //X.splice(toClean[i] - delNum + 1, delNum);
+//     console.log('DelNum: '+ delNum);
+//     console.log('toClean: '+ toClean[i]);
+//     console.log(this.training);
+//     removed = this.training.splice(toClean[i] - delNum + 1, delNum);
+//     console.log(removed);
+//     console.log(this.training);
+//   };
+// };
+
+// kNear.prototype.delete = function(toClean){
+//   console.log("First " + testArray);
+//
+//   var testArray = [1, 2, 3, [4, 5], [6,7]];
+//
+//   console.log(testArray);
+//   var removed = testArray.splice(2,2);
+//   console.log("Third " + testArray);
+//   console.log(removed);
+  // for (i = toClean.length-1; i > -1; i--){
+  //   newX = X;
+  //   delNum = toClean[i] - toClean[i-1];
+  //   if (delNum > 60){
+  //     delNum = 60;
+  //   }
+  //   console.log(X);
+  //   console.log(delNum);
+  //   console.log(toClean[i] - delNum);
+  //   //X.splice(toClean[i] - delNum + 1, delNum);
+  //   console.log(newX);
+  // };
+  // console.log(newX);
+//};
+
+// function isArray(x) {
+//     return x.constructor.toString().indexOf("Array") > -1;
+// }

@@ -19,7 +19,7 @@ var timer;
 var timerEvent;
 
 var level;
-var levelLength = 25000;
+var levelLength = 25000; //25000
 var timeRemaining = 90.0;
 
 var machine = null;
@@ -31,6 +31,7 @@ var trainingText;
 
 var counter = 1;
 var X = [];
+var Y = [];
 
 var covarNames;
 var neighbors;
@@ -133,6 +134,18 @@ var Level1 = {
     var minutes = "0" + Math.floor(s / 60);
     var seconds = "0" + (s - minutes * 60);
     if (s == 0){
+      // var data = Y;
+      // var csvContent = "data:text/csv;charset=utf-8,";
+      // data.forEach(function(infoArray, index){
+      //    dataString = infoArray.join(",");
+      //    csvContent += index < data.length ? dataString+ "\n" : dataString;
+      // });
+      // var encodedUri = encodeURI(csvContent);
+      // var link = document.createElement("a");
+      // link.setAttribute("href", encodedUri);
+      // link.setAttribute("download", "SquirrelDataLevel1.csv");
+      // link.click();
+
       squirrelProgress.destroy();
       game.state.start('levelFailed');
       game2.state.start('levelFailed');
@@ -177,8 +190,22 @@ var Level1 = {
     squirrelProgress.scale.setTo(1/zoom);
 
     if (squirrelX > levelLength){
+      //machine.clean();
+
+      // var data = Y;
+      // var csvContent = "data:text/csv;charset=utf-8,";
+      // data.forEach(function(infoArray, index){
+      //    dataString = infoArray.join(",");
+      //    csvContent += index < data.length ? dataString+ "\n" : dataString;
+      // });
+      // var encodedUri = encodeURI(csvContent);
+      // var link = document.createElement("a");
+      // link.setAttribute("href", encodedUri);
+      // link.setAttribute("download", "SquirrelDataLevel1.csv");
+      // link.click();
+
       squirrelProgress.destroy();
-      game.state.start('level1Complete');
+      game.state.start('level1Game1Complete');
       game2.state.start('level1Complete');
       game3.state.start('level1Complete');
     };
@@ -192,6 +219,11 @@ var Level1 = {
       machine.learn(currFeatures, isDiving);
       predict = machine.classify(currFeatures);
       X.push(currFeatures);
+      currData = [];
+      currData.push(isDiving);
+      currData.push(currFeatures);
+      Y.push(currData);
+
       totalFrames  += 1;
       if (isDiving == 1){
         actualYes += 1;

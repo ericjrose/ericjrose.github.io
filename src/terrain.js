@@ -138,7 +138,7 @@ Terrain.prototype.fill = function (x) {
     newPointsX = numeric.linspace(minX, maxX, spanX);
     //console.log(minX)
     //console.log(maxX)
-    console.log(this.knotsX)
+    //console.log(this.knotsX)
     newPointsY = this.hillFn.at(newPointsX);
     //console.log(newPointsY)
 

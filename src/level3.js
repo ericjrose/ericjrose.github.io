@@ -170,6 +170,18 @@ var Level3 = {
     var minutes = "0" + Math.floor(s / 60);
     var seconds = "0" + (s - minutes * 60);
     if (s == 0){
+      // var data = Y;
+      // var csvContent = "data:text/csv;charset=utf-8,";
+      // data.forEach(function(infoArray, index){
+      //    dataString = infoArray.join(",");
+      //    csvContent += index < data.length ? dataString+ "\n" : dataString;
+      // });
+      // var encodedUri = encodeURI(csvContent);
+      // var link = document.createElement("a");
+      // link.setAttribute("href", encodedUri);
+      // link.setAttribute("download", "SquirrelDataLevel3.csv");
+      // link.click();
+
       squirrelProgress.destroy();
       game.state.start('levelFailed');
       game2.state.start('levelFailed');
@@ -281,8 +293,20 @@ var Level3 = {
       squirrelProgress.scale.setTo(1/zoom);
 
       if (squirrelX > level3Length){
+        // var data = Y;
+        // var csvContent = "data:text/csv;charset=utf-8,";
+        // data.forEach(function(infoArray, index){
+        //    dataString = infoArray.join(",");
+        //    csvContent += index < data.length ? dataString+ "\n" : dataString;
+        // });
+        // var encodedUri = encodeURI(csvContent);
+        // var link = document.createElement("a");
+        // link.setAttribute("href", encodedUri);
+        // link.setAttribute("download", "SquirrelDataLevel3.csv");
+        // link.click();
+
         squirrelProgress.destroy();
-        game.state.start('level3Complete');
+        game.state.start('level3Game1Complete');
         game2.state.start('level3Complete');
         game3.state.start('level3Complete');
       };
@@ -295,6 +319,10 @@ var Level3 = {
         machine.learn(currFeatures, isDiving);
         predict = machine.classify(currFeatures);
         X.push(currFeatures);
+        currData = [];
+        currData.push(isDiving);
+        currData.push(currFeatures);
+        Y.push(currData);
         totalFrames  += 1;
         if (isDiving == 1){
           actualYes += 1;

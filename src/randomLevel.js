@@ -296,7 +296,7 @@ var Level = {
 
       if (squirrelX > levelLength){
         squirrelProgress.destroy();
-        game.state.start('levelComplete');
+        game.state.start('levelGame1Complete');
         game2.state.start('levelComplete');
         game3.state.start('levelComplete');
       };

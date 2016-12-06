@@ -41,19 +41,19 @@ game.state.add('levelFailed', levelFailed);
 game2.state.add('levelFailed', levelFailed);
 game3.state.add('levelFailed', levelFailed);
 
-game.state.add('level1Complete', level1Complete);
+game.state.add('level1Game1Complete', level1Game1Complete);
 game2.state.add('level1Complete', level1Complete);
 game3.state.add('level1Complete', level1Complete);
 
-game.state.add('level2Complete', level2Complete);
+game.state.add('level2Game1Complete', level2Game1Complete);
 game2.state.add('level2Complete', level2Complete);
 game3.state.add('level2Complete', level2Complete);
 
-game.state.add('level3Complete', level3Complete);
+game.state.add('level3Game1Complete', level3Game1Complete);
 game2.state.add('level3Complete', level3Complete);
 game3.state.add('level3Complete', level3Complete);
 
-game.state.add('levelComplete', levelComplete);
+game.state.add('levelGame1Complete', levelGame1Complete);
 game2.state.add('levelComplete', levelComplete);
 game3.state.add('levelComplete', levelComplete);
 
