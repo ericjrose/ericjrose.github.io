@@ -80,7 +80,7 @@ var Level1 = {
     squirrel = new Squirrel(game, 'Squirrel');
     terrain = new Terrain(game, 1, 1, 1);
     player = new Player(game, squirrel, terrain, level);
-    machine = new kNear(5);
+    machine = new kNear(15);
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
