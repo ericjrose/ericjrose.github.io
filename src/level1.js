@@ -80,7 +80,7 @@ var Level1 = {
     squirrel = new Squirrel(game, 'Squirrel');
     terrain = new Terrain(game, 1, 1, 1);
     player = new Player(game, squirrel, terrain, level);
-    machine = new kNear(5);
+    machine = new kNear(k);
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
@@ -302,7 +302,7 @@ var Level1_2 = {
 
 var Level1_3 = {
   preload: function(){
-    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake","Chng X Dive"];
+    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Chng X Dive"];
   },
   create: function(){
     game3.stage.backgroundColor = '#ffffff';
@@ -375,15 +375,15 @@ var Level1_3 = {
     plotText = game3.add.text(screen3Width*0.04, screen3Height*0.5+plotDim*0.235, '-0.5', {fontSize: '10px', fill: '0x000000'});
     plotText = game3.add.text(screen3Width*0.04, screen3Height*0.5-plotDim*0.275, '0.5', {fontSize: '10px', fill: '0x000000'});
 
-    plotText = game3.add.text(screen3Width*.5+plotDim*0.48, screen3Height*0.12, '30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*.5-plotDim*0.52, screen3Height*0.12, '-30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.475, '-30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.525, '30', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5+plotDim*0.48, screen3Height*0.12, '5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5-plotDim*0.52, screen3Height*0.12, '-5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.475, '-5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.525, '5', {fontSize: '10px', fill: '0x000000'});
 
-    plotText = game3.add.text(screen3Width*.5+plotDim*0.23, screen3Height*0.12, '15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*.5-plotDim*0.28, screen3Height*0.12, '-15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.235, '-15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.275, '15', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5+plotDim*0.23, screen3Height*0.12, '2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5-plotDim*0.28, screen3Height*0.12, '-2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.235, '-2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.275, '2.5', {fontSize: '10px', fill: '0x000000'});
 
     plotText = game3.add.text(screen3Width*.7,screen3Height*.03, 'PCA Factor Plot', {fontSize: '15px', fill: '0x000000'});
 
@@ -425,7 +425,7 @@ var Level1_3 = {
       dim1 = numeric.dot(col1, currFeatures);
       //console.log(currFeatures);
       //console.log([dim0,dim1]);
-      points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+      points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
       points.endFill();
 
       neighbors = machine.nearest(currFeatures);
@@ -436,15 +436,16 @@ var Level1_3 = {
           dim1 = numeric.dot(col1, neighbors[i].v);
           dive = neighbors[i].lab;
           //console.log(dive);
+          //console.log([dim0,dim1]);
           if (dive==0){
             points.beginFill(0x00ff00);
             points.lineStyle(2, 0x00ff00 , 1);
-            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
             points.endFill();
           } else{
             points.beginFill(0x551a8b);
             points.lineStyle(2, 0x551a8b , 1);
-            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
             points.endFill();
           };
           //console.log([dim0,dim1]);

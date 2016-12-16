@@ -21,8 +21,8 @@ var levelGame1Complete = {
       //console.log(toClean);
       for (i = 0, j = X.length; i < j; i++){
         toInclude = true;
-        for (k = 0; k < toClean.length; k++){
-          if ((i + 60 > toClean[k])&(i < toClean[k])){
+        for (l = 0; l < toClean.length; l++){
+          if ((i + 60 > toClean[l])&(i < toClean[l])){
             toInclude = false;
           };
         };

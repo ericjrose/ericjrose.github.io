@@ -52,12 +52,12 @@ Squirrel.prototype.boost = function (){
     velX = this.squirrelSprite.body.velocity.x/PTM;
     velY = this.squirrelSprite.body.velocity.y/PTM;
     normVel = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
-    this.squirrelSprite.body.applyForce(30*velX/normVel, 30*velY/normVel);
+    this.squirrelSprite.body.applyForce(10*velX/normVel, 10*velY/normVel);
 };
 
 Squirrel.prototype.parachute = function(){
     velY = this.squirrelSprite.body.velocity.y/PTM;
-    this.squirrelSprite.body.applyForce(0, -5*Math.abs(velY));
+    this.squirrelSprite.body.applyForce(0, -3*Math.abs(velY));
 }
 
 Squirrel.prototype.getPositionX = function () {

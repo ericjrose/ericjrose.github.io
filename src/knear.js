@@ -36,6 +36,7 @@ function mode(store){
 
 function kNear(k){
   this.training = [];
+  this.k = k;
 }
 
 kNear.prototype.learn = function(vector, label){
@@ -48,11 +49,10 @@ kNear.prototype.classify = function(v){
   var maxD = 0;
   this.training.forEach(function(obj){
     var o = {d:dist(v,obj.v), vote:obj.lab};
-    if (voteBloc.length < k){
+    if (voteBloc.length < this.k){
       voteBloc.push(o);
       maxD = updateMax(maxD,voteBloc);
-    }
-    else {
+    } else {
       if (o.d < maxD){
         var bool = true;
         var count = 0;
@@ -72,8 +72,7 @@ kNear.prototype.classify = function(v){
           }
         }
       }
-    }
-
+    };
   });
   var votes = [];
   voteBloc.forEach(function(el){
@@ -88,7 +87,7 @@ kNear.prototype.nearest = function(v){
   var maxD = 0;
   this.training.forEach(function(obj){
     var o = {d:dist(v,obj.v), vote:obj.lab};
-    if (voteBloc.length < k){
+    if (voteBloc.length < this.k){
       near.push(obj);
       voteBloc.push(o);
       maxD = updateMax(maxD,voteBloc);
@@ -115,8 +114,19 @@ kNear.prototype.nearest = function(v){
       }
     }
   });
+  //console.log(near);
   return near;
 };
+
+
+
+// kNear.prototype.setK = function(k){
+//   this.k = k;
+// }
+
+// kNear.prototype.getK = function(){
+//   return this.k;
+// };
 
 // kNear.prototype.clean = function(){
 //   toClean = [];

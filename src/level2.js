@@ -25,12 +25,15 @@ var boostMeter;
 var boostRecharge = 400;
 var boostTimer = boostRecharge;
 
+var boostLength = 5;
+var boostCurr = 5;
+
 //var machine;
 var isDiving = 0;
 var k = 5;
 
-var training = true;
-var trainingText;
+// var training = true;
+// var trainingText;
 
 
 var Level2 = {
@@ -61,6 +64,7 @@ var Level2 = {
     terrain = new Terrain(game, 2, 2, 1);
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
+    //machine.setK(k);
 
 
     game.camera.bounds = null;
@@ -92,7 +96,11 @@ var Level2 = {
     text = game.add.text(screen1Width*.02,screen1Height*.08, 'Level: 2', {fontSize: '20px', fill: '0x000000'});
     text.fixedToCamera = true;
 
-    trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fill: '0x000000'});
+    if (training){
+      trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fill: '0x000000'});
+    }else{
+      trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Evaluating', {fontSize: '20px', fill: '0x000000'});
+    };
     trainingText.fixedToCamera = true;
     keyE = game.input.keyboard.addKey(Phaser.Keyboard.E);
     keyE.onDown.add(chngEvalStatus, this);
@@ -166,7 +174,11 @@ var Level2 = {
       boostAvail = true;
     }
 
-    if (training){
+    if ((training)&(boostCurr < boostLength)){
+      squirrel.boost();
+      isDiving = 2;
+      boostCurr += 1;
+    } else if (training){
       if (cursors.down.isDown) {
         squirrel.dive();
         isDiving = 1;
@@ -175,14 +187,21 @@ var Level2 = {
         isDiving = 2;
         boostTimer = 0;
         boostAvail = false;
+        boostCurr = 0;
       } else {
         isDiving = 0;
       };
+    } else if (boostCurr < boostLength){
+      currFeatures = player.stateToFeatures();
+      isDiving = 2;
+      squirrel.boost();
+      boostCurr += 1;
     } else{
       currFeatures = player.stateToFeatures();
       isDiving = machine.classify(currFeatures);
       if (isDiving == 2){
         squirrel.boost();
+        boostCurr = 0;
       } else if(isDiving == 1){
         squirrel.dive();
       }
@@ -314,7 +333,7 @@ var Level2_2 = {
 
 var Level2_3 = {
   preload: function(){
-    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","Dist to Snake","Chng X Dive"];
+    covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Chng X Dive"];
   },
   create: function(){
     game3.stage.backgroundColor = '#ffffff';
@@ -387,15 +406,15 @@ var Level2_3 = {
     plotText = game3.add.text(screen3Width*0.04, screen3Height*0.5+plotDim*0.235, '-0.5', {fontSize: '10px', fill: '0x000000'});
     plotText = game3.add.text(screen3Width*0.04, screen3Height*0.5-plotDim*0.275, '0.5', {fontSize: '10px', fill: '0x000000'});
 
-    plotText = game3.add.text(screen3Width*.5+plotDim*0.48, screen3Height*0.12, '30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*.5-plotDim*0.52, screen3Height*0.12, '-30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.475, '-30', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.525, '30', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5+plotDim*0.48, screen3Height*0.12, '5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5-plotDim*0.52, screen3Height*0.12, '-5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.475, '-5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.525, '5', {fontSize: '10px', fill: '0x000000'});
 
-    plotText = game3.add.text(screen3Width*.5+plotDim*0.23, screen3Height*0.12, '15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*.5-plotDim*0.28, screen3Height*0.12, '-15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.235, '-15', {fontSize: '10px', fill: '0x000000'});
-    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.275, '15', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5+plotDim*0.23, screen3Height*0.12, '2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*.5-plotDim*0.28, screen3Height*0.12, '-2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5+plotDim*0.235, '-2.5', {fontSize: '10px', fill: '0x000000'});
+    plotText = game3.add.text(screen3Width*0.92, screen3Height*0.5-plotDim*0.275, '2.5', {fontSize: '10px', fill: '0x000000'});
 
     plotText = game3.add.text(screen3Width*.7,screen3Height*.03, 'PCA Factor Plot', {fontSize: '15px', fill: '0x000000'});
 
@@ -437,9 +456,10 @@ var Level2_3 = {
       dim1 = numeric.dot(col1, currFeatures);
       //console.log(currFeatures);
       //console.log([dim0,dim1]);
-      points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+      points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
       points.endFill();
 
+      //console.log(machine.getK());
       neighbors = machine.nearest(currFeatures);
       //console.log(neighbors);
       //console.log(neighbors.length);
@@ -448,15 +468,16 @@ var Level2_3 = {
           dim1 = numeric.dot(col1, neighbors[i].v);
           dive = neighbors[i].lab;
           //console.log(dive);
+          //console.log([dim0,dim1]);
           if (dive==0){
             points.beginFill(0x00ff00);
             points.lineStyle(2, 0x00ff00 , 1);
-            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
             points.endFill();
           } else{
             points.beginFill(0x551a8b);
             points.lineStyle(2, 0x551a8b , 1);
-            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(30*2), screen3Height*0.5 - dim1*plotDim/(30*2), 2);
+            points.drawCircle(screen3Width*0.5 + dim0*plotDim/(5*2), screen3Height*0.5 - dim1*plotDim/(5*2), 2);
             points.endFill();
           };
           //console.log([dim0,dim1]);

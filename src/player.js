@@ -36,10 +36,10 @@ Player.prototype.stateToFeatures = function() {
   velY = this.squirrel.getVelocityY()/PTM;
   hypVel = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
 
-  features.push(velX, velY, hypVel);
+  features.push((velX-35)/16.5, (velY+8)/23.8, (hypVel-43)/19.7);
 
   angle = Math.atan(velY/velX);
-  features.push(angle);
+  features.push((angle+0.2)/0.5);
 
   bisect = bisect_left(this.terrain.knotsX, squirrelX/PTM, 0, this.terrain.knotsX.length);
 
@@ -54,7 +54,7 @@ Player.prototype.stateToFeatures = function() {
     dx = xKnots[i] - squirrelX/PTM;
     dy = val - squirrelY/PTM;
     knotAngle = Math.atan(dy/dx);
-    features.push(deriv, knotAngle);
+    features.push(deriv/0.5, (knotAngle-0.7)/0.5);
   };
 
   heightKnot1 = this.terrain.knotsY[bisect];
@@ -67,7 +67,7 @@ Player.prototype.stateToFeatures = function() {
     distToVall = knot1 - squirrelX/PTM;
   };
 
-  features.push(distToVall, distToApex);
+  features.push((distToVall-13)/7.5, (distToApex-12)/7);
 
   distToSnake = 0;
   if (this.level > 2){
@@ -83,7 +83,14 @@ Player.prototype.stateToFeatures = function() {
       }
     };
   };
-  features.push(distToSnake);
+  if (distToSnake == 0){
+    noSnakes = 1;
+  } else {
+    noSnakes = 0;
+  };
+  features.push(noSnakes);
+  
+  features.push((distToSnake-331)/439);
 
   //In air Dive
   //futureSquirrelXVel = 2*t + velX
@@ -107,7 +114,7 @@ Player.prototype.stateToFeatures = function() {
     chngXNoDive = (gravity/PTM)*sinTheta;
   }
   diffDiveX = chngXDive - chngXNoDive;
-  features.push(diffDiveX);
+  features.push((diffDiveX-1.1)/2.3);
 
   //On ground
 
