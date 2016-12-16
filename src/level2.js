@@ -199,8 +199,10 @@ var Level2 = {
     } else{
       currFeatures = player.stateToFeatures();
       isDiving = machine.classify(currFeatures);
-      if (isDiving == 2){
+      if ((isDiving == 2)&(boostAvail)){
         squirrel.boost();
+        boostTimer = 0;
+        boostAvail = false;
         boostCurr = 0;
       } else if(isDiving == 1){
         squirrel.dive();

@@ -291,10 +291,16 @@ var Level = {
         currFeatures = player.stateToFeatures();
         isDiving = machine.classify(currFeatures);
         //console.log(isDiving)
-        if (isDiving == 3){
+        if ((isDiving == 3)&(paraAvail)){
           squirrel.parachute();
-        } else if (isDiving == 2){
+          paraTimer = 0;
+          paraAvail = false;
+          paraCurr = 0;
+        } else if ((isDiving == 2)&(boostAvail)){
           squirrel.boost();
+          boostTimer = 0;
+          boostAvail = false;
+          boostCurr = 0;
         } else if(isDiving == 1){
           squirrel.dive();
         }
