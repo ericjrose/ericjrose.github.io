@@ -57,7 +57,7 @@ Squirrel.prototype.boost = function (){
 
 Squirrel.prototype.parachute = function(){
     velY = this.squirrelSprite.body.velocity.y/PTM;
-    this.squirrelSprite.body.applyForce(0, -3*Math.abs(velY));
+    this.squirrelSprite.body.applyForce(0, -3.3*Math.abs(velY));
 }
 
 Squirrel.prototype.getPositionX = function () {

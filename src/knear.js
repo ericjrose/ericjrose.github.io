@@ -32,46 +32,79 @@ function mode(store){
 }
 
 
-
-
 function kNear(k){
   this.training = [];
   this.k = k;
+  this.principalPoints = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 }
 
 kNear.prototype.learn = function(vector, label){
-  var obj = {v:vector, lab: label};
+  cluster = 0;
+  shortDist = 9999999;
+  for (p = 0; p < this.principalPoints.length; p++){
+    newDist = dist(vector, this.principalPoints[p]);
+    if (newDist < shortDist){
+      shortDist = newDist;
+      cluster = p;
+    };
+  };
+  var obj = {v:vector, lab: label, cl: cluster};
   this.training.push(obj);
+};
+
+kNear.prototype.updateClusters = function(){
+  var currCenters = this.principalPoints;
+  this.training.forEach(function(obj){
+    shortDist = 9999999;
+    for (p = 0; p < numPrinPoints; p++){
+      newDist = dist(obj.v, currCenters[p]);
+      if (newDist < shortDist){
+        shortDist = newDist;
+        obj.cl = p;
+      };
+    };
+  });
 };
 
 kNear.prototype.classify = function(v){
   var voteBloc = [];
   var maxD = 0;
+  vectorCl = 0;
+  shortDist = 9999999;
+  for (p = 0; p < this.principalPoints.length; p++){
+    newDist = dist(v, this.principalPoints[p]);
+    if (newDist < shortDist){
+      shortDist = newDist;
+      vectorCl = p;
+    };
+  };
   this.training.forEach(function(obj){
-    var o = {d:dist(v,obj.v), vote:obj.lab};
-    if (voteBloc.length < this.k){
-      voteBloc.push(o);
-      maxD = updateMax(maxD,voteBloc);
-    } else {
-      if (o.d < maxD){
-        var bool = true;
-        var count = 0;
-        while (bool){
-          if (Number(voteBloc[count].d) === maxD){
-            voteBloc.splice(count,1,o);
-            maxD = updateMax(maxD,voteBloc);
-            bool = false;
-          }
-          else{
-            if(count < voteBloc.length-1){
-              count++;
+    if (obj.cl == vectorCl){
+      var o = {d:dist(v,obj.v), vote:obj.lab};
+      if (voteBloc.length < this.k){
+        voteBloc.push(o);
+        maxD = updateMax(maxD,voteBloc);
+      } else {
+        if (o.d < maxD){
+          var bool = true;
+          var count = 0;
+          while (bool){
+            if (Number(voteBloc[count].d) === maxD){
+              voteBloc.splice(count,1,o);
+              maxD = updateMax(maxD,voteBloc);
+              bool = false;
             }
             else{
-              bool = false;
+              if(count < voteBloc.length-1){
+                count++;
+              }
+              else{
+                bool = false;
+              }
             }
           }
         }
-      }
+      };
     };
   });
   var votes = [];
@@ -85,29 +118,40 @@ kNear.prototype.nearest = function(v){
   var near = [];
   var voteBloc = [];
   var maxD = 0;
+  vectorCl = 0;
+  shortDist = 9999999;
+  for (p = 0; p < this.principalPoints.length; p++){
+    newDist = dist(v, this.principalPoints[p]);
+    if (newDist < shortDist){
+      shortDist = newDist;
+      vectorCl = p;
+    };
+  };
   this.training.forEach(function(obj){
-    var o = {d:dist(v,obj.v), vote:obj.lab};
-    if (voteBloc.length < this.k){
-      near.push(obj);
-      voteBloc.push(o);
-      maxD = updateMax(maxD,voteBloc);
-    }
-    else {
-      if (o.d < maxD){
-        var bool = true;
-        var count = 0;
-        while (bool){
-          if (Number(voteBloc[count].d) === maxD){
-            voteBloc.splice(count,1,o);
-            maxD = updateMax(maxD,voteBloc);
-            bool = false;
-          }
-          else{
-            if(count < voteBloc.length-1){
-              count++;
+    if (obj.cl == vectorCl){
+      var o = {d:dist(v,obj.v), vote:obj.lab};
+      if (voteBloc.length < this.k){
+        near.push(obj);
+        voteBloc.push(o);
+        maxD = updateMax(maxD,voteBloc);
+      }
+      else {
+        if (o.d < maxD){
+          var bool = true;
+          var count = 0;
+          while (bool){
+            if (Number(voteBloc[count].d) === maxD){
+              voteBloc.splice(count,1,o);
+              maxD = updateMax(maxD,voteBloc);
+              bool = false;
             }
             else{
-              bool = false;
+              if(count < voteBloc.length-1){
+                count++;
+              }
+              else{
+                bool = false;
+              }
             }
           }
         }

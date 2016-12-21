@@ -36,6 +36,11 @@ var level3Game1Complete = {
       Y = newY;
       machine.training = newTraining;
 
+      var kmeans = new KMeans(machine.principalPoints);
+      var clusters = kmeans.cluster(X, numPrinPoints);
+      machine.principalPoints = kmeans.centroids;
+      machine.updateClusters();
+
   },
   update: function() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {

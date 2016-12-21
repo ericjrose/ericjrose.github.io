@@ -32,6 +32,7 @@ var trainingText;
 var counter = 1;
 var X = [];
 var Y = [];
+var numPrinPoints = 50;
 
 var covarNames;
 var neighbors;
