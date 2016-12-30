@@ -19,8 +19,10 @@ var timer;
 var timerEvent;
 
 var level;
-var levelLength = 25000; //25000
+var tutorialLength = 15000; //25000
 var timeRemaining = 90.0;
+
+var tutorialCount = 0;
 
 var machine = null;
 var isDiving = 0;
@@ -28,6 +30,7 @@ var k = 5;
 
 var training = true;
 var trainingText;
+var tutorialText;
 
 var counter = 1;
 var X = [];
@@ -53,7 +56,7 @@ var specificity;
 var precision;
 var prevalence;
 
-var Level1 = {
+var Tutorial = {
   preload: function(){
     //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
     game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
@@ -65,18 +68,6 @@ var Level1 = {
     game.time.advancedTiming = true;
     game.stage.backgroundColor = '#000000';
     level = 1;
-
-    totalFrames = 0;
-    actualYes = 0;
-    actualNo = 0;
-    predictYes = 0;
-    numCorrect = 0;
-    truePositive = 0;
-    trueNegative = 0;
-    falsePositive = 0;
-    falseNegative = 0;
-    X = [];
-    Y = [];
 
     //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
     //background.scale.setTo(screen1Width/4608,screen1Height/2307);
@@ -129,15 +120,112 @@ var Level1 = {
     downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
 
+    // landingPoint = game.add.graphics(0,0);
+    // landingPoint.fixedToCamera =  true;
+    //
+    // squirrelPath = game.add.graphics(0,0);
+    // squirrelPath.fixedToCamera = true;
+
+    initMessage = false;
+    diveMessage = false;
+    releaseMessage = false;
   },
   update: function(){
-
-    console.log(machine.training);
+    tutorialCount += 1;
+    prevDiving = isDiving;
 
     squirrelX = squirrel.getPositionX();
     squirrelY = squirrel.getPositionY();
 
     zoom = Math.min(1, Math.pow((screen1Height-30)/(250-squirrelY),0.75));
+
+    if (tutorialCount == 2){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'Press the down arrow to dive which applies a downward force to the squirrel.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'The goal is to dive so that you land on the downward sloping part of the hill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'You then want to release the dive button at the bottom of the hill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'This will allow your momentum to cause you to fly off the upward part of the hill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'Press P to pause the game at any time.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
+      tutorialText4.fixedToCamera = true;
+      tutorialText5.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
+      tutorialText4.scale.setTo(1/zoom);
+      tutorialText5.scale.setTo(1/zoom);
+      pause();
+      setTimeout(resumeTutorial, 10000);
+      initMessage = true;
+    };
+
+    if (tutorialCount == 400){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The bar across the top of the screen shows your progess in each level.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'You need to finish the level before the timer runs out to complete the level.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      pause();
+      setTimeout(resumeTutorial, 10000);
+    };
+
+    if (tutorialCount == 800){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'As you play data is collected on the current state of the game', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'and on if you are diving.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'A computer player is then learning how to play by using imitation learning.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'Press E at any time to switch between you playing', {fontSize: '20px', fill: '0x000000'});
+      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'and watching the computer player based on the data collected on you.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
+      tutorialText4.fixedToCamera = true;
+      tutorialText5.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
+      tutorialText4.scale.setTo(1/zoom);
+      tutorialText5.scale.setTo(1/zoom);
+      pause();
+      setTimeout(resumeTutorial, 10000);
+    };
+
+    if (tutorialCount == 1200){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The top right screen shows different statistics', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'measuring the effectiveness of the computer player.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'The bottom right shows a plot of the first two principal components', {fontSize: '20px', fill: '0x000000'});
+      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'of the features being collected as you play.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
+      tutorialText4.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
+      tutorialText4.scale.setTo(1/zoom);
+      pause();
+      setTimeout(resumeTutorial, 10000);
+    };
+    if (tutorialCount == 1201){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The red dot on the plot represents the current state of the game.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'The other dots represent the five most similar previous states.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'These dots are green if you did nothing or purple if you chose to dive.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'The computer player then chooses the action that was chosen', {fontSize: '20px', fill: '0x000000'});
+      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'by the majority of the five points.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
+      tutorialText4.fixedToCamera = true;
+      tutorialText5.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
+      tutorialText4.scale.setTo(1/zoom);
+      tutorialText5.scale.setTo(1/zoom);
+      pause();
+      setTimeout(resumeTutorial, 10000);
+    };
 
     game.world.scale.setTo(zoom);
     //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
@@ -150,45 +238,145 @@ var Level1 = {
     var minutes = "0" + Math.floor(s / 60);
     var seconds = "0" + (s - minutes * 60);
     if (s == 0){
-      // var data = Y;
-      // var csvContent = "data:text/csv;charset=utf-8,";
-      // data.forEach(function(infoArray, index){
-      //    dataString = infoArray.join(",");
-      //    csvContent += index < data.length ? dataString+ "\n" : dataString;
-      // });
-      // var encodedUri = encodeURI(csvContent);
-      // var link = document.createElement("a");
-      // link.setAttribute("href", encodedUri);
-      // link.setAttribute("download", "SquirrelDataLevel1.csv");
-      // link.click();
-
       squirrelProgress.destroy();
       game.state.start('levelFailed');
       game2.state.start('levelFailed');
       game3.state.start('levelFailed');
     };
-    text.text = "Level: " + 1 + " Time Left: " + minutes.substr(-2) + ":" + seconds.substr(-2);
+    text.text = "Tutorial" + " Time Left: " + minutes.substr(-2) + ":" + seconds.substr(-2);
 
     text.scale.setTo(1/zoom);
     trainingText.scale.setTo(1/zoom);
     levelProgress.scale.setTo(1/zoom);
 
-    if (training){
-      if (cursors.down.isDown) {
-        squirrel.dive();
+    hillY = terrain.hillFn.at((squirrelX+300)/PTM);
+
+    // Adjusted for radius of squirrel
+    if (squirrelY/PTM   < hillY - 2){
+      grounded = 0;
+    } else{
+      grounded = 1;
+    };
+
+    squirDeriv = terrain.hillFn.diff().at((squirrelX+300)/PTM);
+    // console.log('Squirrel X: ' + squirrelX);
+    // console.log('Squirrel Y: ' + squirrelY);
+    // console.log('Grounded: ' + grounded);
+    // console.log('Hill Y: ' + hillY);
+    // console.log('Deriv: ' + squirDeriv);
+
+    velY = squirrel.getVelocityY(); //  /PTM?
+    velX = squirrel.getVelocityX();
+
+    // console.log('Vel X: ' + velX);
+    // console.log('Vel Y: ' + velY);
+
+    // console.log('Vel Y: ' + velY);
+
+    // landingPoint.destroy();
+    // squirrelPath.destroy();
+    if (grounded){
+      //squirDeriv = terrain.hillFn.diff().at((squirrelX+300)/PTM);
+      if (squirDeriv > 0){
         isDiving = 1;
       } else{
         isDiving = 0;
       };
     } else{
-      currFeatures = player.stateToFeatures();
-      isDiving = machine.classify(currFeatures);
       if (isDiving == 1){
-        squirrel.dive();
+        isDiving = 1;
+      } else if ((velY > 0)&(isDiving == 0)){
+        // bisect = bisect_left(terrain.knotsX, (squirrelX+300)/PTM, 0, terrain.knotsX.length);
+        // heightKnot1 = terrain.knotsY[bisect];
+        // heightKnot2 = terrain.knotsY[bisect + 1];
+
+        // console.log('Squirrel Y: ' + squirrelY/PTM);
+        // console.log('Hill Y: ' + hillY);
+        // if ((squirDeriv > 0)&(squirrelY/PTM + 20 > hillY)){
+        //   console.log('Dive');
+        //   isDiving = 1;
+        // } else {
+        //   isDiving = 0;
+        // };
+
+
+        futureSquirrelY = [squirrelY];
+        futureSquirrelX = [squirrelX];
+        futureHillY = futureSquirrelY/PTM + 10;
+        t = 0
+        // squirrelPath = game.add.graphics(0,0);
+        // squirrelPath.fixedToCamera = true;
+        // squirrelPath.lineStyle(2, 0xff0000 , 1);
+        // squirrelPath.beginFill(0xff0000);
+
+        while(futureSquirrelY[futureSquirrelY.length-1]/PTM < futureHillY){
+          t += .05;
+          //console.log(t);
+          futureSquirrelX.push(0.5*2*PTM*Math.pow(t,2) + velX*t + squirrelX);
+          futureSquirrelY.push(0.5*(8*400)*Math.pow(t,2) + velY*t + squirrelY); ///(Math.PI*Math.pow(.8,2))
+          //squirrelPath.drawCircle(futureSquirrelX[futureSquirrelX.length-1] - game.camera.x, futureSquirrelY[futureSquirrelY.length-1] - game.camera.y, 8);
+          futureHillY = terrain.hillFn.at((futureSquirrelX[futureSquirrelX.length-1]+300)/PTM);
+          if (t > 500){
+            landingDeriv = -1;
+            break;
+          };
+        };
+        //squirrelPath.endFill(0xff0000);
+        sqFn = numeric.spline(futureSquirrelX, futureSquirrelY);
+
+        minIntX = futureSquirrelX[0];
+        maxIntX = futureSquirrelX[futureSquirrelX.length-1];
+        midIntX = (minIntX+maxIntX)/2;
+        sqMidY = sqFn.at(midIntX)/PTM;
+        hillMidY = terrain.hillFn.at((midIntX+300)/PTM);
+        while (Math.abs(sqMidY - hillMidY) > 0.001){
+          //console.log('IN WHILE LOOP');
+          if (sqMidY > hillMidY){
+            maxIntX = midIntX;
+          } else{
+            minIntX = midIntX;
+          };
+          midIntX = (minIntX+maxIntX)/2;
+          sqMidY = sqFn.at(midIntX)/PTM;
+          hillMidY = terrain.hillFn.at((midIntX+300)/PTM);
+        };
+
+        landingDeriv = terrain.hillFn.diff().at((midIntX+300)/PTM);
+        // console.log('Current X: ' + squirrelX);
+        // console.log('Current Y: ' + squirrelY);
+        // console.log('Current X Vel: ' + velX);
+        // console.log('Current Y Vel: ' + velY);
+        // console.log('Future Sq X: ' + futureSquirrelX);
+        // console.log('Future Sq Y: ' + futureSquirrelY);
+        // console.log('Landing X: ' + midIntX);
+        // console.log('Landing Y: ' + hillMidY);
+        // console.log('LandingDeriv: ' + landingDeriv);
+
+        landScreenX = midIntX - game.camera.x;
+        landScreenY = hillMidY - game.camera.y;
+        // console.log('Screen X: ' + landScreenX);
+        // console.log('Screen Y: ' + landScreenY);
+
+        // landingPoint = game.add.graphics(0,0);
+        // landingPoint.fixedToCamera = true;
+        // landingPoint.lineStyle(2, 0xff0000 , 1);
+        // landingPoint.beginFill(0xff0000);
+        // landingPoint.drawCircle(landScreenX, landScreenY, 10);
+        // landingPoint.endFill(0xff0000);
+
+        if (landingDeriv > 0.5){
+          isDiving = 1; //Should be 1
+        } else{
+          isDiving = 0;
+        };
+
+        } else{
+        isDiving = 0;
       };
     };
 
     if (isDiving == 1){
+      squirrel.dive();
       downArrow.destroy();
       downArrow = game.add.sprite(screen1Width*.925,screen1Height*0.08, 'Arrow');
       downArrow.scale.setTo(24/(zoom*786),30/(zoom*1024));
@@ -201,86 +389,85 @@ var Level1 = {
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
     squirrelProgress.beginFill(0xFF0000);
-    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/levelLength, .05*screen1Height, 20);
+    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/tutorialLength, .05*screen1Height, 20);
     squirrelProgress.endFill();
     squirrelProgress.scale.setTo(1/zoom);
 
-    if (squirrelX > levelLength){
-      //machine.clean();
-
-      // var data = Y;
-      // var csvContent = "data:text/csv;charset=utf-8,";
-      // data.forEach(function(infoArray, index){
-      //    dataString = infoArray.join(",");
-      //    csvContent += index < data.length ? dataString+ "\n" : dataString;
-      // });
-      // var encodedUri = encodeURI(csvContent);
-      // var link = document.createElement("a");
-      // link.setAttribute("href", encodedUri);
-      // link.setAttribute("download", "SquirrelDataLevel1.csv");
-      // link.click();
-
+    if (squirrelX > tutorialLength){
       squirrelProgress.destroy();
-      game.state.start('level1Game1Complete');
-      game2.state.start('level1Complete');
-      game3.state.start('level1Complete');
+      game.state.start('tutorialComplete');
+      game2.state.start('tutorialComplete');
+      game3.state.start('tutorialComplete');
     };
 
     terrain.updateKnots(squirrelX/PTM);
-
     squirrel.updatePosition();
 
-    if (training){
-      currFeatures = player.stateToFeatures();
-      machine.learn(currFeatures, isDiving);
-      predict = machine.classify(currFeatures);
-      X.push(currFeatures);
-      currData = [];
-      currData.push(isDiving);
-      currData.push(currFeatures);
-      Y.push(currData);
+    currFeatures = player.stateToFeatures();
+    machine.learn(currFeatures, isDiving);
+    predict = machine.classify(currFeatures);
+    X.push(currFeatures);
+    currData = [];
+    currData.push(isDiving);
+    currData.push(currFeatures);
+    Y.push(currData);
 
-      totalFrames  += 1;
-      if (isDiving == 1){
-        actualYes += 1;
+    totalFrames  += 1;
+    if (isDiving == 1){
+      actualYes += 1;
+    } else{
+      actualNo += 1;
+    }
+    if (predict != 0){
+      predictYes += 1;
+    }
+    if (predict == isDiving){
+      numCorrect += 1;
+      if (isDiving == 0){
+        trueNegative += 1;
       } else{
-        actualNo += 1;
+        truePositive += 1;
       }
-      if (predict != 0){
-        predictYes += 1;
+    }else{
+      if(isDiving == 0){
+        falsePositive += 1;
+      } else{
+        falseNegative += 1;
       }
-      if (predict == isDiving){
-        numCorrect += 1;
-        if (isDiving == 0){
-          trueNegative += 1;
-        } else{
-          truePositive += 1;
-        }
-      }else{
-        if(isDiving == 0){
-          falsePositive += 1;
-        } else{
-          falseNegative += 1;
-        }
-      }
-      missRate = 1 - numCorrect/totalFrames;
-      tpRate = truePositive/actualYes;
-      fpRate = falsePositive/actualNo;
-      specificity = 1 - fpRate;
-      precision = truePositive/predictYes;
-      prevalence = actualYes/totalFrames;
+    }
+    missRate = 1 - numCorrect/totalFrames;
+    tpRate = truePositive/actualYes;
+    fpRate = falsePositive/actualNo;
+    specificity = 1 - fpRate;
+    precision = truePositive/predictYes;
+    prevalence = actualYes/totalFrames;
+
+    if ((prevDiving == 0)&(isDiving == 1)&(initMessage)&(!diveMessage)){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'Start diving so you land on the hill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      pause();
+      diveMessage = true;
+      setTimeout(resumeTutorial, 3000);
+    };
+
+    if ((prevDiving == 1)&(isDiving == 0)&(initMessage)&(!releaseMessage)&(diveMessage)){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'Then release right before the uphill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      pause();
+      releaseMessage = true;
+      setTimeout(resumeTutorial, 3000);
     };
 
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
   },
   render: function(){
-    //game.debug.box2dWorld();
-    //game.debug.cameraInfo(game.camera, 32, 32);
+    // game.debug.box2dWorld();
+    // game.debug.cameraInfo(game.camera, 32, 32);
     //game.debug.text(game.time.fps,2,14,'#00ff00')
   }
 };
 
-var Level1_2 = {
+var Tutorial_2 = {
   preload: function(){
   },
   create: function(){
@@ -316,7 +503,7 @@ var Level1_2 = {
   }
 };
 
-var Level1_3 = {
+var Tutorial_3 = {
   preload: function(){
     covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Chng X Dive"];
   },
@@ -534,4 +721,17 @@ function pause(){
     game2.paused = true;
     game3.paused = true;
   }
+}
+
+function resumeTutorial(){
+    isPaused = false;
+    game.paused = false;
+    game2.paused = false;
+    game3.paused = false;
+    tutorialText.destroy();
+    tutorialText2.destroy();
+    tutorialText3.destroy();
+    tutorialText4.destroy();
+    tutorialText5.destroy();
+    tutorialText6.destroy();
 }

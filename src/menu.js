@@ -10,9 +10,9 @@ var menu = {
   },
   update: function() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {
-      game.state.start('Level1');
-      game2.state.start('Level1_2');
-      game3.state.start('Level1_3');
+      game.state.start('tutorialMenu');
+      game2.state.start('tutorialMenu');
+      game3.state.start('tutorialMenu');
     }
   }
 };

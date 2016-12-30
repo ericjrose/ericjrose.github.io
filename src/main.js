@@ -17,6 +17,18 @@ game3 = new Phaser.Game(screen3Width, screen3Height, Phaser.CANVAS, 'game3');
 game.state.add('Game', Game);
 game2.state.add('Game2', Game2);
 
+game.state.add('Tutorial', Tutorial);
+game2.state.add('Tutorial_2', Tutorial_2);
+game3.state.add('Tutorial_3', Tutorial_3);
+
+game.state.add('tutorialMenu', tutorialMenu);
+game2.state.add('tutorialMenu', tutorialMenu);
+game3.state.add('tutorialMenu', tutorialMenu);
+
+game.state.add('tutorialComplete', tutorialComplete);
+game2.state.add('tutorialComplete', tutorialComplete);
+game3.state.add('tutorialComplete', tutorialComplete);
+
 game.state.add('Level1', Level1);
 game2.state.add('Level1_2', Level1_2);
 game3.state.add('Level1_3', Level1_3);
@@ -60,6 +72,10 @@ game3.state.add('levelComplete', levelComplete);
 game.state.start('menu');
 game2.state.start('menu');
 game3.state.start('menu');
+
+// game.state.start('Tutorial');
+// game2.state.start('Tutorial_2');
+// game3.state.start('Tutorial_3');
 
 //game.state.start('Level1');
 //game2.state.start('Level3_2');
