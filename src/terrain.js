@@ -1,4 +1,4 @@
-function Terrain(game, level, scenery, player, snake) {
+function Terrain(game, level, scenery, player, cloud1, cloud2, cloud3, acorn, snake) {
   this.game = game;
   this.hillGraphics = null;
   this.knotsX = [0];
@@ -21,6 +21,14 @@ function Terrain(game, level, scenery, player, snake) {
   this.hillFn = null;
   this.level = level;
   this.scenery = scenery;
+
+  this.cloud1Sprite = cloud1;
+  this.cloud2Sprite = cloud2;
+  this.cloud3Sprite = cloud3;
+
+  this.acornSprite = acorn;
+  this.acornProb = 0.05;
+  this.acorns = [];
 
   this.snakeSprite = snake;
   this.snakeProb = 0.2;
@@ -100,8 +108,7 @@ Terrain.prototype.fill = function (x) {
         if (this.high) {
             nextY = 1.0 + rbeta(0.5, 3.0) * 8.0; //.5, 3.0   +2.0
             this.high = false;
-        }
-        else{
+        } else{
             nextY = 3.0 + rbeta(3.0, 0.5) * 8.0;    //+2.0
             this.high = true;
             if (this.level > 2){
@@ -115,7 +122,32 @@ Terrain.prototype.fill = function (x) {
                 this.snakes.push(snake);
               };
             };
+        };
+
+        cloudP = Math.random();
+        if (cloudP < 0.1){
+          cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud1Sprite);
+          cloud.scale.setTo(0.5,0.5);
+        } else if (cloudP < 0.2){
+          cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud2Sprite);
+          cloud.scale.setTo(0.5,0.5);
+        } else if (cloudP < 0.3){
+          cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud3Sprite);
+          cloud.scale.setTo(0.8,0.8);
         }
+
+        if (this.level > 1){
+          acornP = Math.random();
+          if (acornP < this.acornProb){
+            acorn = this.game.add.sprite(nextX*PTM - 300, -Math.random()*300, this.acornSprite);
+            acorn.scale.setTo(0.3,0.3);
+            this.game.physics.box2d.enable(acorn);
+            acorn.body.setCollisionCategory(3);
+            acorn.body.static = true;
+            acorn.body.sensor = true;
+            this.acorns.push(acorn);
+          };
+        };
 
         this.knotsX.push(nextX);
         this.knotsY.push(nextY);
@@ -145,7 +177,9 @@ Terrain.prototype.fill = function (x) {
     lastX = this.pointsX[this.pointsX.length - 1];
     lastY = this.pointsY[this.pointsY.length - 1];
 
-    if (this.scenery == 1){
+    if (this.scenery == 0){
+      hillColor = '0x000000';
+    } else if (this.scenery == 1){
       hillColor = '0x3E8C67';
     } else if (this.scenery == 2){
       hillColor = '0xFDC760';

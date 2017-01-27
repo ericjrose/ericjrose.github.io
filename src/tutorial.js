@@ -62,18 +62,18 @@ var Tutorial = {
     game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
-
+    game.load.image('Cloud1', 'imgs/cloud1.png');
+    game.load.image('Cloud2', 'imgs/cloud2.png');
+    game.load.image('Cloud3', 'imgs/cloud3.png');
   },
   create: function(){
     game.time.advancedTiming = true;
-    game.stage.backgroundColor = '#000000';
-    level = 1;
+    game.stage.backgroundColor = '#ffffff';
+    level = 0;
 
-    //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
-    //background.scale.setTo(screen1Width/4608,screen1Height/2307);
-    background = game.add.tileSprite(0, 0, 656, 554,'Forest'); //Image is 656x554
-    background.scale.setTo(screen1Width/656,screen1Height/554);
-    background.fixedToCamera = true;
+    // background = game.add.tileSprite(0, 0, 656, 554,'Forest'); //Image is 656x554
+    // background.scale.setTo(screen1Width/656,screen1Height/554);
+    // background.fixedToCamera = true;
 
 
     game.physics.startSystem(Phaser.Physics.BOX2D);
@@ -82,9 +82,11 @@ var Tutorial = {
     //game.physics.box2d.setBoundsToWorld();
 
     squirrel = new Squirrel(game, 'Squirrel');
-    terrain = new Terrain(game, 1, 1, 1);
+    terrain = new Terrain(game, 0, 0, 1, 'Cloud1','Cloud2','Cloud3');
     player = new Player(game, squirrel, terrain, level);
     machine = new kNear(k);
+
+    frontGroup = game.add.group();
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
@@ -111,6 +113,9 @@ var Tutorial = {
     keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
     keyP.onDown.add(pause, this);
 
+    keyEnter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    keyEnter.onDown.add(resumeTutorial, this);
+
     timer = game.time.create();
     //timerEvent = timer.add(Phaser.Timer.MINUTE*1 + Phaser.Timer.SECOND*30,this.endTimer,this);
     timerEvent = timer.add(Phaser.Timer.MINUTE*2 + Phaser.Timer.SECOND*0);
@@ -129,8 +134,18 @@ var Tutorial = {
     initMessage = false;
     diveMessage = false;
     releaseMessage = false;
+
+    frontGroup.add(text);
+    frontGroup.add(trainingText);
+    frontGroup.add(levelProgress);
+    frontGroup.add(squirrelProgress);
+    frontGroup.add(downArrow);
+    frontGroup.add(squirrel.squirrelSprite);
+    frontGroup.add(terrain.hillGraphics);
   },
   update: function(){
+    game.world.bringToTop(frontGroup);
+
     tutorialCount += 1;
     prevDiving = isDiving;
 
@@ -145,30 +160,34 @@ var Tutorial = {
       tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'You then want to release the dive button at the bottom of the hill.', {fontSize: '20px', fill: '0x000000'});
       tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'This will allow your momentum to cause you to fly off the upward part of the hill.', {fontSize: '20px', fill: '0x000000'});
       tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'Press P to pause the game at any time.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText6 = game.add.text(screen1Width*.08, screen1Height*.65, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
       tutorialText2.fixedToCamera = true;
       tutorialText3.fixedToCamera = true;
       tutorialText4.fixedToCamera = true;
       tutorialText5.fixedToCamera = true;
+      tutorialText6.fixedToCamera = true;
       tutorialText.scale.setTo(1/zoom);
       tutorialText2.scale.setTo(1/zoom);
       tutorialText3.scale.setTo(1/zoom);
       tutorialText4.scale.setTo(1/zoom);
       tutorialText5.scale.setTo(1/zoom);
+      tutorialText6.scale.setTo(1/zoom);
       pause();
-      setTimeout(resumeTutorial, 10000);
       initMessage = true;
     };
 
     if (tutorialCount == 400){
       tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The bar across the top of the screen shows your progess in each level.', {fontSize: '20px', fill: '0x000000'});
       tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'You need to finish the level before the timer runs out to complete the level.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.50, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
       tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
       tutorialText.scale.setTo(1/zoom);
       tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
       pause();
-      setTimeout(resumeTutorial, 10000);
     };
 
     if (tutorialCount == 800){
@@ -177,18 +196,20 @@ var Tutorial = {
       tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'A computer player is then learning how to play by using imitation learning.', {fontSize: '20px', fill: '0x000000'});
       tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'Press E at any time to switch between you playing', {fontSize: '20px', fill: '0x000000'});
       tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'and watching the computer player based on the data collected on you.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText6 = game.add.text(screen1Width*.08, screen1Height*.65, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
       tutorialText2.fixedToCamera = true;
       tutorialText3.fixedToCamera = true;
       tutorialText4.fixedToCamera = true;
       tutorialText5.fixedToCamera = true;
+      tutorialText6.fixedToCamera = true;
       tutorialText.scale.setTo(1/zoom);
       tutorialText2.scale.setTo(1/zoom);
       tutorialText3.scale.setTo(1/zoom);
       tutorialText4.scale.setTo(1/zoom);
       tutorialText5.scale.setTo(1/zoom);
+      tutorialText6.scale.setTo(1/zoom);
       pause();
-      setTimeout(resumeTutorial, 10000);
     };
 
     if (tutorialCount == 1200){
@@ -196,23 +217,7 @@ var Tutorial = {
       tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'measuring the effectiveness of the computer player.', {fontSize: '20px', fill: '0x000000'});
       tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'The bottom right shows a plot of the first two principal components', {fontSize: '20px', fill: '0x000000'});
       tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'of the features being collected as you play.', {fontSize: '20px', fill: '0x000000'});
-      tutorialText.fixedToCamera = true;
-      tutorialText2.fixedToCamera = true;
-      tutorialText3.fixedToCamera = true;
-      tutorialText4.fixedToCamera = true;
-      tutorialText.scale.setTo(1/zoom);
-      tutorialText2.scale.setTo(1/zoom);
-      tutorialText3.scale.setTo(1/zoom);
-      tutorialText4.scale.setTo(1/zoom);
-      pause();
-      setTimeout(resumeTutorial, 10000);
-    };
-    if (tutorialCount == 1201){
-      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The red dot on the plot represents the current state of the game.', {fontSize: '20px', fill: '0x000000'});
-      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'The other dots represent the five most similar previous states.', {fontSize: '20px', fill: '0x000000'});
-      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'These dots are green if you did nothing or purple if you chose to dive.', {fontSize: '20px', fill: '0x000000'});
-      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'The computer player then chooses the action that was chosen', {fontSize: '20px', fill: '0x000000'});
-      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'by the majority of the five points.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.60, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
       tutorialText2.fixedToCamera = true;
       tutorialText3.fixedToCamera = true;
@@ -224,7 +229,27 @@ var Tutorial = {
       tutorialText4.scale.setTo(1/zoom);
       tutorialText5.scale.setTo(1/zoom);
       pause();
-      setTimeout(resumeTutorial, 10000);
+    };
+    if (tutorialCount == 1201){
+      tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'The red dot on the plot represents the current state of the game.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.4, 'The other dots represent the five most similar previous states.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText3 = game.add.text(screen1Width*.08, screen1Height*.45, 'These dots are green if you did nothing or purple if you chose to dive.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText4 = game.add.text(screen1Width*.08, screen1Height*.5, 'The computer player then chooses the action that was chosen', {fontSize: '20px', fill: '0x000000'});
+      tutorialText5 = game.add.text(screen1Width*.08, screen1Height*.55, 'by the majority of the five points.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText6 = game.add.text(screen1Width*.08, screen1Height*.65, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText3.fixedToCamera = true;
+      tutorialText4.fixedToCamera = true;
+      tutorialText5.fixedToCamera = true;
+      tutorialText6.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
+      tutorialText3.scale.setTo(1/zoom);
+      tutorialText4.scale.setTo(1/zoom);
+      tutorialText5.scale.setTo(1/zoom);
+      tutorialText6.scale.setTo(1/zoom);
+      pause();
     };
 
     game.world.scale.setTo(zoom);
@@ -444,18 +469,24 @@ var Tutorial = {
 
     if ((prevDiving == 0)&(isDiving == 1)&(initMessage)&(!diveMessage)){
       tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'Start diving so you land on the hill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.45, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
       pause();
       diveMessage = true;
-      setTimeout(resumeTutorial, 3000);
     };
 
     if ((prevDiving == 1)&(isDiving == 0)&(initMessage)&(!releaseMessage)&(diveMessage)){
       tutorialText = game.add.text(screen1Width*.08, screen1Height*.35, 'Then release right before the uphill.', {fontSize: '20px', fill: '0x000000'});
+      tutorialText2 = game.add.text(screen1Width*.08, screen1Height*.45, 'Press ENTER to continue the tutorial.', {fontSize: '20px', fill: '0x000000'});
       tutorialText.fixedToCamera = true;
+      tutorialText2.fixedToCamera = true;
+      tutorialText.scale.setTo(1/zoom);
+      tutorialText2.scale.setTo(1/zoom);
       pause();
       releaseMessage = true;
-      setTimeout(resumeTutorial, 3000);
     };
 
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);

@@ -33,6 +33,7 @@ var counter = 1;
 var X = [];
 var Y = [];
 var numPrinPoints = 50;
+var prevDataLength = 0;
 
 var covarNames;
 var neighbors;
@@ -59,7 +60,9 @@ var Level1 = {
     game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
-
+    game.load.image('Cloud1', 'imgs/cloudForest1.png');
+    game.load.image('Cloud2', 'imgs/cloudForest2.png');
+    game.load.image('Cloud3', 'imgs/cloudForest3.png');
   },
   create: function(){
     game.time.advancedTiming = true;
@@ -91,9 +94,11 @@ var Level1 = {
     //game.physics.box2d.setBoundsToWorld();
 
     squirrel = new Squirrel(game, 'Squirrel');
-    terrain = new Terrain(game, 1, 1, 1);
+    terrain = new Terrain(game, 1, 1, 1, 'Cloud1','Cloud2','Cloud3');
     player = new Player(game, squirrel, terrain, level);
     machine = new kNear(k);
+
+    frontGroup = game.add.group();
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
@@ -129,10 +134,19 @@ var Level1 = {
     downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
 
+    frontGroup.add(text);
+    frontGroup.add(trainingText);
+    frontGroup.add(levelProgress);
+    frontGroup.add(squirrelProgress);
+    frontGroup.add(downArrow);
+    frontGroup.add(squirrel.squirrelSprite);
+    frontGroup.add(terrain.hillGraphics);
+
   },
   update: function(){
+    game.world.bringToTop(frontGroup);
 
-    console.log(machine.training);
+    //console.log(machine.training.length);
 
     squirrelX = squirrel.getPositionX();
     squirrelY = squirrel.getPositionY();
@@ -219,6 +233,8 @@ var Level1 = {
       // link.setAttribute("href", encodedUri);
       // link.setAttribute("download", "SquirrelDataLevel1.csv");
       // link.click();
+
+      console.log(machine.training.length);
 
       squirrelProgress.destroy();
       game.state.start('level1Game1Complete');

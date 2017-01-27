@@ -54,8 +54,22 @@ var Level = {
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Snake', 'imgs/Snake.png');
+    game.load.image('CloudForest1', 'imgs/cloudForest1.png');
+    game.load.image('CloudForest2', 'imgs/CloudForest2.png');
+    game.load.image('CloudForest3', 'imgs/cloudForest3.png');
+    game.load.image('CloudDesert1', 'imgs/cloudDesert1.png');
+    game.load.image('CloudDesert2', 'imgs/cloudDesert2.png');
+    game.load.image('CloudDesert3', 'imgs/cloudDesert3.png');
+    game.load.image('CloudRainforest1', 'imgs/cloudRainforest1.png');
+    game.load.image('CloudRainforest2', 'imgs/cloudRainforest2.png');
+    game.load.image('CloudRainforest3', 'imgs/cloudRainforest3.png');
+    game.load.image('Acorn', 'imgs/acorn2.png');
   },
   create: function(){
+
+    console.log(machine.training.length);
+    prevDataLength = machine.training.length;
+
     levelLength = 30000 + 2000*(level-3);
 
     game.stage.backgroundColor = '#000000';
@@ -63,12 +77,21 @@ var Level = {
     if (scenery == 3){
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Rainforest'); //Image is 4808x2307
       background = game.add.tileSprite(0, 0, 656, 554,'Rainforest');
+      cloud1 = 'CloudRainforest1';
+      cloud2 = 'CloudRainforest2';
+      cloud3 = 'CloudRainforest3';
     } else if(scenery == 2){
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Desert');
       background = game.add.tileSprite(0, 0, 656, 554,'Desert');
+      cloud1 = 'CloudDesert1';
+      cloud2 = 'CloudDesert2';
+      cloud3 = 'CloudDesert3';
     } else{
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest');
       background = game.add.tileSprite(0, 0, 656, 554,'Forest');
+      cloud1 = 'CloudForest1';
+      cloud2 = 'CloudForest2';
+      cloud3 = 'CloudForest3';
     }
     //background.scale.setTo(screen1Width/4608,screen1Height/2307);
     background.scale.setTo(screen1Width/656,screen1Height/554);
@@ -81,13 +104,16 @@ var Level = {
 
 
     squirrel = new Squirrel(game, 'Squirrel', startX, startY);
-    terrain = new Terrain(game, level, scenery, 1, 'Snake');
+    terrain = new Terrain(game, level, scenery, 1, cloud1, cloud2, cloud3, 'Acorn','Snake');
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
+
+    frontGroup = game.add.group();
 
     squirrelAlive = true;
     squirrelHasCollided = false;
 
+    squirrel.squirrelSprite.body.setCategoryContactCallback(3, this.acornCollision, this);
     squirrel.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
 
     game.camera.bounds = null;
@@ -148,6 +174,43 @@ var Level = {
     downArrow = game.add.sprite(screen1Width*.925,screen1Height*0.08, 'Arrow');
     downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
+
+    frontGroup.add(text);
+    frontGroup.add(trainingText);
+    frontGroup.add(levelProgress);
+    frontGroup.add(squirrelProgress);
+    frontGroup.add(downArrow);
+    frontGroup.add(squirrel.squirrelSprite);
+    frontGroup.add(terrain.hillGraphics);
+    frontGroup.add(boostFill);
+    frontGroup.add(boostMeter);
+    frontGroup.add(paraMeter);
+    frontGroup.add(paraFill);
+  },
+  acornCollision : function(body1, body2, fixture1, fixture2, begin){
+    if (!begin){
+      return;
+    };
+    console.log('Acorn Collision');
+    body2.sprite.destroy();
+    if (boostTimer < boostRecharge){
+      boostTimer += 100;
+      if (boostTimer > boostRecharge){
+        boostTimer = boostRecharge;
+      };
+    };
+    if (boostTimer == boostRecharge){
+      boostAvail = true;
+    };
+    if (paraTimer < paraRecharge){
+      paraTimer += 100;
+      if (paraTimer > paraRecharge){
+        paraTimer = paraRecharge;
+      };
+    };
+    if (paraTimer == paraRecharge){
+      paraAvail = true;
+    };
   },
   snakeCollision: function(){
     //console.log('Collision');
@@ -181,6 +244,7 @@ var Level = {
     squirrelAlive = true;
   },
   update: function(){
+    game.world.bringToTop(frontGroup);
 
     //squirrel.squirrelSprite.body.setCategoryContactCallback(2, snakeCollision, this);
     //game.physics.arcade.overlap(squirrel.squirrelSprite, terrain.snakes, snakeCollision, null, this);
@@ -326,6 +390,9 @@ var Level = {
       squirrelProgress.scale.setTo(1/zoom);
 
       if (squirrelX > levelLength){
+
+        console.log(machine.training.length);
+
         squirrelProgress.destroy();
         game.state.start('levelGame1Complete');
         game2.state.start('levelComplete');

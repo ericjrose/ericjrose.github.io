@@ -42,9 +42,19 @@ var Level2 = {
     game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 72ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel JetPack 02.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
+    game.load.image('Cloud1', 'imgs/cloudDesert1.png');
+    game.load.image('Cloud2', 'imgs/cloudDesert2.png');
+    game.load.image('Cloud3', 'imgs/cloudDesert3.png');
+    game.load.image('Acorn', 'imgs/acorn2.png');
 
   },
   create: function(){
+
+    // Uncomment when starting from level 1
+    console.log(machine.training.length);
+    prevDataLength = machine.training.length;
+
+
     game.stage.backgroundColor = '#000000';
     level = 2;
 
@@ -61,11 +71,14 @@ var Level2 = {
     //game.physics.box2d.setBoundsToWorld();
 
     squirrel = new Squirrel(game, 'Squirrel');
-    terrain = new Terrain(game, 2, 2, 1);
+    terrain = new Terrain(game, 2, 2, 1, 'Cloud1','Cloud2','Cloud3', 'Acorn');
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
     //machine.setK(k);
 
+    frontGroup = game.add.group();
+
+    squirrel.squirrelSprite.body.setCategoryContactCallback(3, this.acornCollision, this);
 
     game.camera.bounds = null;
     game.camera.y = -screen1Height/1.5;
@@ -115,8 +128,34 @@ var Level2 = {
     downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
 
+    frontGroup.add(text);
+    frontGroup.add(trainingText);
+    frontGroup.add(levelProgress);
+    frontGroup.add(squirrelProgress);
+    frontGroup.add(downArrow);
+    frontGroup.add(squirrel.squirrelSprite);
+    frontGroup.add(terrain.hillGraphics);
+    frontGroup.add(boostFill);
+    frontGroup.add(boostMeter);
+  },
+  acornCollision : function(body1, body2, fixture1, fixture2, begin){
+    if (!begin){
+      return;
+    };
+    console.log('Acorn Collision');
+    body2.sprite.destroy();
+    if (boostTimer < boostRecharge){
+      boostTimer += 100;
+      if (boostTimer > boostRecharge){
+        boostTimer = boostRecharge;
+      };
+    };
+    if (boostTimer == boostRecharge){
+      boostAvail = true;
+    };
   },
   update: function(){
+    game.world.bringToTop(frontGroup);
 
     squirrelX = squirrel.getPositionX();
     squirrelY = squirrel.getPositionY();
@@ -238,6 +277,8 @@ var Level2 = {
       // link.setAttribute("href", encodedUri);
       // link.setAttribute("download", "SquirrelDataLevel2.csv");
       // link.click();
+
+      console.log(machine.training.length);
 
       squirrelProgress.destroy();
       game.state.start('level2Game1Complete');

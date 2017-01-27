@@ -11,10 +11,10 @@ var level3Game1Complete = {
       var newTraining = [];
       var newY = [];
       var toClean = [];
-      for (i = 1; i < X.length; i++){
+      for (i = 1 + prevDataLength; i < X.length; i++){
           var prevXVel =  X[i-1][1];
           var currXVel = X[i][1];
-          if (currXVel - prevXVel < -5){
+          if (currXVel - prevXVel < -0.5){
             toClean.push(i);
           };
       };
@@ -31,7 +31,12 @@ var level3Game1Complete = {
           newTraining.push(machine.training[i]);
           newY.push(Y[i]);
         };
-      }
+      };
+      if (newData.length > 8000){
+        newData = newData.splice(newData.length - 8000, 8000);
+        newY = newY.splice(newY.length - 8000, 8000);
+        newTraining = newTraining.splice(newTraining.length - 8000, 8000);
+      };
       X = newData;
       Y = newY;
       machine.training = newTraining;

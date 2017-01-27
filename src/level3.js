@@ -55,8 +55,16 @@ var Level3 = {
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png')
     game.load.image('Arrow', 'imgs/downArrow.png')
     game.load.image('Snake', 'imgs/Snake.png');
+    game.load.image('Cloud1', 'imgs/cloudRainforest1.png');
+    game.load.image('Cloud2', 'imgs/cloudRainforest2.png');
+    game.load.image('Cloud3', 'imgs/cloudRainforest3.png');
+    game.load.image('Acorn', 'imgs/acorn2.png')
   },
   create: function(){
+
+    console.log(machine.training.length);
+    prevDataLength = machine.training.length;
+
     game.stage.backgroundColor = '#000000';
     level = 3;
 
@@ -73,13 +81,16 @@ var Level3 = {
 
 
     squirrel = new Squirrel(game, 'Squirrel', startX, startY);
-    terrain = new Terrain(game, 3, 3, 1, 'Snake');
+    terrain = new Terrain(game, 3, 3, 1,'Cloud1','Cloud2','Cloud3','Acorn', 'Snake');
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
+
+    frontGroup = game.add.group();
 
     squirrelAlive = true;
     squirrelHasCollided = false;
 
+    squirrel.squirrelSprite.body.setCategoryContactCallback(3, this.acornCollision, this);
     squirrel.squirrelSprite.body.setCategoryContactCallback(2, this.snakeCollision, this);
 
     game.camera.bounds = null;
@@ -139,6 +150,43 @@ var Level3 = {
     downArrow = game.add.sprite(screen1Width*.925,screen1Height*0.08, 'Arrow');
     downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
+
+    frontGroup.add(text);
+    frontGroup.add(trainingText);
+    frontGroup.add(levelProgress);
+    frontGroup.add(squirrelProgress);
+    frontGroup.add(downArrow);
+    frontGroup.add(squirrel.squirrelSprite);
+    frontGroup.add(terrain.hillGraphics);
+    frontGroup.add(boostFill);
+    frontGroup.add(boostMeter);
+    frontGroup.add(paraMeter);
+    frontGroup.add(paraFill);
+  },
+  acornCollision : function(body1, body2, fixture1, fixture2, begin){
+    if (!begin){
+      return;
+    };
+    console.log('Acorn Collision');
+    body2.sprite.destroy();
+    if (boostTimer < boostRecharge){
+      boostTimer += 100;
+      if (boostTimer > boostRecharge){
+        boostTimer = boostRecharge;
+      };
+    };
+    if (boostTimer == boostRecharge){
+      boostAvail = true;
+    };
+    if (paraTimer < paraRecharge){
+      paraTimer += 100;
+      if (paraTimer > paraRecharge){
+        paraTimer = paraRecharge;
+      };
+    };
+    if (paraTimer == paraRecharge){
+      paraAvail = true;
+    };
   },
   snakeCollision: function(){
     //console.log('Collision');
@@ -172,6 +220,7 @@ var Level3 = {
     squirrelAlive = true;
   },
   update: function(){
+    game.world.bringToTop(frontGroup);
 
     //squirrel.squirrelSprite.body.setCategoryContactCallback(2, snakeCollision, this);
     //game.physics.arcade.overlap(squirrel.squirrelSprite, terrain.snakes, snakeCollision, null, this);
@@ -340,6 +389,8 @@ var Level3 = {
         // link.setAttribute("href", encodedUri);
         // link.setAttribute("download", "SquirrelDataLevel3.csv");
         // link.click();
+
+        console.log(machine.training.length);
 
         squirrelProgress.destroy();
         game.state.start('level3Game1Complete');
