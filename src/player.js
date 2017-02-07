@@ -73,6 +73,7 @@ Player.prototype.stateToFeatures = function() {
   features.push((distToVall-13)/7.5, (distToApex-12)/7);
 
   distToSnake = 0;
+  angToSnake = 0;
   if (this.level > 2){
     if (this.terrain.snakes.length != 0){
       nearestSnake = 0
@@ -88,6 +89,9 @@ Player.prototype.stateToFeatures = function() {
         // console.log('Snake Y: ' + this.terrain.snakes[nearestSnake].position.y);
         // console.log('Squirrel Y: ' + squirrelY);
         distToSnake = Math.sqrt(Math.pow(this.terrain.snakes[nearestSnake].position.x - squirrelX,2) + Math.pow(this.terrain.snakes[nearestSnake].position.y - squirrelY,2));
+        dx = this.terrain.snakes[nearestSnake].position.x - squirrelX;
+        dy = this.terrain.snakes[nearestSnake].position.y - squirrelY;
+        angToSnake = Math.atan(dy/dx);
       }
     };
   };
@@ -102,6 +106,36 @@ Player.prototype.stateToFeatures = function() {
   // console.log('Dist To Snake: ' + distToSnake);
 
   features.push((distToSnake-331)/439);
+  features.push(angToSnake);
+
+  distToAcorn = 0;
+  angToAcorn = 0;
+  if (this.level > 1){
+    if (this.terrain.acorns.length != 0){
+      nearestAcorn = 0
+
+      while((this.terrain.acorns[nearestAcorn].position.x < squirrelX)&(this.terrain.acorns.length > nearestAcorn + 1)){
+        nearestAcorn += 1;
+      };
+      if (this.terrain.acorns[nearestAcorn].position.x < squirrelX){
+        distToAcorn = 0;
+      } else{
+        distToAcorn = Math.sqrt(Math.pow(this.terrain.acorns[nearestAcorn].position.x - squirrelX,2) + Math.pow(this.terrain.acorns[nearestAcorn].position.y - squirrelY,2));
+        dx = this.terrain.acorns[nearestAcorn].position.x - squirrelX;
+        dy = this.terrain.acorns[nearestAcorn].position.y - squirrelY;
+        angToAcorn = Math.atan(dy/dx);
+      }
+    };
+  };
+  if (distToAcorn == 0){
+    noAcorns = 1;
+  } else {
+    noAcorns = 0;
+  };
+
+  features.push(noAcorns);
+  features.push((distToAcorn-325)/532);
+  features.push(angToAcorn);
 
   //In air Dive
   //futureSquirrelXVel = 2*t + velX

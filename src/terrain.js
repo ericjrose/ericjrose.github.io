@@ -179,15 +179,19 @@ Terrain.prototype.fill = function (x) {
 
     if (this.scenery == 0){
       hillColor = '0x000000';
+      hillLineColor = '0x000000';
     } else if (this.scenery == 1){
       hillColor = '0x3E8C67';
+      hillLineColor = '0x3E8C67';
     } else if (this.scenery == 2){
       hillColor = '0xFDC760';
+      hillLineColor = '0xFDC760';
     } else{
       hillColor = '0x7569AF';
+      hillLineColor = '0x7569AF';
     };
     this.hillGraphics.beginFill(hillColor);
-    this.hillGraphics.lineStyle(5, hillColor, 1);
+    this.hillGraphics.lineStyle(5, hillLineColor, 1);
     this.hillGraphics.moveTo(lastX*PTM-300, 250);
 
     for (i = 0; i < newPointsX.length; ++i) {

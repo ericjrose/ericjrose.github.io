@@ -1,9 +1,9 @@
-var level3Complete = {
-  preload: function() {
+var autoLevelComplete = {
+    preload: function(){
       game.stage.backgroundColor = '#000000';
       game.load.image('backgroundImg','imgs/Flying Squirrel Title Screen L0.png')
-  },
-  create: function() {
+    },
+    create: function(){
       game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
       game.input.onDown.add(goFull, this);
 
@@ -11,13 +11,12 @@ var level3Complete = {
       background.fixedToCamera = true;
       background.scale.setTo((1/zoom)*screenWidth/4608,(1/zoom)*screenHeight/2307);
 
-      //game.add.tileSprite(0,0, game.width, game.height, 'levelFailed');
-      text1 = game.add.text(440, 300, "Level 3 Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
-      text2 = game.add.text(470, 380, "Press ENTER to start Level 4", {fontSize: '24px', fill: "#FFF", align: "center"});
-      text1.scale.setTo(1/zoom);
-      text1.fixedToCamera = true;
-      text2.scale.setTo(1/zoom);
-      text2.fixedToCamera = true;
+      text = game.add.text(440, 300, "Level "+ level + " Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
+      countdownText = game.add.text(450, 380, "Next Level Starting", {fontSize: '32px', fill: "#FFF", align: "center"});
+      text.fixedToCamera = true;
+      countdownText.fixedToCamera = true;
+      text.scale.setTo(1/zoom);
+      countdownText.scale.setTo(1/zoom);
 
       var newData = [];
       var newTraining = [];
@@ -26,7 +25,7 @@ var level3Complete = {
       for (i = 1 + prevDataLength; i < X.length; i++){
           var prevXVel =  X[i-1][1];
           var currXVel = X[i][1];
-          if (currXVel - prevXVel < -0.5){
+          if (currXVel - prevXVel < -0.3){
             toClean.push(i);
           };
       };
@@ -58,12 +57,26 @@ var level3Complete = {
       machine.principalPoints = kmeans.centroids;
       machine.updateClusters();
 
-  },
-  update: function() {
-    if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {
-      scenery = getRandomInt(1,3);
-      level += 1;
-      game.state.start('Level');
+      timer = game.time.create();
+      timerEvent = timer.add(Phaser.Timer.MINUTE*0 + Phaser.Timer.SECOND*5);
+      timer.start();
+
+    },
+    update: function(){
+      s = Math.round((timerEvent.delay - timer.ms) / 1000);
+      var minutes = "0" + Math.floor(s / 60);
+      var seconds = "0" + (s - minutes * 60);
+      if (s == 0){
+        if (level == 1){
+          game.state.start('Level2');
+        } else if (level == 2){
+          game.state.start('Level3');
+        } else {
+          scenery = getRandomInt(1,3);
+          level += 1;
+          game.state.start('Level');
+        }
+      };
+      countdownText.text = "Next Level Starting in: " + seconds.substr(-2);
     }
-  }
 };
