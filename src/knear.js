@@ -142,6 +142,7 @@ kNear.prototype.nearest = function(v){
           while (bool){
             if (Number(voteBloc[count].d) === maxD){
               voteBloc.splice(count,1,o);
+              near.splice(count,1,obj);
               maxD = updateMax(maxD,voteBloc);
               bool = false;
             }

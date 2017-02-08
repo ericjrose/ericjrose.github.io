@@ -652,158 +652,158 @@ var Level = {
         specificity = 1 - fpRate;
         precision = truePositive/predictYes;
         prevalence = actualYes/totalFrames;
+      };
 
-        counter += 1;
+      counter += 1;
 
-        if (counter % 100 == 0){
-          mr = missRate.toFixed(3);
-          tp = tpRate.toFixed(3);
-          fp = fpRate.toFixed(3);
-          spec = specificity.toFixed(3);
-          prec = precision.toFixed(3);
-          prev = prevalence.toFixed(3);
-          rateText.text = 'Misclassification Rate: '+ mr;
-          tpText.text = 'True Positive Rate: ' + tp;
-          fpText.text = 'False Positive Rate: ' + fp;
-          specText.text = 'Specificity: ' + spec;
-          precText.text = 'Precision: ' + prec;
-          prevText.text = 'Prevalence: ' + prev;
+      if (counter % 100 == 0){
+        mr = missRate.toFixed(3);
+        tp = tpRate.toFixed(3);
+        fp = fpRate.toFixed(3);
+        spec = specificity.toFixed(3);
+        prec = precision.toFixed(3);
+        prev = prevalence.toFixed(3);
+        rateText.text = 'Misclassification Rate: '+ mr;
+        tpText.text = 'True Positive Rate: ' + tp;
+        fpText.text = 'False Positive Rate: ' + fp;
+        specText.text = 'Specificity: ' + spec;
+        precText.text = 'Precision: ' + prec;
+        prevText.text = 'Prevalence: ' + prev;
+      };
+
+      if (counter % 300 == 0){
+        pcaGraphics.destroy();
+        points.destroy();
+        if (pca0Text != null){
+          pca0Text.destroy();
+          pca1Text.destroy();
+          pca2Text.destroy();
+          pca3Text.destroy();
+          pca4Text.destroy();
+          pca5Text.destroy();
+          pca6Text.destroy();
+          pca7Text.destroy();
+          pca8Text.destroy();
+          pca9Text.destroy();
+          pca10Text.destroy();
+          pca11Text.destroy();
+          pca12Text.destroy();
+          pca13Text.destroy();
+          pca14Text.destroy();
+          pca15Text.destroy();
+          pca16Text.destroy();
+          pca17Text.destroy();
+          pca18Text.destroy();
+          pca19Text.destroy();
         };
 
-        if (counter % 300 == 0){
-          pcaGraphics.destroy();
-          points.destroy();
-          if (pca0Text != null){
-            pca0Text.destroy();
-            pca1Text.destroy();
-            pca2Text.destroy();
-            pca3Text.destroy();
-            pca4Text.destroy();
-            pca5Text.destroy();
-            pca6Text.destroy();
-            pca7Text.destroy();
-            pca8Text.destroy();
-            pca9Text.destroy();
-            pca10Text.destroy();
-            pca11Text.destroy();
-            pca12Text.destroy();
-            pca13Text.destroy();
-            pca14Text.destroy();
-            pca15Text.destroy();
-            pca16Text.destroy();
-            pca17Text.destroy();
-            pca18Text.destroy();
-            pca19Text.destroy();
-          };
+        points = game.add.graphics(0,0);
+        points.beginFill(0xff0000);
+        points.lineStyle(2, 0xff0000 , 1);
 
-          points = game.add.graphics(0,0);
-          points.beginFill(0xff0000);
-          points.lineStyle(2, 0xff0000 , 1);
+        pc = pca(X);
+        pc2 = pcaReduce(pc, 2);
+        col0 = pc2.map(function(value,index) { return value[0]; });
+        col1 = pc2.map(function(value,index) { return value[1]; });
+        dim0 = numeric.dot(col0, currFeatures);
+        dim1 = numeric.dot(col1, currFeatures);
+        points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
+        points.endFill();
 
-          pc = pca(X);
-          pc2 = pcaReduce(pc, 2);
-          col0 = pc2.map(function(value,index) { return value[0]; });
-          col1 = pc2.map(function(value,index) { return value[1]; });
-          dim0 = numeric.dot(col0, currFeatures);
-          dim1 = numeric.dot(col1, currFeatures);
-          points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
-          points.endFill();
-
-          neighbors = machine.nearest(currFeatures);
-          for (i = 0; i < neighbors.length; i++){
-              dim0 = numeric.dot(col0, neighbors[i].v);
-              dim1 = numeric.dot(col1, neighbors[i].v);
-              dive = neighbors[i].lab;
-              if (dive==0){
-                points.beginFill(0x00ff00);
-                points.lineStyle(2, 0x00ff00 , 1);
-                points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
-                points.endFill();
-              } else{
-                points.beginFill(0x551a8b);
-                points.lineStyle(2, 0x551a8b , 1);
-                points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
-                points.endFill();
-              };
-          };
-
-
-          pcaGraphics = game.add.graphics(0,0);
-          pcaGraphics.beginFill(0x0000ff);
-          pcaGraphics.lineStyle(2, 0x0000ff , 1);
-          for (i = 0; i < pc2.length; i++){
-            pcaGraphics.moveTo(screen1Width + screen3Width*0.5, screen2Height + screen3Height*0.5);
-            pcaGraphics.lineTo(screen1Width + pc2[i][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[i][1]*plotDim/2 + screen3Height*0.5);
-          }
-          pca0Text = game.add.text(screen1Width + pc2[0][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[0][1]*plotDim/2 + screen3Height*0.5, covarNames[0],{fontSize: '10px', fill: '0x000000'});
-          pca1Text = game.add.text(screen1Width + pc2[1][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[1][1]*plotDim/2 + screen3Height*0.5, covarNames[1],{fontSize: '10px', fill: '0x000000'});
-          pca2Text = game.add.text(screen1Width + pc2[2][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[2][1]*plotDim/2 + screen3Height*0.5, covarNames[2],{fontSize: '10px', fill: '0x000000'});
-          pca3Text = game.add.text(screen1Width + pc2[3][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[3][1]*plotDim/2 + screen3Height*0.5, covarNames[3],{fontSize: '10px', fill: '0x000000'});
-          pca4Text = game.add.text(screen1Width + pc2[4][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[4][1]*plotDim/2 + screen3Height*0.5, covarNames[4],{fontSize: '10px', fill: '0x000000'});
-          pca5Text = game.add.text(screen1Width + pc2[5][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[5][1]*plotDim/2 + screen3Height*0.5, covarNames[5],{fontSize: '10px', fill: '0x000000'});
-          pca6Text = game.add.text(screen1Width + pc2[6][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[6][1]*plotDim/2 + screen3Height*0.5, covarNames[6],{fontSize: '10px', fill: '0x000000'});
-          pca7Text = game.add.text(screen1Width + pc2[7][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[7][1]*plotDim/2 + screen3Height*0.5, covarNames[7],{fontSize: '10px', fill: '0x000000'});
-          pca8Text = game.add.text(screen1Width + pc2[8][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[8][1]*plotDim/2 + screen3Height*0.5, covarNames[8],{fontSize: '10px', fill: '0x000000'});
-          pca9Text = game.add.text(screen1Width + pc2[9][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[9][1]*plotDim/2 + screen3Height*0.5, covarNames[9],{fontSize: '10px', fill: '0x000000'});
-          pca10Text = game.add.text(screen1Width + pc2[10][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[10][1]*plotDim/2 + screen3Height*0.5, covarNames[10],{fontSize: '10px', fill: '0x000000'});
-          pca11Text = game.add.text(screen1Width + pc2[11][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[11][1]*plotDim/2 + screen3Height*0.5, covarNames[11],{fontSize: '10px', fill: '0x000000'});
-          pca12Text = game.add.text(screen1Width + pc2[12][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[12][1]*plotDim/2 + screen3Height*0.5, covarNames[12],{fontSize: '10px', fill: '0x000000'});
-          pca13Text = game.add.text(screen1Width + pc2[13][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[13][1]*plotDim/2 + screen3Height*0.5, covarNames[13],{fontSize: '10px', fill: '0x000000'});
-          pca14Text = game.add.text(screen1Width + pc2[14][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[14][1]*plotDim/2 + screen3Height*0.5, covarNames[14],{fontSize: '10px', fill: '0x000000'});
-          pca15Text = game.add.text(screen1Width + pc2[15][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[15][1]*plotDim/2 + screen3Height*0.5, covarNames[15],{fontSize: '10px', fill: '0x000000'});
-          pca16Text = game.add.text(screen1Width + pc2[16][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[16][1]*plotDim/2 + screen3Height*0.5, covarNames[16],{fontSize: '10px', fill: '0x000000'});
-          pca17Text = game.add.text(screen1Width + pc2[17][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[17][1]*plotDim/2 + screen3Height*0.5, covarNames[17],{fontSize: '10px', fill: '0x000000'});
-          pca18Text = game.add.text(screen1Width + pc2[18][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[18][1]*plotDim/2 + screen3Height*0.5, covarNames[18],{fontSize: '10px', fill: '0x000000'});
-          pca19Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[19][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
-          pcaGraphics.endFill();
-
-          pcaGraphics.fixedToCamera = true;
-          points.fixedToCamera = true;
-          pca0Text.fixedToCamera = true;
-          pca1Text.fixedToCamera = true;
-          pca2Text.fixedToCamera = true;
-          pca3Text.fixedToCamera = true;
-          pca4Text.fixedToCamera = true;
-          pca5Text.fixedToCamera = true;
-          pca6Text.fixedToCamera = true;
-          pca7Text.fixedToCamera = true;
-          pca8Text.fixedToCamera = true;
-          pca9Text.fixedToCamera = true;
-          pca10Text.fixedToCamera = true;
-          pca11Text.fixedToCamera = true;
-          pca12Text.fixedToCamera = true;
-          pca13Text.fixedToCamera = true;
-          pca14Text.fixedToCamera = true;
-          pca15Text.fixedToCamera = true;
-          pca16Text.fixedToCamera = true;
-          pca17Text.fixedToCamera = true;
-          pca18Text.fixedToCamera = true;
-          pca19Text.fixedToCamera = true;
-
-
-          statGroup.add(pcaGraphics);
-          statGroup.add(points);
-          statGroup.add(pca0Text);
-          statGroup.add(pca1Text);
-          statGroup.add(pca2Text);
-          statGroup.add(pca3Text);
-          statGroup.add(pca4Text);
-          statGroup.add(pca5Text);
-          statGroup.add(pca6Text);
-          statGroup.add(pca7Text);
-          statGroup.add(pca8Text);
-          statGroup.add(pca9Text);
-          statGroup.add(pca10Text);
-          statGroup.add(pca11Text);
-          statGroup.add(pca12Text);
-          statGroup.add(pca13Text);
-          statGroup.add(pca14Text);
-          statGroup.add(pca15Text);
-          statGroup.add(pca16Text);
-          statGroup.add(pca17Text);
-          statGroup.add(pca18Text);
-          statGroup.add(pca19Text);
+        neighbors = machine.nearest(currFeatures);
+        for (i = 0; i < neighbors.length; i++){
+            dim0 = numeric.dot(col0, neighbors[i].v);
+            dim1 = numeric.dot(col1, neighbors[i].v);
+            dive = neighbors[i].lab;
+            if (dive==0){
+              points.beginFill(0x00ff00);
+              points.lineStyle(2, 0x00ff00 , 1);
+              points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
+              points.endFill();
+            } else{
+              points.beginFill(0x551a8b);
+              points.lineStyle(2, 0x551a8b , 1);
+              points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
+              points.endFill();
+            };
         };
+
+
+        pcaGraphics = game.add.graphics(0,0);
+        pcaGraphics.beginFill(0x0000ff);
+        pcaGraphics.lineStyle(2, 0x0000ff , 1);
+        for (i = 0; i < pc2.length; i++){
+          pcaGraphics.moveTo(screen1Width + screen3Width*0.5, screen2Height + screen3Height*0.5);
+          pcaGraphics.lineTo(screen1Width + pc2[i][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[i][1]*plotDim/2 + screen3Height*0.5);
+        }
+        pca0Text = game.add.text(screen1Width + pc2[0][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[0][1]*plotDim/2 + screen3Height*0.5, covarNames[0],{fontSize: '10px', fill: '0x000000'});
+        pca1Text = game.add.text(screen1Width + pc2[1][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[1][1]*plotDim/2 + screen3Height*0.5, covarNames[1],{fontSize: '10px', fill: '0x000000'});
+        pca2Text = game.add.text(screen1Width + pc2[2][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[2][1]*plotDim/2 + screen3Height*0.5, covarNames[2],{fontSize: '10px', fill: '0x000000'});
+        pca3Text = game.add.text(screen1Width + pc2[3][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[3][1]*plotDim/2 + screen3Height*0.5, covarNames[3],{fontSize: '10px', fill: '0x000000'});
+        pca4Text = game.add.text(screen1Width + pc2[4][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[4][1]*plotDim/2 + screen3Height*0.5, covarNames[4],{fontSize: '10px', fill: '0x000000'});
+        pca5Text = game.add.text(screen1Width + pc2[5][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[5][1]*plotDim/2 + screen3Height*0.5, covarNames[5],{fontSize: '10px', fill: '0x000000'});
+        pca6Text = game.add.text(screen1Width + pc2[6][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[6][1]*plotDim/2 + screen3Height*0.5, covarNames[6],{fontSize: '10px', fill: '0x000000'});
+        pca7Text = game.add.text(screen1Width + pc2[7][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[7][1]*plotDim/2 + screen3Height*0.5, covarNames[7],{fontSize: '10px', fill: '0x000000'});
+        pca8Text = game.add.text(screen1Width + pc2[8][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[8][1]*plotDim/2 + screen3Height*0.5, covarNames[8],{fontSize: '10px', fill: '0x000000'});
+        pca9Text = game.add.text(screen1Width + pc2[9][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[9][1]*plotDim/2 + screen3Height*0.5, covarNames[9],{fontSize: '10px', fill: '0x000000'});
+        pca10Text = game.add.text(screen1Width + pc2[10][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[10][1]*plotDim/2 + screen3Height*0.5, covarNames[10],{fontSize: '10px', fill: '0x000000'});
+        pca11Text = game.add.text(screen1Width + pc2[11][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[11][1]*plotDim/2 + screen3Height*0.5, covarNames[11],{fontSize: '10px', fill: '0x000000'});
+        pca12Text = game.add.text(screen1Width + pc2[12][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[12][1]*plotDim/2 + screen3Height*0.5, covarNames[12],{fontSize: '10px', fill: '0x000000'});
+        pca13Text = game.add.text(screen1Width + pc2[13][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[13][1]*plotDim/2 + screen3Height*0.5, covarNames[13],{fontSize: '10px', fill: '0x000000'});
+        pca14Text = game.add.text(screen1Width + pc2[14][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[14][1]*plotDim/2 + screen3Height*0.5, covarNames[14],{fontSize: '10px', fill: '0x000000'});
+        pca15Text = game.add.text(screen1Width + pc2[15][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[15][1]*plotDim/2 + screen3Height*0.5, covarNames[15],{fontSize: '10px', fill: '0x000000'});
+        pca16Text = game.add.text(screen1Width + pc2[16][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[16][1]*plotDim/2 + screen3Height*0.5, covarNames[16],{fontSize: '10px', fill: '0x000000'});
+        pca17Text = game.add.text(screen1Width + pc2[17][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[17][1]*plotDim/2 + screen3Height*0.5, covarNames[17],{fontSize: '10px', fill: '0x000000'});
+        pca18Text = game.add.text(screen1Width + pc2[18][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[18][1]*plotDim/2 + screen3Height*0.5, covarNames[18],{fontSize: '10px', fill: '0x000000'});
+        pca19Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[19][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
+        pcaGraphics.endFill();
+
+        pcaGraphics.fixedToCamera = true;
+        points.fixedToCamera = true;
+        pca0Text.fixedToCamera = true;
+        pca1Text.fixedToCamera = true;
+        pca2Text.fixedToCamera = true;
+        pca3Text.fixedToCamera = true;
+        pca4Text.fixedToCamera = true;
+        pca5Text.fixedToCamera = true;
+        pca6Text.fixedToCamera = true;
+        pca7Text.fixedToCamera = true;
+        pca8Text.fixedToCamera = true;
+        pca9Text.fixedToCamera = true;
+        pca10Text.fixedToCamera = true;
+        pca11Text.fixedToCamera = true;
+        pca12Text.fixedToCamera = true;
+        pca13Text.fixedToCamera = true;
+        pca14Text.fixedToCamera = true;
+        pca15Text.fixedToCamera = true;
+        pca16Text.fixedToCamera = true;
+        pca17Text.fixedToCamera = true;
+        pca18Text.fixedToCamera = true;
+        pca19Text.fixedToCamera = true;
+
+
+        statGroup.add(pcaGraphics);
+        statGroup.add(points);
+        statGroup.add(pca0Text);
+        statGroup.add(pca1Text);
+        statGroup.add(pca2Text);
+        statGroup.add(pca3Text);
+        statGroup.add(pca4Text);
+        statGroup.add(pca5Text);
+        statGroup.add(pca6Text);
+        statGroup.add(pca7Text);
+        statGroup.add(pca8Text);
+        statGroup.add(pca9Text);
+        statGroup.add(pca10Text);
+        statGroup.add(pca11Text);
+        statGroup.add(pca12Text);
+        statGroup.add(pca13Text);
+        statGroup.add(pca14Text);
+        statGroup.add(pca15Text);
+        statGroup.add(pca16Text);
+        statGroup.add(pca17Text);
+        statGroup.add(pca18Text);
+        statGroup.add(pca19Text);
       };
 
       //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
