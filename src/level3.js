@@ -523,9 +523,9 @@ var Level3 = {
         isDiving = 3;
         paraCurr += 1;
       } else if ((training)&(boostCurr < boostLength)){
-            squirrel.boost();
-            isDiving = 2;
-            boostCurr += 1;
+        squirrel.boost();
+        isDiving = 2;
+        boostCurr += 1;
       } else if (training){
         if (cursors.down.isDown) {
           squirrel.dive();
@@ -559,7 +559,7 @@ var Level3 = {
         currFeatures = player.stateToFeatures();
         isDiving = machine.classify(currFeatures);
         //console.log(isDiving)
-        if ((isDiving == 3)&(paraAvail)){
+        if ((isDiving == 3)&(paraAvail)&(velY > 0)){
           squirrel.parachute();
           paraTimer = 0;
           paraAvail = false;

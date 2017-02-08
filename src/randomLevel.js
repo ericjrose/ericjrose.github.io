@@ -569,7 +569,7 @@ var Level = {
         currFeatures = player.stateToFeatures();
         isDiving = machine.classify(currFeatures);
         //console.log(isDiving)
-        if ((isDiving == 3)&(paraAvail)){
+        if ((isDiving == 3)&(paraAvail)&(velY > 0)){
           squirrel.parachute();
           paraTimer = 0;
           paraAvail = false;
