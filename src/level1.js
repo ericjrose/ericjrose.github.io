@@ -58,7 +58,7 @@ var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to 
 var Level1 = {
   preload: function(){
     //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
-    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
+    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 300ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Cloud1', 'imgs/cloudForest1.png');
@@ -66,6 +66,9 @@ var Level1 = {
     game.load.image('Cloud3', 'imgs/cloudForest3.png');
   },
   create: function(){
+    backgroundWidth = 2735;
+    backgroundHeight = 2305;
+
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(goFull, this);
 
@@ -89,8 +92,8 @@ var Level1 = {
 
     //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
     //background.scale.setTo(screen1Width/4608,screen1Height/2307);
-    background = game.add.tileSprite(0, 0, 656, 554,'Forest'); //Image is 656x554
-    background.scale.setTo(screen1Width/656,screen1Height/554);
+    background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Forest'); //Image is 656x554
+    background.scale.setTo(screen1Width/backgroundWidth,screen1Height/backgroundHeight);
     background.fixedToCamera = true;
 
 
@@ -324,7 +327,7 @@ var Level1 = {
 
     game.world.scale.setTo(zoom);
     //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
-    background.scale.setTo((1/zoom)*screen1Width/656,(1/zoom)*screen1Height/554);
+    background.scale.setTo((1/zoom)*screen1Width/backgroundWidth,(1/zoom)*screen1Height/backgroundHeight);
     game.camera.x = squirrelX*zoom - 100;
     //game.camera.y = -screen1Height/2 - screen1Height + screen1Height*zoom;
     game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
@@ -409,6 +412,9 @@ var Level1 = {
     trainingText.scale.setTo(1/zoom);
     levelProgress.scale.setTo(1/zoom);
 
+    canBoost = false;
+    canPara = false;
+
     if (training){
       if (cursors.down.isDown) {
         squirrel.dive();
@@ -418,7 +424,7 @@ var Level1 = {
       };
     } else{
       currFeatures = player.stateToFeatures();
-      isDiving = machine.classify(currFeatures);
+      isDiving = machine.classify(currFeatures, canBoost, canPara);
       if (isDiving == 1){
         squirrel.dive();
       };
@@ -473,7 +479,7 @@ var Level1 = {
     if (training){
       currFeatures = player.stateToFeatures();
       machine.learn(currFeatures, isDiving);
-      predict = machine.classify(currFeatures);
+      predict = machine.classify(currFeatures, canBoost, canPara);
       X.push(currFeatures);
       currData = [];
       currData.push(isDiving);
@@ -567,7 +573,7 @@ var Level1 = {
       points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
       points.endFill();
 
-      neighbors = machine.nearest(currFeatures);
+      neighbors = machine.nearest(currFeatures, canBoost, canPara);
       for (i = 0; i < neighbors.length; i++){
           dim0 = numeric.dot(col0, neighbors[i].v);
           dim1 = numeric.dot(col1, neighbors[i].v);

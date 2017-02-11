@@ -14,13 +14,16 @@ var level1Complete = {
       //game.add.tileSprite(0,0, game.width, game.height, 'levelFailed');
       text1 = game.add.text(440, 280, "Level 1 Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
       text2 = game.add.text(280, 360, "You Can Now Press the Right Arrow for an Additional Boost", {fontSize: '24px', fill: "#FFF", align: "center"});
-      text3 = game.add.text(460, 420, "Press ENTER to Start Level 2", {fontSize: '24px', fill: "#FFF", align: "center"});
+      text3 = game.add.text(370, 420, "Pick Up Acorns to Recharge Your Boost Faster", {fontSize: '24px', fill: "#FFF", align: "center"});
+      text4 = game.add.text(460, 500, "Press ENTER to Start Level 2", {fontSize: '24px', fill: "#FFF", align: "center"});
       text1.fixedToCamera = true;
       text1.scale.setTo(1/zoom);
       text2.fixedToCamera = true;
       text2.scale.setTo(1/zoom);
       text3.fixedToCamera = true;
       text3.scale.setTo(1/zoom);
+      text4.fixedToCamera = true;
+      text4.scale.setTo(1/zoom);
 
       //console.log(prevDataLength);
       var newData = [];

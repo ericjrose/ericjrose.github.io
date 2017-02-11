@@ -36,7 +36,7 @@ var acornRecharge = 300;
 var Level2 = {
   preload: function(){
     //game.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
-    game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 72ppi.gif');
+    game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 300ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel JetPack 02.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Cloud1', 'imgs/cloudDesert1.png');
@@ -45,6 +45,9 @@ var Level2 = {
     game.load.image('Acorn', 'imgs/acorn2.png');
   },
   create: function(){
+    backgroundWidth = 2735;
+    backgroundHeight = 2305;
+
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(goFull, this);
 
@@ -57,8 +60,8 @@ var Level2 = {
 
     //background = game.add.tileSprite(0, 0, 4608, 2307,'Desert'); //Image is 4808x2307
     //background.scale.setTo(screen1Width/4608,screen1Height/2307);
-    background = game.add.tileSprite(0, 0, 656, 554,'Desert'); //Image is 656x554
-    background.scale.setTo(screen1Width/656,screen1Height/554);
+    background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Desert'); //Image is 656x554
+    background.scale.setTo(screen1Width/backgroundWidth,screen1Height/backgroundHeight);
     background.fixedToCamera = true;
 
 
@@ -323,7 +326,7 @@ var Level2 = {
 
     game.world.scale.setTo(zoom);
     //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
-    background.scale.setTo((1/zoom)*screen1Width/656,(1/zoom)*screen1Height/554);
+    background.scale.setTo((1/zoom)*screen1Width/backgroundWidth,(1/zoom)*screen1Height/backgroundHeight);
     game.camera.x = squirrelX*zoom - 100;
     game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 
@@ -425,6 +428,9 @@ var Level2 = {
       boostAvail = true;
     }
 
+    canBoost = boostAvail;
+    canPara = false;
+
     if ((training)&(boostCurr < boostLength)){
       squirrel.boost();
       isDiving = 2;
@@ -449,7 +455,7 @@ var Level2 = {
       boostCurr += 1;
     } else{
       currFeatures = player.stateToFeatures();
-      isDiving = machine.classify(currFeatures);
+      isDiving = machine.classify(currFeatures, canBoost, canPara);
       if ((isDiving == 2)&(boostAvail)){
         squirrel.boost();
         boostTimer = 0;
@@ -507,7 +513,7 @@ var Level2 = {
     if (training){
       currFeatures = player.stateToFeatures();
       machine.learn(currFeatures, isDiving);
-      predict = machine.classify(currFeatures);
+      predict = machine.classify(currFeatures, canBoost, canPara);
       X.push(currFeatures);
       currData = [];
       currData.push(isDiving);
@@ -600,7 +606,7 @@ var Level2 = {
       points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
       points.endFill();
 
-      neighbors = machine.nearest(currFeatures);
+      neighbors = machine.nearest(currFeatures, canBoost, canPara);
       for (i = 0; i < neighbors.length; i++){
           dim0 = numeric.dot(col0, neighbors[i].v);
           dim1 = numeric.dot(col1, neighbors[i].v);

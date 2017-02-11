@@ -32,6 +32,4 @@ game.state.add('autoLevelComplete', autoLevelComplete);
 
 game.state.start('menu');
 
-//game.state.start('Level1');
-
 // game.state.start('Level1');

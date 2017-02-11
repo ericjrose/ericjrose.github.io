@@ -66,7 +66,7 @@ kNear.prototype.updateClusters = function(){
   });
 };
 
-kNear.prototype.classify = function(v){
+kNear.prototype.classify = function(v, canBoost, canPara){
   var voteBloc = [];
   var maxD = 0;
   vectorCl = 0;
@@ -80,30 +80,32 @@ kNear.prototype.classify = function(v){
   };
   this.training.forEach(function(obj){
     if (obj.cl == vectorCl){
-      var o = {d:dist(v,obj.v), vote:obj.lab};
-      if (voteBloc.length < this.k){
-        voteBloc.push(o);
-        maxD = updateMax(maxD,voteBloc);
-      } else {
-        if (o.d < maxD){
-          var bool = true;
-          var count = 0;
-          while (bool){
-            if (Number(voteBloc[count].d) === maxD){
-              voteBloc.splice(count,1,o);
-              maxD = updateMax(maxD,voteBloc);
-              bool = false;
-            }
-            else{
-              if(count < voteBloc.length-1){
-                count++;
+      if ((!((obj.lab == 2)&(!canBoost)))& (!((obj.lab == 3)&(!canPara)))){
+        var o = {d:dist(v,obj.v), vote:obj.lab};
+        if (voteBloc.length < this.k){
+          voteBloc.push(o);
+          maxD = updateMax(maxD,voteBloc);
+        } else {
+          if (o.d < maxD){
+            var bool = true;
+            var count = 0;
+            while (bool){
+              if (Number(voteBloc[count].d) === maxD){
+                voteBloc.splice(count,1,o);
+                maxD = updateMax(maxD,voteBloc);
+                bool = false;
               }
               else{
-                bool = false;
+                if(count < voteBloc.length-1){
+                  count++;
+                }
+                else{
+                  bool = false;
+                }
               }
             }
           }
-        }
+        };
       };
     };
   });
@@ -114,7 +116,7 @@ kNear.prototype.classify = function(v){
   return mode(votes);
 };
 
-kNear.prototype.nearest = function(v){
+kNear.prototype.nearest = function(v, canBoost, canPara){
   var near = [];
   var voteBloc = [];
   var maxD = 0;
@@ -129,35 +131,37 @@ kNear.prototype.nearest = function(v){
   };
   this.training.forEach(function(obj){
     if (obj.cl == vectorCl){
-      var o = {d:dist(v,obj.v), vote:obj.lab};
-      if (voteBloc.length < this.k){
-        near.push(obj);
-        voteBloc.push(o);
-        maxD = updateMax(maxD,voteBloc);
-      }
-      else {
-        if (o.d < maxD){
-          var bool = true;
-          var count = 0;
-          while (bool){
-            if (Number(voteBloc[count].d) === maxD){
-              voteBloc.splice(count,1,o);
-              near.splice(count,1,obj);
-              maxD = updateMax(maxD,voteBloc);
-              bool = false;
-            }
-            else{
-              if(count < voteBloc.length-1){
-                count++;
+      if ((!((obj.lab == 2)&(!canBoost)))&(!((obj.lab == 3)&(!canPara)))){
+        var o = {d:dist(v,obj.v), vote:obj.lab};
+        if (voteBloc.length < this.k){
+            near.push(obj);
+            voteBloc.push(o);
+            maxD = updateMax(maxD,voteBloc);
+        }
+        else {
+          if (o.d < maxD){
+            var bool = true;
+            var count = 0;
+            while (bool){
+              if (Number(voteBloc[count].d) === maxD){
+                  voteBloc.splice(count,1,o);
+                  near.splice(count,1,obj);
+                  maxD = updateMax(maxD,voteBloc);
+                  bool = false;
               }
               else{
-                bool = false;
+                if(count < voteBloc.length-1){
+                  count++;
+                }
+                else{
+                  bool = false;
+                }
               }
             }
           }
         }
-      }
-    }
+      };
+    };
   });
   //console.log(near);
   return near;

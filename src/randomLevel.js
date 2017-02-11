@@ -45,9 +45,9 @@ var Level = {
     //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
     //game.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
     //game.load.image('Rainforest','imgs/Flying Squirrel Rainforest L3.png');
-    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
-    game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 72ppi.gif');
-    game.load.image('Rainforest','imgs/Flying Squirrel Rainforest Cropped 72ppi.gif');
+    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 300ppi.gif');
+    game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 300ppi.gif');
+    game.load.image('Rainforest','imgs/Flying Squirrel Rainforest Cropped 300ppi.gif');
     game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Snake', 'imgs/Snake.png');
@@ -63,6 +63,9 @@ var Level = {
     game.load.image('Acorn', 'imgs/acorn2.png');
   },
   create: function(){
+    backgroundWidth = 2735;
+    backgroundHeight = 2305;
+
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(goFull, this);
 
@@ -75,25 +78,25 @@ var Level = {
 
     if (scenery == 3){
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Rainforest'); //Image is 4808x2307
-      background = game.add.tileSprite(0, 0, 656, 554,'Rainforest');
+      background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Rainforest');
       cloud1 = 'CloudRainforest1';
       cloud2 = 'CloudRainforest2';
       cloud3 = 'CloudRainforest3';
     } else if(scenery == 2){
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Desert');
-      background = game.add.tileSprite(0, 0, 656, 554,'Desert');
+      background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Desert');
       cloud1 = 'CloudDesert1';
       cloud2 = 'CloudDesert2';
       cloud3 = 'CloudDesert3';
     } else{
       //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest');
-      background = game.add.tileSprite(0, 0, 656, 554,'Forest');
+      background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Forest');
       cloud1 = 'CloudForest1';
       cloud2 = 'CloudForest2';
       cloud3 = 'CloudForest3';
     }
     //background.scale.setTo(screen1Width/4608,screen1Height/2307);
-    background.scale.setTo(screen1Width/656,screen1Height/554);
+    background.scale.setTo(screen1Width/backgroundWidth,screen1Height/backgroundHeight);
     background.fixedToCamera = true;
 
 
@@ -427,7 +430,7 @@ var Level = {
 
       game.world.scale.setTo(zoom);
       //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
-      background.scale.setTo((1/zoom)*screen1Width/656,(1/zoom)*screen1Height/554);
+      background.scale.setTo((1/zoom)*screen1Width/backgroundWidth,(1/zoom)*screen1Height/backgroundHeight);
       game.camera.x = squirrelX*zoom - 100;
       game.camera.y = -screen1Height/1.5 - screen1Height + screen1Height*zoom;
 
@@ -528,6 +531,10 @@ var Level = {
       }
 
       velY = squirrel.getVelocityY();
+
+      canBoost = boostAvail;
+      canPara = ((paraAvail)&(velY > 0));
+
       if ((training)&(paraCurr < paraLength)){
         squirrel.parachute();
         isDiving = 3;
@@ -567,7 +574,7 @@ var Level = {
         boostCurr += 1;
       } else{
         currFeatures = player.stateToFeatures();
-        isDiving = machine.classify(currFeatures);
+        isDiving = machine.classify(currFeatures, canBoost, canPara);
         //console.log(isDiving)
         if ((isDiving == 3)&(paraAvail)&(velY > 0)){
           squirrel.parachute();
@@ -621,7 +628,7 @@ var Level = {
       if (training){
         currFeatures = player.stateToFeatures();
         machine.learn(currFeatures, isDiving);
-        predict = machine.classify(currFeatures);
+        predict = machine.classify(currFeatures, canBoost, canPara);
         X.push(currFeatures);
         totalFrames  += 1;
         if (isDiving == 1){
@@ -710,7 +717,7 @@ var Level = {
         points.drawCircle(screen1Width + screen3Width*0.5 + dim0*plotDim/(5*2), screen2Height + screen3Height*0.5 - dim1*plotDim/(5*2), 2);
         points.endFill();
 
-        neighbors = machine.nearest(currFeatures);
+        neighbors = machine.nearest(currFeatures, canBoost, canPara);
         for (i = 0; i < neighbors.length; i++){
             dim0 = numeric.dot(col0, neighbors[i].v);
             dim1 = numeric.dot(col1, neighbors[i].v);
