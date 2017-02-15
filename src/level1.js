@@ -18,7 +18,7 @@ var timer;
 var timerEvent;
 
 var level;
-var levelLength = 25000; //25000
+var levelLength = 30000; //25000
 var timeRemaining = 90.0;
 
 var machine = null;
@@ -59,7 +59,7 @@ var Level1 = {
   preload: function(){
     //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
     game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 300ppi.gif');
-    game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
+    game.load.image('Squirrel', 'imgs/cape.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Cloud1', 'imgs/cloudForest1.png');
     game.load.image('Cloud2', 'imgs/cloudForest2.png');

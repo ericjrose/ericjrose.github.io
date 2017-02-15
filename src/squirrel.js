@@ -1,8 +1,13 @@
-function Squirrel(game, sqImg, initX, initY) {
+function Squirrel(game, sqImg, boostImg1, boostImg2, boostImg3, initX, initY) {
     this.game = game;
     this._radius = 0.8;
     this._prevPosition = null;
     this._currPosition = {x: startX, y: startY};
+
+    this.boostImg1 = boostImg1;
+    this.boostImg2 = boostImg2;
+    this.boostImg3 = boostImg3;
+    this.sqImg = sqImg;
 
     this.squirrelSprite = game.add.sprite(10, 10, sqImg);
     this.squirrelSprite.scale.setTo(50/415,25/219);
@@ -48,16 +53,31 @@ Squirrel.prototype.dive = function () {
     //this.squirrelSprite.body.applyForce(2.0, -10.0);
 };
 
-Squirrel.prototype.boost = function (){
+Squirrel.prototype.boost = function (timeBoost){
+    if (timeBoost < 3){
+      this.squirrelSprite.loadTexture(this.boostImg1);
+    } else if (timeBoost < 7) {
+      this.squirrelSprite.loadTexture(this.boostImg2);
+    } else if (timeBoost < boostLength) {
+      this.squirrelSprite.loadTexture(this.boostImg3);
+    } else {
+      this.squirrelSprite.loadTexture(this.sqImg);
+    }
     velX = this.squirrelSprite.body.velocity.x/PTM;
     velY = this.squirrelSprite.body.velocity.y/PTM;
     normVel = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
-    this.squirrelSprite.body.applyForce(10*velX/normVel, 10*velY/normVel);
+    this.squirrelSprite.body.applyForce(5*velX/normVel, 5*velY/normVel);
 };
 
 Squirrel.prototype.parachute = function(){
     velY = this.squirrelSprite.body.velocity.y/PTM;
-    this.squirrelSprite.body.applyForce(0, -3.3*Math.abs(velY));
+    console.log('Y Vel: ' + velY);
+    // this.squirrelSprite.body.applyForce(0, -3.37*Math.abs(velY));
+    if (velY < -1){
+      this.squirrelSprite.body.applyForce(0, -0.5*Math.abs(velY));
+    } else {
+      this.squirrelSprite.body.applyForce(0, -3.5*Math.abs(velY));
+    }
 }
 
 Squirrel.prototype.getPositionX = function () {

@@ -17,15 +17,15 @@
 // var timerEvent;
 //
 // var level;
-var level2Length = 27500;
+var level2Length = 32500;
 
 var boostAvail = true;
 var boostMeter;
 var boostRecharge = 600;
 var boostTimer = boostRecharge;
 
-var boostLength = 5;
-var boostCurr = 5;
+var boostLength = 10;
+var boostCurr = 10;
 
 var acornRecharge = 300;
 
@@ -37,7 +37,10 @@ var Level2 = {
   preload: function(){
     //game.load.image('Desert','imgs/Flying Squirrel Desert L2.png');
     game.load.image('Desert','imgs/Flying Squirrel Desert Cropped 300ppi.gif');
-    game.load.image('Squirrel', 'imgs/Squirrel JetPack 02.png');
+    game.load.image('Squirrel', 'imgs/rocket.png');
+    game.load.image('boost1', 'imgs/rocket_1.png');
+    game.load.image('boost2', 'imgs/rocket_2.png');
+    game.load.image('boost3', 'imgs/rocket_3.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Cloud1', 'imgs/cloudDesert1.png');
     game.load.image('Cloud2', 'imgs/cloudDesert2.png');
@@ -70,7 +73,7 @@ var Level2 = {
     game.physics.box2d.restitution = restitution;
     //game.physics.box2d.setBoundsToWorld();
 
-    squirrel = new Squirrel(game, 'Squirrel');
+    squirrel = new Squirrel(game, 'Squirrel','boost1','boost2','boost3');
     terrain = new Terrain(game, 2, 2, 1, 'Cloud1','Cloud2','Cloud3', 'Acorn');
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
@@ -432,35 +435,35 @@ var Level2 = {
     canPara = false;
 
     if ((training)&(boostCurr < boostLength)){
-      squirrel.boost();
-      isDiving = 2;
       boostCurr += 1;
+      squirrel.boost(boostCurr);
+      isDiving = 2;
     } else if (training){
       if (cursors.down.isDown) {
         squirrel.dive();
         isDiving = 1;
       } else if ((cursors.right.isDown)&(boostAvail) ) {
-        squirrel.boost();
+        boostCurr = 0;
+        squirrel.boost(boostCurr);
         isDiving = 2;
         boostTimer = 0;
         boostAvail = false;
-        boostCurr = 0;
       } else {
         isDiving = 0;
       };
     } else if (boostCurr < boostLength){
       currFeatures = player.stateToFeatures();
       isDiving = 2;
-      squirrel.boost();
       boostCurr += 1;
+      squirrel.boost(boostCurr);
     } else{
       currFeatures = player.stateToFeatures();
       isDiving = machine.classify(currFeatures, canBoost, canPara);
       if ((isDiving == 2)&(boostAvail)){
-        squirrel.boost();
+        boostCurr = 0;
+        squirrel.boost(boostCurr);
         boostTimer = 0;
         boostAvail = false;
-        boostCurr = 0;
       } else if(isDiving == 1){
         squirrel.dive();
       }

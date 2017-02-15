@@ -91,7 +91,7 @@ Player.prototype.stateToFeatures = function() {
         distToSnake = Math.sqrt(Math.pow(this.terrain.snakes[nearestSnake].position.x - squirrelX,2) + Math.pow(this.terrain.snakes[nearestSnake].position.y - squirrelY,2));
         dx = this.terrain.snakes[nearestSnake].position.x - squirrelX;
         dy = this.terrain.snakes[nearestSnake].position.y - squirrelY;
-        angToSnake = Math.atan(dy/dx);
+        angToSnake = angle - Math.atan(dy/dx);
       }
     };
   };
@@ -123,7 +123,7 @@ Player.prototype.stateToFeatures = function() {
         distToAcorn = Math.sqrt(Math.pow(this.terrain.acorns[nearestAcorn].position.x - squirrelX,2) + Math.pow(this.terrain.acorns[nearestAcorn].position.y - squirrelY,2));
         dx = this.terrain.acorns[nearestAcorn].position.x - squirrelX;
         dy = this.terrain.acorns[nearestAcorn].position.y - squirrelY;
-        angToAcorn = Math.atan(dy/dx);
+        angToAcorn = angle - Math.atan(dy/dx);
       }
     };
   };
