@@ -10,6 +10,7 @@ function Squirrel(game, sqImg, boostImg1, boostImg2, boostImg3, initX, initY) {
     this.sqImg = sqImg;
 
     this.squirrelSprite = game.add.sprite(10, 10, sqImg);
+    //this.squirrelSprite.tint = 0xEE2B2A;
     this.squirrelSprite.scale.setTo(50/415,25/219);
     this.game.physics.box2d.enable(this.squirrelSprite);
     this.squirrelSprite.body.setCircle(this._radius*PTM);
@@ -54,9 +55,9 @@ Squirrel.prototype.dive = function () {
 };
 
 Squirrel.prototype.boost = function (timeBoost){
-    if (timeBoost < 3){
+    if (timeBoost < boostLength/3){
       this.squirrelSprite.loadTexture(this.boostImg1);
-    } else if (timeBoost < 7) {
+    } else if (timeBoost < 2*boostLength/3) {
       this.squirrelSprite.loadTexture(this.boostImg2);
     } else if (timeBoost < boostLength) {
       this.squirrelSprite.loadTexture(this.boostImg3);
@@ -66,7 +67,7 @@ Squirrel.prototype.boost = function (timeBoost){
     velX = this.squirrelSprite.body.velocity.x/PTM;
     velY = this.squirrelSprite.body.velocity.y/PTM;
     normVel = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
-    this.squirrelSprite.body.applyForce(5*velX/normVel, 5*velY/normVel);
+    this.squirrelSprite.body.applyForce(1.5*velX/normVel, 1.5*velY/normVel);
 };
 
 Squirrel.prototype.parachute = function(){

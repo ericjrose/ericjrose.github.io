@@ -34,6 +34,8 @@ var Y = [];
 var numPrinPoints = 50;
 var prevDataLength = 0;
 
+var starInd = 0;
+
 var covarNames;
 var neighbors;
 var predict;
@@ -53,6 +55,29 @@ var specificity;
 var precision;
 var prevalence;
 
+var numLevels = 10;
+var colorTheme = [];
+var treeType = [];
+var skyType = [];
+var starInd = [];
+var groundType = [];
+var groundImgType = [];
+var groundY1 = [];
+var groundY2 = [];
+var groundY3 = [];
+var groundY = [];
+var groundX = [];
+var treeY = [];
+var treeY2 = [];
+var treeY3 = [];
+var treeX = [];
+var treeX2 = [];
+var treeX3 = [];
+var skyX = [];
+var skyY = [];
+var starX = [];
+var starY = [];
+
 var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Ang to Snake","No Acorns","Dist to Acorn","Ang to Acorn","Chng X Dive"];
 
 var Level1 = {
@@ -61,20 +86,229 @@ var Level1 = {
     game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 300ppi.gif');
     game.load.image('Squirrel', 'imgs/cape.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
-    game.load.image('Cloud1', 'imgs/cloudForest1.png');
-    game.load.image('Cloud2', 'imgs/cloudForest2.png');
-    game.load.image('Cloud3', 'imgs/cloudForest3.png');
+    game.load.image('Cloud1', 'imgs/cloud1.png');
+    game.load.image('Cloud2', 'imgs/cloud2.png');
+    game.load.image('Cloud3', 'imgs/cloud3.png');
+
+    game.load.image('Sun', 'imgs/sky_sun.png');
+    game.load.image('Moon', 'imgs/sky_moon.png');
+    game.load.image('Star', 'imgs/sky_star.png');
+
+    game.load.image('Tree1', 'imgs/tree_ball.png');
+    game.load.image('Tree2', 'imgs/tree_bush.png');
+    game.load.image('Tree3', 'imgs/tree_cone.png');
+    game.load.image('Tree4', 'imgs/tree_triangle.png');
+
+    game.load.image('Mount1','imgs/ground_mountain1.png');
+    game.load.image('Mount2','imgs/ground_mountain2.png');
+    game.load.image('Mount3','imgs/ground_mountain3.png');
+
+    game.load.image('Hill1','imgs/ground_hill1.png');
+    game.load.image('Hill2','imgs/ground_hill2.png');
+    game.load.image('Hill3','imgs/ground_hill3.png');
+
   },
   create: function(){
+
+    level = 1;
+
     backgroundWidth = 2735;
     backgroundHeight = 2305;
+
+    for (var i = 0; i < numLevels; i++){
+      //colorTheme.push(getRandomInt(1,9));
+      colorTheme.push(4);
+      treeType.push(getRandomInt(1,5));
+      skyType.push(getRandomInt(1,3));
+      starInd.push(getRandomInt(0,2));
+      groundType.push(getRandomInt(1,3));
+      groundY1.push(300 + 50*(Math.random()*2 - 1));
+      groundY2.push(300 + 50*(Math.random()*2 - 1));
+      groundY3.push(300 + 50*(Math.random()*2 - 1));
+      groundY.push([groundY1[i], groundY2[i], groundY3[i]]);
+      groundY[i].sort(function(a,b){
+        return a- b;
+      });
+      groundX.push(shuffleArray([-100, 200, 500]));
+      treeY.push([groundY[i][0] + 200 + 30*Math.random(),groundY[i][1] + 200 + 30*Math.random(),groundY[i][2] + 200 + 30*Math.random()]);
+      treeX.push([groundX[i][0] + 200 + 100*Math.random(),groundX[i][1] + 200 + 100*Math.random(),groundX[i][2] + 200 + 100*Math.random()]);
+      groundImgType.push([getRandomInt(1,3),getRandomInt(1,3),getRandomInt(1,3)]);
+      skyX.push(600 + Math.random());
+      skyY.push(50 + Math.random());
+      starX.push([100 + 50*(Math.random()*2 - 1), 200 + 50*(Math.random()*2 - 1), 300 + 50*(Math.random()*2 - 1), 400 + 50*(Math.random()*2 - 1),
+                                500 + 50*(Math.random()*2 - 1), 700 + 50*(Math.random()*2 - 1)]);
+      starY.push([40 + 30*(Math.random()*2 - 1), 40 + 30*(Math.random()*2 - 1), 40 + 30*(Math.random()*2 - 1), 40 + 30*(Math.random()*2 - 1),
+                                40 + 30*(Math.random()*2 - 1), 40 + 30*(Math.random()*2 - 1)]);
+
+    }
+
+
+
+
+    if (colorTheme[level-1] == 1){
+      color1 = 0x6DBCDB;
+      color2 = 0xFFFFFF;
+      color3 = 0xD28EB5;
+      color4 = 0x7A526C;
+      color5 = 0xAB9B9E;
+    } else if (colorTheme[level-1] == 2){
+      color1 = 0x554236;
+      color2 = 0xF77825;
+      color3 = 0xD3CE3D;
+      color4 = 0xF1EFA5;
+      color5 = 0x60B99A;
+    } else if (colorTheme[level-1] == 3){
+      color1 = 0x587477;
+      color2 = 0xBEA544;
+      color3 = 0xF67272;
+      color4 = 0xF9285E;
+      color5 = 0xB64960;
+    } else if (colorTheme[level-1] == 4){
+      color1 = 0x1F100B;
+      color2 = 0x39446E;
+      color3 = 0x6C98A4;
+      color4 = 0xECDCCD;
+      color5 = 0xC40101;
+    } else if (colorTheme[level-1] == 5){
+      color1 = 0x7C9E9D;
+      color2 = 0x9598AD;
+      color3 = 0xFAEBD0;
+      color4 = 0xD4A44A;
+      color5 = 0x80936D;
+    } else if (colorTheme[level-1] == 6){
+      color1 = 0xFFF0AB;
+      color2 = 0x7A6E7C;
+      color3 = 0xE08D28;
+      color4 = 0xC6C00E;
+      color5 = 0xB7ADB6;
+    } else if (colorTheme[level-1] == 7){
+      color1 = 0x3E3C4A;
+      color2 = 0x6E6489;
+      color3 = 0xAD8FB1;
+      color4 = 0xFFC7C5;
+      color5 = 0xB05372;
+    } else {
+      color1 = 0x52060A;
+      color2 = 0xC0596C;
+      color3 = 0xEBD8D4;
+      color4 = 0xC4BFA9;
+      color5 = 0x9F8964;
+    }
+
+    if (treeType[level-1] == 1){
+      treeImg = 'Tree1';
+    } else if (treeType[level-1] == 2){
+      treeImg = 'Tree2';
+    } else if (treeType[level-1] == 3){
+      treeImg = 'Tree3';
+    } else {
+      treeImg = 'Tree4';
+    };
+
+    if (skyType[level-1] == 1){
+      skyImg = 'Sun';
+    } else {
+      skyImg = 'Moon';
+    };
+
+    if (groundType[level-1] == 1){
+      groundImg = 'Mount';
+    } else {
+      groundImg = 'Hill';
+    }
+
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(goFull, this);
 
     game.time.advancedTiming = true;
-    game.stage.backgroundColor = '#000000';
-    level = 1;
+    game.stage.backgroundColor = color5;
+
+//////// Background
+    backgroundGroup = game.add.group();
+
+    groundGraphics = game.add.graphics(0,0);
+    groundGraphics.beginFill(color3);
+    groundGraphics.drawRect(0, 2*screen1Height/3, screenWidth, screen1Height/3);
+    groundGraphics.endFill();
+    groundGraphics.fixedToCamera = true;
+
+    mount1 = game.add.sprite(groundX[level-1][0], groundY[level-1][0], groundImg + groundImgType[level-1][0]);
+    mount1.tint = color4;
+    mount1.fixedToCamera = true;
+    mount1.scale.setTo(0.08,0.08);
+    backgroundGroup.add(mount1);
+
+    mount2 = game.add.sprite(groundX[level-1][1], groundY[level-1][1], groundImg + groundImgType[level-1][1]);
+    mount2.tint = color4;
+    mount2.fixedToCamera = true;
+    mount2.scale.setTo(0.08,0.08);
+    backgroundGroup.add(mount2);
+
+    mount3 = game.add.sprite(groundX[level-1][2], groundY[level-1][2], groundImg + groundImgType[level-1][2]);
+    mount3.tint = color4;
+    mount3.fixedToCamera = true;
+    mount3.scale.setTo(0.08,0.08);
+    backgroundGroup.add(mount3);
+
+    tree1 = game.add.sprite(treeX[level-1][0], treeY[level-1][0], treeImg);
+    tree1.tint = color5;
+    tree1.fixedToCamera = true;
+    tree1.scale.setTo(0.05,0.05);
+    backgroundGroup.add(tree1);
+
+    tree2 = game.add.sprite(treeX[level-1][1], treeY[level-1][1], treeImg);
+    tree2.tint = color5;
+    tree2.fixedToCamera = true;
+    tree2.scale.setTo(0.05,0.05);
+    backgroundGroup.add(tree2);
+
+    tree3 = game.add.sprite(treeX[level-1][2], treeY[level-1][2], treeImg);
+    tree3.tint = color5;
+    tree3.fixedToCamera = true;
+    tree3.scale.setTo(0.05,0.05);
+    backgroundGroup.add(tree3);
+
+    if ((starInd[level-1] == 1)&(skyType[level-1] == 2)){
+      star1 = game.add.sprite(starX[level-1][0], starY[level-1][0], 'Star');
+      star1.tint = color3;
+      star1.fixedToCamera = true;
+      star1.scale.setTo(0.015,0.015);
+
+      star2 = game.add.sprite(starX[level-1][1], starY[level-1][1], 'Star');
+      star2.tint = color3;
+      star2.fixedToCamera = true;
+      star2.scale.setTo(0.015,0.015);
+
+      star3 = game.add.sprite(starX[level-1][2], starY[level-1][2], 'Star');
+      star3.tint = color3;
+      star3.fixedToCamera = true;
+      star3.scale.setTo(0.015,0.015);
+
+      star4 = game.add.sprite(starX[level-1][3], starY[level-1][3],'Star');
+      star4.tint = color3;
+      star4.fixedToCamera = true;
+      star4.scale.setTo(0.015,0.015);
+
+      star5 = game.add.sprite(starX[level-1][4], starY[level-1][4], 'Star');
+      star5.tint = color3;
+      star5.fixedToCamera = true;
+      star5.scale.setTo(0.015,0.015);
+
+      star6 = game.add.sprite(starX[level-1][5], starY[level-1][5], 'Star');
+      star6.tint = color3;
+      star6.fixedToCamera = true;
+      star6.scale.setTo(0.015,0.015);
+    };
+
+    sky = game.add.sprite(skyX[level-1], skyY[level-1], skyImg);
+    sky.tint = color3;
+    sky.fixedToCamera = true;
+    sky.scale.setTo(0.04,0.04);
+    //backgroundGroup.add(sky);
+
+/////////
+
 
     totalFrames = 0;
     actualYes = 0;
@@ -90,12 +324,9 @@ var Level1 = {
 
     training = true;
 
-    //background = game.add.tileSprite(0, 0, 4608, 2307,'Forest'); //Image is 4808x2307
-    //background.scale.setTo(screen1Width/4608,screen1Height/2307);
-    background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Forest'); //Image is 656x554
-    background.scale.setTo(screen1Width/backgroundWidth,screen1Height/backgroundHeight);
-    background.fixedToCamera = true;
-
+    //background = game.add.tileSprite(0, 0, backgroundWidth, backgroundHeight,'Forest'); //Image is 656x554
+    //background.scale.setTo(screen1Width/backgroundWidth,screen1Height/backgroundHeight);
+    //background.fixedToCamera = true;
 
     game.physics.startSystem(Phaser.Physics.BOX2D);
     game.physics.box2d.gravity.y = gravity;
@@ -103,7 +334,7 @@ var Level1 = {
     //game.physics.box2d.setBoundsToWorld();
 
     squirrel = new Squirrel(game, 'Squirrel');
-    terrain = new Terrain(game, 1, 1, 1, 'Cloud1','Cloud2','Cloud3');
+    terrain = new Terrain(game, 1, 1, 1, color1, color2, 'Cloud1','Cloud2','Cloud3');
     player = new Player(game, squirrel, terrain, level);
     machine = new kNear(k);
 
@@ -125,10 +356,10 @@ var Level1 = {
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
 
-    text = game.add.text(screen1Width*.02,screen1Height*.08, 'Level: 1', {fontSize: '20px', fill: '0x000000'});
+    text = game.add.text(screen1Width*.02,screen1Height*.08, 'Level: 1', {fontSize: '20px',fontWeight:'bold', fill: '0x000000'});
     text.fixedToCamera = true;
 
-    trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fill: '0x000000'});
+    trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fontWeight: 'bold', fill: '0x000000'});
     trainingText.fixedToCamera = true;
     keyE = game.input.keyboard.addKey(Phaser.Keyboard.E);
     keyE.onDown.add(chngEvalStatus, this);
@@ -150,12 +381,12 @@ var Level1 = {
     sideCanvas.endFill();
     sideCanvas.fixedToCamera = true;
 
-    rateText = game.add.text(screenWidth*0.7, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px', fill: '0xffffff'});
-    tpText = game.add.text(screenWidth*0.7, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
-    fpText = game.add.text(screenWidth*0.7, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fill: '0xffffff'});
-    specText = game.add.text(screenWidth*0.7, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fill: '0xffffff'});
-    precText = game.add.text(screenWidth*0.7, screen2Height*0.5, 'Precision:', {fontSize: '14px', fill: '0xffffff'});
-    prevText = game.add.text(screenWidth*0.7, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fill: '0xffffff'});
+    rateText = game.add.text(screenWidth*0.7, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px',fontWeight: 'bold',fill: '0xffffff'});
+    tpText = game.add.text(screenWidth*0.7, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
+    fpText = game.add.text(screenWidth*0.7, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
+    specText = game.add.text(screenWidth*0.7, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
+    precText = game.add.text(screenWidth*0.7, screen2Height*0.5, 'Precision:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
+    prevText = game.add.text(screenWidth*0.7, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
 
     rateText.fixedToCamera = true;
     tpText.fixedToCamera = true;
@@ -315,6 +546,7 @@ var Level1 = {
   },
   update: function(){
 
+    game.world.bringToTop(backgroundGroup);
     game.world.bringToTop(frontGroup);
     game.world.bringToTop(statGroup);
 
@@ -324,6 +556,24 @@ var Level1 = {
     squirrelY = squirrel.getPositionY();
 
     zoom = Math.min(1, Math.pow((screen1Height-30)/(250-squirrelY),0.75));
+
+    mount1.scale.setTo(0.08/zoom);
+    mount2.scale.setTo(0.08/zoom);
+    mount3.scale.setTo(0.08/zoom);
+    tree1.scale.setTo(0.05/zoom);
+    tree2.scale.setTo(0.05/zoom);
+    tree3.scale.setTo(0.05/zoom);
+    groundGraphics.scale.setTo(1/zoom);
+    sky.scale.setTo(0.04/zoom);
+    if (starInd == 1){
+      star1.scale.setTo(0.015/zoom);
+      star2.scale.setTo(0.015/zoom);
+      star3.scale.setTo(0.015/zoom);
+      star4.scale.setTo(0.015/zoom);
+      star5.scale.setTo(0.015/zoom);
+      star6.scale.setTo(0.015/zoom);
+    };
+
 
     game.world.scale.setTo(zoom);
     //background.scale.setTo((1/zoom)*screen1Width/4608,(1/zoom)*screen1Height/2307);
@@ -351,7 +601,7 @@ var Level1 = {
       squirrelProgress.destroy();
       game.state.start('levelFailed');
     };
-    text.text = "Level: " + 1 + " Time Left: " + minutes.substr(-2) + ":" + seconds.substr(-2);
+    text.text = "Level: " + 1 + "   Time Remaining: " + minutes.substr(-2) + ":" + seconds.substr(-2);
 
     sideCanvas.scale.setTo(1/zoom);
     rateText.scale.setTo(1/zoom);
@@ -716,4 +966,20 @@ function pause(){
     isPaused = true;
     game.paused = true;
   }
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
 }

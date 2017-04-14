@@ -13,10 +13,12 @@ var levelComplete = {
 
       //game.add.tileSprite(0,0, game.width, game.height, 'levelFailed');
 
-      text = game.add.text(400, 300, "Level "+ level + " Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
-      text = game.add.text(390, 380, "Press ENTER to Start the Next Level", {fontSize: '24px', fill: "#FFF", align: "center"});
-      text.scale.setTo(1/zoom);
-      text.fixedToCamera = true;
+      text1 = game.add.text(400, 300, "Level "+ level + " Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
+      text2 = game.add.text(390, 380, "Press ENTER to Start the Next Level", {fontSize: '24px', fill: "#FFF", align: "center"});
+      text1.scale.setTo(1/zoom);
+      text1.fixedToCamera = true;
+      text2.scale.setTo(1/zoom);
+      text2.fixedToCamera = true;
 
       var newData = [];
       var newTraining = [];

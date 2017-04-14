@@ -1,6 +1,8 @@
-function Terrain(game, level, scenery, player, cloud1, cloud2, cloud3, acorn, snake) {
+function Terrain(game, level, scenery, player, hillCol, cloudCol, cloud1, cloud2, cloud3, acorn, snake) {
   this.game = game;
   this.hillGraphics = null;
+  this.hillColor = hillCol;
+  this.cloudCol = cloudCol;
   this.knotsX = [0];
   this.knotsY = [10];
   if (player == 1){
@@ -127,12 +129,15 @@ Terrain.prototype.fill = function (x) {
         cloudP = Math.random();
         if (cloudP < 0.1){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud1Sprite);
+          cloud.tint = this.cloudCol;
           cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.2){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud2Sprite);
+          cloud.tint = this.cloudCol;
           cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.3){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud3Sprite);
+          cloud.tint = this.cloudCol;
           cloud.scale.setTo(0.8,0.8);
         }
 
@@ -177,19 +182,21 @@ Terrain.prototype.fill = function (x) {
     lastX = this.pointsX[this.pointsX.length - 1];
     lastY = this.pointsY[this.pointsY.length - 1];
 
-    if (this.scenery == 0){
-      hillColor = '0x000000';
-      hillLineColor = '0x000000';
-    } else if (this.scenery == 1){
-      hillColor = '0x3E8C67';
-      hillLineColor = '0x3E8C67';
-    } else if (this.scenery == 2){
-      hillColor = '0xFDC760';
-      hillLineColor = '0xFDC760';
-    } else{
-      hillColor = '0x7569AF';
-      hillLineColor = '0x7569AF';
-    };
+    hillColor = this.hillColor;
+    hillLineColor = this.hillColor;
+    // if (this.scenery == 0){
+    //   hillColor = '0x000000';
+    //   hillLineColor = '0x000000';
+    // } else if (this.scenery == 1){
+    //   hillColor = '0x3E8C67';
+    //   hillLineColor = '0x3E8C67';
+    // } else if (this.scenery == 2){
+    //   hillColor = '0xFDC760';
+    //   hillLineColor = '0xFDC760';
+    // } else{
+    //   hillColor = '0x7569AF';
+    //   hillLineColor = '0x7569AF';
+    // };
     this.hillGraphics.beginFill(hillColor);
     this.hillGraphics.lineStyle(5, hillLineColor, 1);
     this.hillGraphics.moveTo(lastX*PTM-300, 250);

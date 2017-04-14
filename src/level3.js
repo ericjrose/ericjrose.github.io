@@ -40,8 +40,8 @@ var paraMeter;
 var paraRecharge = 600;
 var paraTimer = paraRecharge;
 
-var paraLength = 10;
-var paraCurr = 10;
+var paraLength = 20;
+var paraCurr = 20;
 
 // var isDiving = 0;
 // var k = 5;

@@ -24,8 +24,8 @@ var boostMeter;
 var boostRecharge = 600;
 var boostTimer = boostRecharge;
 
-var boostLength = 10;
-var boostCurr = 10;
+var boostLength = 30;
+var boostCurr = 30;
 
 var acornRecharge = 300;
 
