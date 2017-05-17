@@ -61,7 +61,6 @@ var levelComplete = {
   },
   update: function() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {
-      scenery = getRandomInt(1,3);
       level += 1;
       game.state.start('Level');
     }

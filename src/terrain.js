@@ -1,8 +1,7 @@
-function Terrain(game, level, scenery, player, hillCol, cloudCol, cloud1, cloud2, cloud3, acorn, snake) {
+function Terrain(game, level, player, hillCol, cloud1, cloud2, cloud3, acorn, snake) {
   this.game = game;
   this.hillGraphics = null;
   this.hillColor = hillCol;
-  this.cloudCol = cloudCol;
   this.knotsX = [0];
   this.knotsY = [10];
   if (player == 1){
@@ -22,7 +21,6 @@ function Terrain(game, level, scenery, player, hillCol, cloudCol, cloud1, cloud2
   //this.hillKnots = [{'x': terrain.knotsX, 'y': terrain.knotsY}];
   this.hillFn = null;
   this.level = level;
-  this.scenery = scenery;
 
   this.cloud1Sprite = cloud1;
   this.cloud2Sprite = cloud2;
@@ -121,6 +119,7 @@ Terrain.prototype.fill = function (x) {
                 this.game.physics.box2d.enable(snake);
                 snake.body.setCollisionCategory(2);
                 snake.body.static = true;
+                frontGroup.add(snake);
                 this.snakes.push(snake);
               };
             };
@@ -129,15 +128,15 @@ Terrain.prototype.fill = function (x) {
         cloudP = Math.random();
         if (cloudP < 0.1){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud1Sprite);
-          cloud.tint = this.cloudCol;
+          backgroundGroup.add(cloud);
           cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.2){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud2Sprite);
-          cloud.tint = this.cloudCol;
+          backgroundGroup.add(cloud);
           cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.3){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud3Sprite);
-          cloud.tint = this.cloudCol;
+          backgroundGroup.add(cloud);
           cloud.scale.setTo(0.8,0.8);
         }
 
@@ -150,6 +149,7 @@ Terrain.prototype.fill = function (x) {
             acorn.body.setCollisionCategory(3);
             acorn.body.static = true;
             acorn.body.sensor = true;
+            frontGroup.add(acorn);
             this.acorns.push(acorn);
           };
         };
@@ -184,19 +184,6 @@ Terrain.prototype.fill = function (x) {
 
     hillColor = this.hillColor;
     hillLineColor = this.hillColor;
-    // if (this.scenery == 0){
-    //   hillColor = '0x000000';
-    //   hillLineColor = '0x000000';
-    // } else if (this.scenery == 1){
-    //   hillColor = '0x3E8C67';
-    //   hillLineColor = '0x3E8C67';
-    // } else if (this.scenery == 2){
-    //   hillColor = '0xFDC760';
-    //   hillLineColor = '0xFDC760';
-    // } else{
-    //   hillColor = '0x7569AF';
-    //   hillLineColor = '0x7569AF';
-    // };
     this.hillGraphics.beginFill(hillColor);
     this.hillGraphics.lineStyle(5, hillLineColor, 1);
     this.hillGraphics.moveTo(lastX*PTM-300, 250);
