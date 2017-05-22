@@ -72,7 +72,6 @@ Squirrel.prototype.boost = function (timeBoost){
 
 Squirrel.prototype.parachute = function(){
     velY = this.squirrelSprite.body.velocity.y/PTM;
-    console.log('Y Vel: ' + velY);
     // this.squirrelSprite.body.applyForce(0, -3.37*Math.abs(velY));
     if (velY < -1){
       this.squirrelSprite.body.applyForce(0, -0.5*Math.abs(velY));

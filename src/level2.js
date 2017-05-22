@@ -35,141 +35,21 @@ var acornRecharge = 300;
 var Level2 = {
   preload: function(){
     game.load.image('Squirrel', 'imgs/rocket.png');
-    game.load.image('Arrow', 'imgs/downArrow.png');
+    //game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('boost1', 'imgs/rocket_1.png');
     game.load.image('boost2', 'imgs/rocket_2.png');
     game.load.image('boost3', 'imgs/rocket_3.png');
     game.load.image('Acorn', 'imgs/acorn2.png');
 
-    game.load.image('Cloud1_C1', 'imgs/cloud1_C1.png');
-    game.load.image('Cloud2_C1', 'imgs/cloud2_C1.png');
-    game.load.image('Cloud3_C1', 'imgs/cloud3_C1.png');
-    game.load.image('Cloud1_C2', 'imgs/cloud1_C2.png');
-    game.load.image('Cloud2_C2', 'imgs/cloud2_C2.png');
-    game.load.image('Cloud3_C2', 'imgs/cloud3_C2.png');
-    game.load.image('Cloud1_C3', 'imgs/cloud1_C3.png');
-    game.load.image('Cloud2_C3', 'imgs/cloud2_C3.png');
-    game.load.image('Cloud3_C3', 'imgs/cloud3_C3.png');
-    game.load.image('Cloud1_C4', 'imgs/cloud1_C4.png');
-    game.load.image('Cloud2_C4', 'imgs/cloud2_C4.png');
-    game.load.image('Cloud3_C4', 'imgs/cloud3_C4.png');
-    game.load.image('Cloud1_C5', 'imgs/cloud1_C5.png');
-    game.load.image('Cloud2_C5', 'imgs/cloud2_C5.png');
-    game.load.image('Cloud3_C5', 'imgs/cloud3_C5.png');
-    game.load.image('Cloud1_C6', 'imgs/cloud1_C6.png');
-    game.load.image('Cloud2_C6', 'imgs/cloud2_C6.png');
-    game.load.image('Cloud3_C6', 'imgs/cloud3_C6.png');
-    game.load.image('Cloud1_C7', 'imgs/cloud1_C7.png');
-    game.load.image('Cloud2_C7', 'imgs/cloud2_C7.png');
-    game.load.image('Cloud3_C7', 'imgs/cloud3_C7.png');
-    game.load.image('Cloud1_C8', 'imgs/cloud1_C8.png');
-    game.load.image('Cloud2_C8', 'imgs/cloud2_C8.png');
-    game.load.image('Cloud3_C8', 'imgs/cloud3_C8.png');
-
-
-    game.load.image('Sun_C1', 'imgs/sky_sun_C1.png');
-    game.load.image('Moon_C1', 'imgs/sky_moon_C1.png');
-    game.load.image('Star_C1', 'imgs/sky_star_C1.png');
-    game.load.image('Sun_C2', 'imgs/sky_sun_C2.png');
-    game.load.image('Moon_C2', 'imgs/sky_moon_C2.png');
-    game.load.image('Star_C2', 'imgs/sky_star_C2.png');
-    game.load.image('Sun_C3', 'imgs/sky_sun_C3.png');
-    game.load.image('Moon_C3', 'imgs/sky_moon_C3.png');
-    game.load.image('Star_C3', 'imgs/sky_star_C3.png');
-    game.load.image('Sun_C4', 'imgs/sky_sun_C4.png');
-    game.load.image('Moon_C4', 'imgs/sky_moon_C4.png');
-    game.load.image('Star_C4', 'imgs/sky_star_C4.png');
-    game.load.image('Sun_C5', 'imgs/sky_sun_C5.png');
-    game.load.image('Moon_C5', 'imgs/sky_moon_C5.png');
-    game.load.image('Star_C5', 'imgs/sky_star_C5.png');
-    game.load.image('Sun_C6', 'imgs/sky_sun_C6.png');
-    game.load.image('Moon_C6', 'imgs/sky_moon_C6.png');
-    game.load.image('Star_C6', 'imgs/sky_star_C6.png');
-    game.load.image('Sun_C7', 'imgs/sky_sun_C7.png');
-    game.load.image('Moon_C7', 'imgs/sky_moon_C7.png');
-    game.load.image('Star_C7', 'imgs/sky_star_C7.png');
-    game.load.image('Sun_C8', 'imgs/sky_sun_C8.png');
-    game.load.image('Moon_C8', 'imgs/sky_moon_C8.png');
-    game.load.image('Star_C8', 'imgs/sky_star_C8.png');
-
-    game.load.image('Tree1_C1', 'imgs/tree_ball_C1.png');
-    game.load.image('Tree2_C1', 'imgs/tree_bush_C1.png');
-    game.load.image('Tree3_C1', 'imgs/tree_triangle_C1.png');
-    game.load.image('Tree1_C2', 'imgs/tree_ball_C2.png');
-    game.load.image('Tree2_C2', 'imgs/tree_bush_C2.png');
-    game.load.image('Tree3_C2', 'imgs/tree_triangle_C2.png');
-    game.load.image('Tree1_C3', 'imgs/tree_ball_C3.png');
-    game.load.image('Tree2_C3', 'imgs/tree_bush_C3.png');
-    game.load.image('Tree3_C3', 'imgs/tree_triangle_C3.png');
-    game.load.image('Tree1_C4', 'imgs/tree_ball_C4.png');
-    game.load.image('Tree2_C4', 'imgs/tree_bush_C4.png');
-    game.load.image('Tree3_C4', 'imgs/tree_triangle_C4.png');
-    game.load.image('Tree1_C5', 'imgs/tree_ball_C5.png');
-    game.load.image('Tree2_C5', 'imgs/tree_bush_C5.png');
-    game.load.image('Tree3_C5', 'imgs/tree_triangle_C5.png');
-    game.load.image('Tree1_C6', 'imgs/tree_ball_C6.png');
-    game.load.image('Tree2_C6', 'imgs/tree_bush_C6.png');
-    game.load.image('Tree3_C6', 'imgs/tree_triangle_C6.png');
-    game.load.image('Tree1_C7', 'imgs/tree_ball_C7.png');
-    game.load.image('Tree2_C7', 'imgs/tree_bush_C7.png');
-    game.load.image('Tree3_C7', 'imgs/tree_triangle_C7.png');
-    game.load.image('Tree1_C8', 'imgs/tree_ball_C8.png');
-    game.load.image('Tree2_C8', 'imgs/tree_bush_C8.png');
-    game.load.image('Tree3_C8', 'imgs/tree_triangle_C8.png');
-
-    game.load.image('Mount1_C1','imgs/ground_mountain1_C1.png');
-    game.load.image('Mount2_C1','imgs/ground_mountain2_C1.png');
-    game.load.image('Mount3_C1','imgs/ground_mountain3_C1.png');
-    game.load.image('Mount1_C2','imgs/ground_mountain1_C2.png');
-    game.load.image('Mount2_C2','imgs/ground_mountain2_C2.png');
-    game.load.image('Mount3_C2','imgs/ground_mountain3_C2.png');
-    game.load.image('Mount1_C3','imgs/ground_mountain1_C3.png');
-    game.load.image('Mount2_C3','imgs/ground_mountain2_C3.png');
-    game.load.image('Mount3_C3','imgs/ground_mountain3_C3.png');
-    game.load.image('Mount1_C4','imgs/ground_mountain1_C4.png');
-    game.load.image('Mount2_C4','imgs/ground_mountain2_C4.png');
-    game.load.image('Mount3_C4','imgs/ground_mountain3_C4.png');
-    game.load.image('Mount1_C5','imgs/ground_mountain1_C5.png');
-    game.load.image('Mount2_C5','imgs/ground_mountain2_C5.png');
-    game.load.image('Mount3_C5','imgs/ground_mountain3_C5.png');
-    game.load.image('Mount1_C6','imgs/ground_mountain1_C6.png');
-    game.load.image('Mount2_C6','imgs/ground_mountain2_C6.png');
-    game.load.image('Mount3_C6','imgs/ground_mountain3_C6.png');
-    game.load.image('Mount1_C7','imgs/ground_mountain1_C7.png');
-    game.load.image('Mount2_C7','imgs/ground_mountain2_C7.png');
-    game.load.image('Mount3_C7','imgs/ground_mountain3_C7.png');
-    game.load.image('Mount1_C8','imgs/ground_mountain1_C8.png');
-    game.load.image('Mount2_C8','imgs/ground_mountain2_C8.png');
-    game.load.image('Mount3_C8','imgs/ground_mountain3_C8.png');
-
-    game.load.image('Hill1_C1','imgs/ground_hill1_C1.png');
-    game.load.image('Hill2_C1','imgs/ground_hill2_C1.png');
-    game.load.image('Hill3_C1','imgs/ground_hill3_C1.png');
-    game.load.image('Hill1_C2','imgs/ground_hill1_C2.png');
-    game.load.image('Hill2_C2','imgs/ground_hill2_C2.png');
-    game.load.image('Hill3_C2','imgs/ground_hill3_C2.png');
-    game.load.image('Hill1_C3','imgs/ground_hill1_C3.png');
-    game.load.image('Hill2_C3','imgs/ground_hill2_C3.png');
-    game.load.image('Hill3_C3','imgs/ground_hill3_C3.png');
-    game.load.image('Hill1_C4','imgs/ground_hill1_C4.png');
-    game.load.image('Hill2_C4','imgs/ground_hill2_C4.png');
-    game.load.image('Hill3_C4','imgs/ground_hill3_C4.png');
-    game.load.image('Hill1_C5','imgs/ground_hill1_C5.png');
-    game.load.image('Hill2_C5','imgs/ground_hill2_C5.png');
-    game.load.image('Hill3_C5','imgs/ground_hill3_C5.png');
-    game.load.image('Hill1_C6','imgs/ground_hill1_C6.png');
-    game.load.image('Hill2_C6','imgs/ground_hill2_C6.png');
-    game.load.image('Hill3_C6','imgs/ground_hill3_C6.png');
-    game.load.image('Hill1_C7','imgs/ground_hill1_C7.png');
-    game.load.image('Hill2_C7','imgs/ground_hill2_C7.png');
-    game.load.image('Hill3_C7','imgs/ground_hill3_C7.png');
-    game.load.image('Hill1_C8','imgs/ground_hill1_C8.png');
-    game.load.image('Hill2_C8','imgs/ground_hill2_C8.png');
-    game.load.image('Hill3_C8','imgs/ground_hill3_C8.png');
+    game.load.audio('BoostSound', 'sounds/boost_explosion.wav');
+    game.load.audio('AcornSound', 'sounds/collect_coin3.wav');
   },
   create: function(){
     backgroundWidth = 2735;
     backgroundHeight = 2305;
+
+    boostSound = game.add.audio('BoostSound');
+    acornSound = game.add.audio('AcornSound');
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(goFull, this);
@@ -326,14 +206,14 @@ var Level2 = {
     game.physics.box2d.restitution = restitution;
     //game.physics.box2d.setBoundsToWorld();
 
+    frontGroup = game.add.group();
+    statGroup = game.add.group();
+
     squirrel = new Squirrel(game, 'Squirrel','boost1','boost2','boost3');
     terrain = new Terrain(game, level, 1, color1,'Cloud1' + '_C' + colorTheme[level-1],'Cloud2' + '_C' + colorTheme[level-1],'Cloud3' + '_C' + colorTheme[level-1],'Acorn');
     player = new Player(game, squirrel, terrain, level);
     //machine = new kNear(5);
     //machine.setK(k);
-
-    frontGroup = game.add.group();
-    statGroup = game.add.group();
 
     squirrel.squirrelSprite.body.setCategoryContactCallback(3, this.acornCollision, this);
 
@@ -561,6 +441,7 @@ var Level2 = {
     };
     // console.log('Acorn Collision');
     body2.sprite.destroy();
+    acornSound.play();
     if (boostTimer < boostRecharge){
       boostTimer += acornRecharge;
       if (boostTimer > boostRecharge){
@@ -714,6 +595,7 @@ var Level2 = {
       } else if ((cursors.right.isDown)&(boostAvail) ) {
         boostCurr = 0;
         squirrel.boost(boostCurr);
+        boostSound.play();
         isDiving = 2;
         boostTimer = 0;
         boostAvail = false;
@@ -731,6 +613,7 @@ var Level2 = {
       if ((isDiving == 2)&(boostAvail)){
         boostCurr = 0;
         squirrel.boost(boostCurr);
+        boostSound.play();
         boostTimer = 0;
         boostAvail = false;
       } else if(isDiving == 1){

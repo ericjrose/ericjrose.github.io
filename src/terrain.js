@@ -121,6 +121,7 @@ Terrain.prototype.fill = function (x) {
                 snake.body.static = true;
                 frontGroup.add(snake);
                 this.snakes.push(snake);
+                console.log(this.snakes);
               };
             };
         };

@@ -77,6 +77,12 @@ var skyY = [];
 var starX = [];
 var starY = [];
 
+var music;
+var liftSound;
+var boostSound;
+var acornSound;
+var snakeSound;
+
 var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Ang to Snake","No Acorns","Dist to Acorn","Ang to Acorn","Chng X Dive"];
 
 var Level1 = {
@@ -209,6 +215,7 @@ var Level1 = {
     game.load.image('Hill1_C8','imgs/ground_hill1_C8.png');
     game.load.image('Hill2_C8','imgs/ground_hill2_C8.png');
     game.load.image('Hill3_C8','imgs/ground_hill3_C8.png');
+
   },
   create: function(){
 
@@ -423,13 +430,13 @@ var Level1 = {
     game.physics.box2d.restitution = restitution;
     //game.physics.box2d.setBoundsToWorld();
 
+    frontGroup = game.add.group();
+    statGroup = game.add.group();
+
     squirrel = new Squirrel(game, 'Squirrel');
     terrain = new Terrain(game, 1, 1, color1,'Cloud1' + '_C' + colorTheme[level-1],'Cloud2' + '_C' + colorTheme[level-1],'Cloud3' + '_C' + colorTheme[level-1]);
     player = new Player(game, squirrel, terrain, level);
     machine = new kNear(k);
-
-    frontGroup = game.add.group();
-    statGroup = game.add.group();
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
