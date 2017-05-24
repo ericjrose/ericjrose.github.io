@@ -5,7 +5,8 @@ var level3Complete = {
   },
   create: function() {
       game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-      game.input.onDown.add(goFull, this);
+      keyF = game.input.keyboard.addKey(Phaser.Keyboard.F);
+      keyF.onDown.add(goFull, this);
 
       background = game.add.tileSprite(0, 0, 4608, 2307,'backgroundImg'); //Image is 4808x2307
       background.fixedToCamera = true;

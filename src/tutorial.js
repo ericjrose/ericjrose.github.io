@@ -67,7 +67,8 @@ var Tutorial = {
   },
   create: function(){
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    game.input.onDown.add(goFull, this);
+    keyF = game.input.keyboard.addKey(Phaser.Keyboard.F);
+    keyF.onDown.add(goFull, this);
 
     game.time.advancedTiming = true;
     game.stage.backgroundColor = '#ffffff';
@@ -83,13 +84,14 @@ var Tutorial = {
     game.physics.box2d.restitution = restitution;
     //game.physics.box2d.setBoundsToWorld();
 
+    frontGroup = game.add.group();
+    backgroundGroup = game.add.group();
+    statGroup = game.add.group();
+
     squirrel = new Squirrel(game, 'Squirrel');
-    terrain = new Terrain(game, 0, 0, 1, 'Cloud1','Cloud2','Cloud3');
+    terrain = new Terrain(game, 0, 1, 1, 'Cloud1','Cloud2','Cloud3');
     player = new Player(game, squirrel, terrain, level);
     machine = new kNear(k);
-
-    frontGroup = game.add.group();
-    statGroup = game.add.group();
 
     game.camera.bounds = null;
     // game.camera.y = -screen1Height/2;
@@ -97,16 +99,44 @@ var Tutorial = {
     cursors = game.input.keyboard.createCursorKeys();
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
+    quitButton = game.add.text(screen1Width*.02,screen1Height*.02, 'Quit', {fontSize: '18px', fill: '#000000'});
+    pauseButton = game.add.text(screen1Width*.08,screen1Height*.02, 'Pause', {fontSize: '18px', fill: '#000000'});
+    muteButton = game.add.text(screen1Width*.16,screen1Height*.02, 'Mute', {fontSize: '18px', fill: '#000000'});
+    fullScreenButton = game.add.text(screen1Width*.23,screen1Height*.02, 'Full Screen', {fontSize: '18px', fill: '#000000'});
+    evaluateButton = game.add.text(screen1Width*.36,screen1Height*.02, 'Switch to AI', {fontSize: '18px', fill: '#000000'});
+    quitButton.fixedToCamera = true;
+    frontGroup.add(quitButton);
+    pauseButton.fixedToCamera = true;
+    frontGroup.add(pauseButton);
+    muteButton.fixedToCamera = true;
+    frontGroup.add(muteButton);
+    fullScreenButton.fixedToCamera = true;
+    frontGroup.add(fullScreenButton);
+    evaluateButton.fixedToCamera = true;
+    frontGroup.add(evaluateButton);
+    quitButton.inputEnabled = true;
+    pauseButton.inputEnabled = true;
+    muteButton.inputEnabled = true;
+    fullScreenButton.inputEnabled = true;
+    evaluateButton.inputEnabled = true;
+    quitButton.events.onInputDown.add(quitGame, this);
+    pauseButton.events.onInputDown.add(pause, this);
+    muteButton.events.onInputDown.add(mute, this);
+    fullScreenButton.events.onInputDown.add(goFull, this);
+    evaluateButton.events.onInputDown.add(chngEvalStatus, this);
+
+    game.input.onDown.add(pausedClick, self);
+
     levelProgress = game.add.graphics(0,0);
     levelProgress.fixedToCamera = true;
     levelProgress.lineStyle(2, 0x000000, 1);
-    levelProgress.moveTo(.1*screen1Width,screen1Height*.05)
-    levelProgress.lineTo(.9*screen1Width, screen1Height*.05);
+    levelProgress.moveTo(.1*screen1Width,screen1Height*.07)
+    levelProgress.lineTo(.9*screen1Width, screen1Height*.07);
 
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
 
-    text = game.add.text(screen1Width*.02,screen1Height*.08, 'Level: 1', {fontSize: '20px', fill: '0x000000'});
+    text = game.add.text(screen1Width*.02,screen1Height*.09, 'Level: 1', {fontSize: '20px', fill: '0x000000'});
     text.fixedToCamera = true;
 
     trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fill: '0x000000'});
@@ -115,6 +145,10 @@ var Tutorial = {
     keyE.onDown.add(chngEvalStatus, this);
     keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
     keyP.onDown.add(pause, this);
+    keyQ = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    keyQ.onDown.add(quitGame, this);
+    keyM = game.input.keyboard.addKey(Phaser.Keyboard.M);
+    keyM.onDown.add(mute, this);
 
     keyEnter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     keyEnter.onDown.add(resumeTutorial, this);
@@ -433,6 +467,12 @@ var Tutorial = {
     };
     text.text = "Tutorial" + " Time Left: " + minutes.substr(-2) + ":" + seconds.substr(-2);
 
+    quitButton.scale.setTo(1/zoom);
+    pauseButton.scale.setTo(1/zoom);
+    muteButton.scale.setTo(1/zoom);
+    fullScreenButton.scale.setTo(1/zoom);
+    evaluateButton.scale.setTo(1/zoom);
+
     sideCanvas.scale.setTo(1/zoom);
     rateText.scale.setTo(1/zoom);
     tpText.scale.setTo(1/zoom);
@@ -632,7 +672,7 @@ var Tutorial = {
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
     squirrelProgress.beginFill(0xFF0000);
-    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/tutorialLength, .05*screen1Height, 20);
+    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/tutorialLength, .07*screen1Height, 20);
     squirrelProgress.endFill();
     squirrelProgress.scale.setTo(1/zoom);
 

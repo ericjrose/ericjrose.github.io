@@ -17,6 +17,7 @@ game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, 'game');
 
 game.state.add('Tutorial', Tutorial);
 game.state.add('tutorialMenu', tutorialMenu);
+game.state.add('credits', credits);
 game.state.add('tutorialComplete', tutorialComplete);
 game.state.add('Level1', Level1);
 game.state.add('Level2', Level2);

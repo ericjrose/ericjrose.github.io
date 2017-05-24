@@ -10,6 +10,7 @@ var player;
 var features;
 var text;
 var isPaused = false;
+var isMuted = false;
 
 var downArrow;
 
@@ -54,7 +55,7 @@ var specificity;
 var precision;
 var prevalence;
 
-var numLevels = 10;
+var numLevels = 1000;
 var colorTheme = [];
 var treeType = [];
 var skyType = [];
@@ -227,11 +228,12 @@ var Level1 = {
     for (var i = 0; i < numLevels; i++){
       colorTheme.push(getRandomInt(1,9));
       //colorTheme.push(1);
-      treeType.push(getRandomInt(1,5));
-      //skyType.push(getRandomInt(1,3));
-      skyType.push(2);
-      //starInd.push(getRandomInt(0,2));
-      starInd.push(1);
+      treeType.push(getRandomInt(1,4));
+      //treeType.push(2);
+      skyType.push(getRandomInt(1,3));
+      //skyType.push(2);
+      starInd.push(getRandomInt(0,2));
+      //starInd.push(1);
       groundType.push(getRandomInt(1,3));
       //groundType.push(1);
       groundY1.push(300 + 50*(Math.random()*2 - 1));
@@ -307,11 +309,15 @@ var Level1 = {
 
     if (treeType[level-1] == 1){
       treeImg = 'Tree1';
+      bushInd = 0;
     } else if (treeType[level-1] == 2){
       treeImg = 'Tree2';
+      bushInd = 1;
     } else {
       treeImg = 'Tree3';
+      bushInd = 0;
     }
+
 
     if (skyType[level-1] == 1){
       skyImg = 'Sun';
@@ -327,7 +333,8 @@ var Level1 = {
 
 
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    game.input.onDown.add(goFull, this);
+    keyF = game.input.keyboard.addKey(Phaser.Keyboard.F);
+    keyF.onDown.add(goFull, this);
 
     game.time.advancedTiming = true;
     game.stage.backgroundColor = color5;
@@ -356,17 +363,17 @@ var Level1 = {
     mount3.scale.setTo(0.9,0.9);
     backgroundGroup.add(mount3);
 
-    tree1 = game.add.sprite(treeX[level-1][0], treeY[level-1][0], treeImg + '_C' + colorTheme[level-1]);
+    tree1 = game.add.sprite(treeX[level-1][0], treeY[level-1][0] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree1.fixedToCamera = true;
     tree1.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree1);
 
-    tree2 = game.add.sprite(treeX[level-1][1], treeY[level-1][1], treeImg + '_C' + colorTheme[level-1]);
+    tree2 = game.add.sprite(treeX[level-1][1], treeY[level-1][1] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree2.fixedToCamera = true;
     tree2.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree2);
 
-    tree3 = game.add.sprite(treeX[level-1][2], treeY[level-1][2], treeImg + '_C' + colorTheme[level-1]);
+    tree3 = game.add.sprite(treeX[level-1][2], treeY[level-1][2] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree3.fixedToCamera = true;
     tree3.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree3);
@@ -444,24 +451,56 @@ var Level1 = {
     cursors = game.input.keyboard.createCursorKeys();
     //game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
+    quitButton = game.add.text(screen1Width*.02,screen1Height*.02, 'Quit', {fontSize: '18px', fill: '#000000'});
+    pauseButton = game.add.text(screen1Width*.08,screen1Height*.02, 'Pause', {fontSize: '18px', fill: '#000000'});
+    muteButton = game.add.text(screen1Width*.16,screen1Height*.02, 'Mute', {fontSize: '18px', fill: '#000000'});
+    fullScreenButton = game.add.text(screen1Width*.23,screen1Height*.02, 'Full Screen', {fontSize: '18px', fill: '#000000'});
+    evaluateButton = game.add.text(screen1Width*.36,screen1Height*.02, 'Switch to AI', {fontSize: '18px', fill: '#000000'});
+    quitButton.fixedToCamera = true;
+    frontGroup.add(quitButton);
+    pauseButton.fixedToCamera = true;
+    frontGroup.add(pauseButton);
+    muteButton.fixedToCamera = true;
+    frontGroup.add(muteButton);
+    fullScreenButton.fixedToCamera = true;
+    frontGroup.add(fullScreenButton);
+    evaluateButton.fixedToCamera = true;
+    frontGroup.add(evaluateButton);
+    quitButton.inputEnabled = true;
+    pauseButton.inputEnabled = true;
+    muteButton.inputEnabled = true;
+    fullScreenButton.inputEnabled = true;
+    evaluateButton.inputEnabled = true;
+    quitButton.events.onInputDown.add(quitGame, this);
+    pauseButton.events.onInputDown.add(pause, this);
+    muteButton.events.onInputDown.add(mute, this);
+    fullScreenButton.events.onInputDown.add(goFull, this);
+    evaluateButton.events.onInputDown.add(chngEvalStatus, this);
+
+    game.input.onDown.add(pausedClick, self);
+
     levelProgress = game.add.graphics(0,0);
     levelProgress.fixedToCamera = true;
     levelProgress.lineStyle(2, 0x000000, 1);
-    levelProgress.moveTo(.1*screen1Width,screen1Height*.05)
-    levelProgress.lineTo(.9*screen1Width, screen1Height*.05);
+    levelProgress.moveTo(.1*screen1Width,screen1Height*.07)
+    levelProgress.lineTo(.9*screen1Width, screen1Height*.07);
 
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
 
-    text = game.add.text(screen1Width*.02,screen1Height*.08, 'Level: 1', {fontSize: '20px',fontWeight:'bold', fill: '0x000000'});
+    text = game.add.text(screen1Width*.02,screen1Height*.09, 'Level: 1', {fontSize: '20px',fontWeight:'bold', fill: '#000000'});
     text.fixedToCamera = true;
 
-    trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fontWeight: 'bold', fill: '0x000000'});
+    trainingText = game.add.text(screen1Width*.02,screen1Height*.13, 'Training', {fontSize: '20px', fontWeight: 'bold', fill: '#000000'});
     trainingText.fixedToCamera = true;
     keyE = game.input.keyboard.addKey(Phaser.Keyboard.E);
     keyE.onDown.add(chngEvalStatus, this);
     keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
     keyP.onDown.add(pause, this);
+    keyQ = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    keyQ.onDown.add(quitGame, this);
+    keyM = game.input.keyboard.addKey(Phaser.Keyboard.M);
+    keyM.onDown.add(mute, this);
 
     timer = game.time.create();
     //timerEvent = timer.add(Phaser.Timer.MINUTE*1 + Phaser.Timer.SECOND*30,this.endTimer,this);
@@ -478,12 +517,12 @@ var Level1 = {
     sideCanvas.endFill();
     sideCanvas.fixedToCamera = true;
 
-    rateText = game.add.text(screenWidth*0.7, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px',fontWeight: 'bold',fill: '0xffffff'});
-    tpText = game.add.text(screenWidth*0.7, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
-    fpText = game.add.text(screenWidth*0.7, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
-    specText = game.add.text(screenWidth*0.7, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
-    precText = game.add.text(screenWidth*0.7, screen2Height*0.5, 'Precision:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
-    prevText = game.add.text(screenWidth*0.7, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fontWeight: 'bold', fill: '0xffffff'});
+    rateText = game.add.text(screenWidth*0.7, screen2Height*0.1, 'Misclassification Rate:', {fontSize: '14px',fontWeight: 'bold',fill: '#000000'});
+    tpText = game.add.text(screenWidth*0.7, screen2Height*0.2, 'True Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill:'#000000'});
+    fpText = game.add.text(screenWidth*0.7, screen2Height*0.3, 'False Positive Rate:', {fontSize: '14px', fontWeight: 'bold', fill: '#000000'});
+    specText = game.add.text(screenWidth*0.7, screen2Height*0.4, 'Specificity:', {fontSize: '14px', fontWeight: 'bold', fill: '#000000'});
+    precText = game.add.text(screenWidth*0.7, screen2Height*0.5, 'Precision:', {fontSize: '14px', fontWeight: 'bold', fill: '#000000'});
+    prevText = game.add.text(screenWidth*0.7, screen2Height*0.6, 'Prevalence:', {fontSize: '14px', fontWeight: 'bold', fill: '#000000'});
 
     rateText.fixedToCamera = true;
     tpText.fixedToCamera = true;
@@ -654,6 +693,12 @@ var Level1 = {
 
     zoom = Math.min(1, Math.pow((screen1Height-30)/(250-squirrelY),0.75));
 
+    quitButton.scale.setTo(1/zoom);
+    pauseButton.scale.setTo(1/zoom);
+    muteButton.scale.setTo(1/zoom);
+    fullScreenButton.scale.setTo(1/zoom);
+    evaluateButton.scale.setTo(1/zoom);
+
     mount1.scale.setTo(0.9/zoom);
     mount2.scale.setTo(0.9/zoom);
     mount3.scale.setTo(0.9/zoom);
@@ -788,7 +833,7 @@ var Level1 = {
     squirrelProgress = game.add.graphics(0,0);
     squirrelProgress.fixedToCamera = true;
     squirrelProgress.beginFill(0xFF0000);
-    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/levelLength, .05*screen1Height, 20);
+    squirrelProgress.drawCircle(.1*screen1Width + .8*screen1Width*squirrelX/levelLength, .07*screen1Height, 20);
     squirrelProgress.endFill();
     squirrelProgress.scale.setTo(1/zoom);
 
@@ -1053,6 +1098,11 @@ function chngEvalStatus(){
   };
 };
 
+function quitGame(){
+  music.stop();
+  game.state.start('menu')
+}
+
 function pause(){
   if (isPaused){
     isPaused = false;
@@ -1060,6 +1110,35 @@ function pause(){
   } else{
     isPaused = true;
     game.paused = true;
+  }
+}
+
+function mute(){
+  if (isMuted){
+    isMuted = false;
+    game.sound.mute = false;
+  } else{
+    isMuted = true;
+    game.sound.mute = true;
+  }
+}
+
+function pausedClick(){
+  if (isPaused){
+    if ((this.game.input.y > 5)&(this.game.input.y < 40)){
+      if ((this.game.input.x > 5)&(this.game.input.x < 60)){
+        pause();
+        quitGame();
+      } else if ((this.game.input.x > 60)&(this.game.input.x < 125)){
+        pause();
+      } else if ((this.game.input.x > 125)&(this.game.input.x < 185)){
+        mute();
+      } else if ((this.game.input.x > 185)&(this.game.input.x < 295)){
+        goFull();
+      } else if ((this.game.input.x > 295)&(this.game.input.x < 410)){
+        chngEvalStatus();
+      }
+    }
   }
 }
 
