@@ -49,6 +49,17 @@ for i in range(1,4):
     im = im.resize((int(width*0.115), int(height*0.115)), Image.ANTIALIAS)
     im.save(NEW_PATH)
 
+    OLD_PATH = r'../imgs/Large Images/cloud' + str(i) + '.png'
+    NEW_PATH = r'../imgs/cloud' + str(i) + '.png'
+    im = Image.open(OLD_PATH)
+    pixels = im.load()
+    width, height = im.size
+    if i == 3:
+        im = im.resize((int(width*0.8), int(height*0.8)), Image.ANTIALIAS)
+    else:
+        im = im.resize((int(width*0.5), int(height*0.5)), Image.ANTIALIAS)
+    im.save(NEW_PATH)
+
 for i in range(1,9):
     for j in range(1,4):
         OLD_PATH = r'../imgs/Large Images/ground_mountain' + str(j) + '_C' + str(i) + '.png'

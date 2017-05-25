@@ -57,9 +57,7 @@ var tutorialText;
 
 var Tutorial = {
   preload: function(){
-    //game.load.image('Forest','imgs/Flying Squirrel Forest L1.png');
-    game.load.image('Forest','imgs/Flying Squirrel Forest Cropped 72ppi.gif');
-    game.load.image('Squirrel', 'imgs/Squirrel Cape 01.png');
+    game.load.image('Squirrel', 'imgs/cape.png');
     game.load.image('Arrow', 'imgs/downArrow.png');
     game.load.image('Cloud1', 'imgs/cloud1.png');
     game.load.image('Cloud2', 'imgs/cloud2.png');
