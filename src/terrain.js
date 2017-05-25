@@ -115,13 +115,12 @@ Terrain.prototype.fill = function (x) {
               p = Math.random();
               if (p < this.snakeProb){
                 snake = this.game.add.sprite(nextX*PTM - 300 - 15, nextY*PTM - 20, this.snakeSprite);
-                snake.scale.setTo(35/160,30/144);
+                //snake.scale.setTo(35/160,30/144);
                 this.game.physics.box2d.enable(snake);
                 snake.body.setCollisionCategory(2);
                 snake.body.static = true;
                 frontGroup.add(snake);
                 this.snakes.push(snake);
-                console.log(this.snakes);
               };
             };
         };
@@ -130,22 +129,22 @@ Terrain.prototype.fill = function (x) {
         if (cloudP < 0.1){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud1Sprite);
           backgroundGroup.add(cloud);
-          cloud.scale.setTo(0.5,0.5);
+          //cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.2){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud2Sprite);
           backgroundGroup.add(cloud);
-          cloud.scale.setTo(0.5,0.5);
+          //cloud.scale.setTo(0.5,0.5);
         } else if (cloudP < 0.3){
           cloud = this.game.add.sprite(nextX*PTM - 300, -490-Math.random()*20, this.cloud3Sprite);
           backgroundGroup.add(cloud);
-          cloud.scale.setTo(0.8,0.8);
+          //cloud.scale.setTo(0.8,0.8);
         }
 
         if (this.level > 1){
           acornP = Math.random();
           if (acornP < this.acornProb){
             acorn = this.game.add.sprite(nextX*PTM - 300, -Math.random()*300, this.acornSprite);
-            acorn.scale.setTo(0.3,0.3);
+            //acorn.scale.setTo(0.3,0.3);
             this.game.physics.box2d.enable(acorn);
             acorn.body.setCollisionCategory(3);
             acorn.body.static = true;

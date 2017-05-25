@@ -155,64 +155,76 @@ var Level3 = {
 
     mount1 = game.add.sprite(groundX[level-1][0], groundY[level-1][0], groundImg + groundImgType[level-1][0]+ '_C' + colorTheme[level-1]);
     mount1.fixedToCamera = true;
-    mount1.scale.setTo(0.9, 0.9);
+    //mount1.scale.setTo(0.9, 0.9);
     backgroundGroup.add(mount1);
 
     mount2 = game.add.sprite(groundX[level-1][1], groundY[level-1][1], groundImg + groundImgType[level-1][1]+ '_C' + colorTheme[level-1]);
     mount2.fixedToCamera = true;
-    mount2.scale.setTo(0.9,0.9);
+    //mount2.scale.setTo(0.9,0.9);
     backgroundGroup.add(mount2);
 
     mount3 = game.add.sprite(groundX[level-1][2], groundY[level-1][2], groundImg + groundImgType[level-1][2]+ '_C' + colorTheme[level-1]);
     mount3.fixedToCamera = true;
-    mount3.scale.setTo(0.9,0.9);
+    //mount3.scale.setTo(0.9,0.9);
     backgroundGroup.add(mount3);
 
     tree1 = game.add.sprite(treeX[level-1][0], treeY[level-1][0] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree1.fixedToCamera = true;
-    tree1.scale.setTo(0.5,0.5);
+    //tree1.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree1);
 
     tree2 = game.add.sprite(treeX[level-1][1], treeY[level-1][1] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree2.fixedToCamera = true;
-    tree2.scale.setTo(0.5,0.5);
+    //tree2.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree2);
 
     tree3 = game.add.sprite(treeX[level-1][2], treeY[level-1][2] + bushInd*50, treeImg + '_C' + colorTheme[level-1]);
     tree3.fixedToCamera = true;
-    tree3.scale.setTo(0.5,0.5);
+    //tree3.scale.setTo(0.5,0.5);
     backgroundGroup.add(tree3);
 
     if ((starInd[level-1] == 1)&(skyType[level-1] == 2)){
       star1 = game.add.sprite(starX[level-1][0], starY[level-1][0], 'Star' + '_C' + colorTheme[level-1]);
       star1.fixedToCamera = true;
-      star1.scale.setTo(0.15,0.15);
+      //star1.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star1);
+      star1.scale.setTo(starScale[level-1][0]);
 
       star2 = game.add.sprite(starX[level-1][1], starY[level-1][1], 'Star' + '_C' + colorTheme[level-1]);
       star2.fixedToCamera = true;
-      star2.scale.setTo(0.15,0.15);
+      //star2.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star2);
+      star2.scale.setTo(starScale[level-1][1]);
 
       star3 = game.add.sprite(starX[level-1][2], starY[level-1][2], 'Star' + '_C' + colorTheme[level-1]);
       star3.fixedToCamera = true;
-      star3.scale.setTo(0.15,0.15);
+      //star3.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star3);
+      star3.scale.setTo(starScale[level-1][2]);
 
       star4 = game.add.sprite(starX[level-1][3], starY[level-1][3],'Star' + '_C' + colorTheme[level-1]);
       star4.fixedToCamera = true;
-      star4.scale.setTo(0.15,0.15);
+      //star4.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star4);
+      star4.scale.setTo(starScale[level-1][3]);
 
       star5 = game.add.sprite(starX[level-1][4], starY[level-1][4], 'Star' + '_C' + colorTheme[level-1]);
       star5.fixedToCamera = true;
-      star5.scale.setTo(0.15,0.15);
+      //star5.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star5);
+      star5.scale.setTo(starScale[level-1][4]);
 
       star6 = game.add.sprite(starX[level-1][5], starY[level-1][5], 'Star' + '_C' + colorTheme[level-1]);
       star6.fixedToCamera = true;
-      star6.scale.setTo(0.15,0.15);
+      //star6.scale.setTo(0.15,0.15);
+      backgroundGroup.add(star6);
+      star6.scale.setTo(starScale[level-1][5]);
     };
 
     sky = game.add.sprite(skyX[level-1], skyY[level-1], skyImg + '_C' + colorTheme[level-1]);
     sky.fixedToCamera = true;
-    sky.scale.setTo(0.4,0.4);
-    //backgroundGroup.add(sky);
+    //sky.scale.setTo(0.4,0.4);
+    backgroundGroup.add(sky);
 
     game.physics.startSystem(Phaser.Physics.BOX2D);
     game.physics.box2d.gravity.y = gravity;
@@ -320,7 +332,7 @@ var Level3 = {
     timer.start();
 
     downArrow = game.add.sprite(screen1Width*.925,screen1Height*0.08, 'Arrow');
-    downArrow.scale.setTo(24/786,30/1024);
+    //downArrow.scale.setTo(24/786,30/1024);
     downArrow.fixedToCamera = true;
 
     sideCanvas = game.add.graphics(0,0);
@@ -597,21 +609,21 @@ var Level3 = {
       fullScreenButton.scale.setTo(1/zoom);
       evaluateButton.scale.setTo(1/zoom);
 
-      mount1.scale.setTo(0.9/zoom);
-      mount2.scale.setTo(0.9/zoom);
-      mount3.scale.setTo(0.9/zoom);
-      tree1.scale.setTo(0.5/zoom);
-      tree2.scale.setTo(0.5/zoom);
-      tree3.scale.setTo(0.5/zoom);
+      mount1.scale.setTo(1/zoom);
+      mount2.scale.setTo(1/zoom);
+      mount3.scale.setTo(1/zoom);
+      tree1.scale.setTo(1/zoom);
+      tree2.scale.setTo(1/zoom);
+      tree3.scale.setTo(1/zoom);
       groundGraphics.scale.setTo(1/zoom);
-      sky.scale.setTo(0.4/zoom);
-      if (starInd == 1){
-        star1.scale.setTo(0.15/zoom);
-        star2.scale.setTo(0.15/zoom);
-        star3.scale.setTo(0.15/zoom);
-        star4.scale.setTo(0.15/zoom);
-        star5.scale.setTo(0.15/zoom);
-        star6.scale.setTo(0.15/zoom);
+      sky.scale.setTo(1/zoom);
+      if ((starInd[level-1] == 1)&(skyType[level-1] == 2)){
+        star1.scale.setTo(starScale[level-1][0]/zoom);
+        star2.scale.setTo(starScale[level-1][1]/zoom);
+        star3.scale.setTo(starScale[level-1][2]/zoom);
+        star4.scale.setTo(starScale[level-1][3]/zoom);
+        star5.scale.setTo(starScale[level-1][4]/zoom);
+        star6.scale.setTo(starScale[level-1][5]/zoom);
       };
 
       game.world.scale.setTo(zoom);
@@ -782,7 +794,8 @@ var Level3 = {
       if (isDiving == 1){
         downArrow.destroy();
         downArrow = game.add.sprite(screen1Width*.925,screen1Height*0.08, 'Arrow');
-        downArrow.scale.setTo(24/(zoom*786),30/(zoom*1024));
+        //downArrow.scale.setTo(24/(zoom*786),30/(zoom*1024));
+        downArrow.scale.setTo(1/zoom);
         downArrow.fixedToCamera = true;
       } else {
         downArrow.destroy();

@@ -11,7 +11,7 @@ function Squirrel(game, sqImg, boostImg1, boostImg2, boostImg3, initX, initY) {
 
     this.squirrelSprite = game.add.sprite(10, 10, sqImg);
     //this.squirrelSprite.tint = 0xEE2B2A;
-    this.squirrelSprite.scale.setTo(50/415,25/219);
+    //this.squirrelSprite.scale.setTo(50/415,25/219);
     this.game.physics.box2d.enable(this.squirrelSprite);
     this.squirrelSprite.body.setCircle(this._radius*PTM);
     this.squirrelSprite.body.dynamic = true;
