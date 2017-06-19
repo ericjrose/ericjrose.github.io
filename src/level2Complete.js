@@ -24,6 +24,7 @@ var level2Complete = {
       text3.scale.setTo(1/zoom);
 
       //console.log(prevDataLength);
+      window.sendPcaTrim();
       var newData = [];
       var newTraining = [];
       var newY = [];

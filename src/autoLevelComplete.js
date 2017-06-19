@@ -18,6 +18,7 @@ var autoLevelComplete = {
       text.scale.setTo(1/zoom);
       countdownText.scale.setTo(1/zoom);
 
+      window.sendPcaTrim();
       var newData = [];
       var newTraining = [];
       var newY = [];
