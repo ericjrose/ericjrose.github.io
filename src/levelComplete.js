@@ -21,6 +21,7 @@ var levelComplete = {
       text2.scale.setTo(1/zoom);
       text2.fixedToCamera = true;
 
+      window.sendPcaTrim();
       var newData = [];
       var newTraining = [];
       var newY = [];

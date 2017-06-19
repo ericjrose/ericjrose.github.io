@@ -85,6 +85,29 @@ var snakeSound;
 
 var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Ang to Snake","No Acorns","Dist to Acorn","Ang to Acorn","Chng X Dive"];
 
+{ // create pca webworker
+  window.pcaWorker = new Worker('src/pca-webworker.js');
+
+  window.pComp = null;
+
+  window.pcaWorker.onmessage = function (e) {
+    window.pComp = e.data;
+  };
+
+  window.sendPcaData = function sendPcaData(featureRow) {
+    window.pcaWorker.postMessage({
+      type: 'data',
+      data: featureRow
+    });
+  };
+
+  window.sendPcaTrim = function sendPcaTrim() {
+    window.pcaWorker.postMessage({
+      type: 'reset'
+    });
+  };
+}
+
 var Level1 = {
   preload: function(){
     game.load.image('Squirrel', 'imgs/cape.png');
@@ -871,6 +894,7 @@ var Level1 = {
       currFeatures = player.stateToFeatures();
       machine.learn(currFeatures, isDiving);
       predict = machine.classify(currFeatures, canBoost, canPara);
+      window.sendPcaData(currFeatures);
       X.push(currFeatures);
       currData = [];
       currData.push(isDiving);
@@ -925,7 +949,10 @@ var Level1 = {
       prevText.text = 'Prevalence: ' + prev;
     }
 
-    if (counter % 300 == 0){
+    var pc2 = window.pComp;
+    if (pc2 !== null) {
+      window.pComp = null;
+
       pcaGraphics.destroy();
       points.destroy();
       if (pca0Text != null){
@@ -955,8 +982,6 @@ var Level1 = {
       points.beginFill(0xff0000);
       points.lineStyle(2, 0xff0000 , 1);
 
-      pc = pca(X);
-      pc2 = pcaReduce(pc, 2);
       col0 = pc2.map(function(value,index) { return value[0]; });
       col1 = pc2.map(function(value,index) { return value[1]; });
       dim0 = numeric.dot(col0, currFeatures);
@@ -1058,7 +1083,7 @@ var Level1 = {
       statGroup.add(pca17Text);
       statGroup.add(pca18Text);
       statGroup.add(pca19Text);
-    };
+    } // end if training (mcoleman)
 
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
   },

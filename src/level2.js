@@ -722,6 +722,7 @@ var Level2 = {
       currFeatures = player.stateToFeatures();
       machine.learn(currFeatures, isDiving);
       predict = machine.classify(currFeatures, canBoost, canPara);
+      window.sendPcaData(currFeatures);
       X.push(currFeatures);
       currData = [];
       currData.push(isDiving);
@@ -775,7 +776,10 @@ var Level2 = {
       prevText.text = 'Prevalence: ' + prev;
     };
 
-    if (counter % 300 == 0){
+    var pc2 = window.pComp;
+    if (pc2 !== null){
+      window.pComp = null;
+
       pcaGraphics.destroy();
       points.destroy();
       if (pca0Text != null){
@@ -805,8 +809,6 @@ var Level2 = {
       points.beginFill(0xff0000);
       points.lineStyle(2, 0xff0000 , 1);
 
-      pc = pca(X);
-      pc2 = pcaReduce(pc, 2);
       col0 = pc2.map(function(value,index) { return value[0]; });
       col1 = pc2.map(function(value,index) { return value[1]; });
       dim0 = numeric.dot(col0, currFeatures);
