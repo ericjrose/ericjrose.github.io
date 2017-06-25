@@ -163,8 +163,8 @@ Player.prototype.stateToFeatures = function() {
   features.push((diffDiveX-1.1)/2.3);
 
   altitude = squirrelY/PTM - hillY;
-  features.push(altitude);
-  
+  features.push((altitude+18)/16);
+
   // if (prevAction == this.prevAction){
   //   this.consecActions += 1;
   // } else {
