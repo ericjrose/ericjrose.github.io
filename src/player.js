@@ -8,6 +8,8 @@ function Player(game, squirrel, terrain, level){
   this.squirrel = squirrel;
   this.terrain = terrain;
   this.level = level;
+  //this.prevAction = 0;
+  //this.consecActions = 0;
 };
 
 Player.prototype.stateToFeatures = function() {
@@ -159,6 +161,18 @@ Player.prototype.stateToFeatures = function() {
   diffDiveX = chngXNoDive - chngXDive;
   //console.log('Diff X Vel Dive: ' + diffDiveX);
   features.push((diffDiveX-1.1)/2.3);
+
+  altitude = squirrelY/PTM - hillY;
+  features.push(altitude);
+  
+  // if (prevAction == this.prevAction){
+  //   this.consecActions += 1;
+  // } else {
+  //   this.consecActions = 0;
+  // }
+  // features.push(this.consecActions);
+  // this.prevAction = prevAction;
+
 
   //On ground
 

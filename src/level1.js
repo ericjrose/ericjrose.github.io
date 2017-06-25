@@ -83,7 +83,8 @@ var boostSound;
 var acornSound;
 var snakeSound;
 
-var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Ang to Snake","No Acorns","Dist to Acorn","Ang to Acorn","Chng X Dive"];
+var covarNames = ["Grounded","X Vel","Y Vel","Vel","Sq Angle","Deriv 1","Ang to Knot 1","Deriv 2","Ang to Knot 2","Deriv 3","Ang to Knot 3","Dist to Valley","Dist to Apex","No Snakes","Dist to Snake","Ang to Snake","No Acorns","Dist to Acorn","Ang to Acorn","Chng X Dive","Altitude"];
+var numFeatures = 21;
 
 { // create pca webworker
   window.pcaWorker = new Worker('src/pca-webworker.js');
@@ -819,6 +820,7 @@ var Level1 = {
       pca17Text.scale.setTo(1/zoom);
       pca18Text.scale.setTo(1/zoom);
       pca19Text.scale.setTo(1/zoom);
+      pca20Text.scale.setTo(1/zoom);
     };
 
     text.scale.setTo(1/zoom);
@@ -976,6 +978,7 @@ var Level1 = {
         pca17Text.destroy();
         pca18Text.destroy();
         pca19Text.destroy();
+        pca20Text.destroy();
       }
 
       points = game.add.graphics(0,0);
@@ -1035,6 +1038,7 @@ var Level1 = {
       pca17Text = game.add.text(screen1Width + pc2[17][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[17][1]*plotDim/2 + screen3Height*0.5, covarNames[17],{fontSize: '10px', fill: '0x000000'});
       pca18Text = game.add.text(screen1Width + pc2[18][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[18][1]*plotDim/2 + screen3Height*0.5, covarNames[18],{fontSize: '10px', fill: '0x000000'});
       pca19Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[19][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
+      pca20Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[20][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
       pcaGraphics.endFill();
 
       pcaGraphics.fixedToCamera = true;
@@ -1059,6 +1063,7 @@ var Level1 = {
       pca17Text.fixedToCamera = true;
       pca18Text.fixedToCamera = true;
       pca19Text.fixedToCamera = true;
+      pca20Text.fixedToCamera = true;
 
 
       statGroup.add(pcaGraphics);
@@ -1083,6 +1088,7 @@ var Level1 = {
       statGroup.add(pca17Text);
       statGroup.add(pca18Text);
       statGroup.add(pca19Text);
+      statGroup.add(pca20Text);
     } // end if training (mcoleman)
 
     //game.camera.focusOnXY(squirrel._body.x + 300.0, squirrel._body.y);
