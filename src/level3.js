@@ -983,7 +983,7 @@ var Level3 = {
         pca17Text = game.add.text(screen1Width + pc2[17][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[17][1]*plotDim/2 + screen3Height*0.5, covarNames[17],{fontSize: '10px', fill: '0x000000'});
         pca18Text = game.add.text(screen1Width + pc2[18][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[18][1]*plotDim/2 + screen3Height*0.5, covarNames[18],{fontSize: '10px', fill: '0x000000'});
         pca19Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[19][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
-        pca20Text = game.add.text(screen1Width + pc2[19][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[20][1]*plotDim/2 + screen3Height*0.5, covarNames[19],{fontSize: '10px', fill: '0x000000'});
+        pca20Text = game.add.text(screen1Width + pc2[20][0]*plotDim/2 + screen3Width*0.5, screen2Height - pc2[20][1]*plotDim/2 + screen3Height*0.5, covarNames[20],{fontSize: '10px', fill: '0x000000'});
         pcaGraphics.endFill();
 
         pcaGraphics.fixedToCamera = true;
