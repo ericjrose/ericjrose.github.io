@@ -41,8 +41,8 @@ var Level2 = {
     game.load.image('boost3', 'imgs/rocket_3.png');
     game.load.image('Acorn', 'imgs/acorn2.png');
 
-    game.load.audio('BoostSound', 'sounds/boost_explosion.wav');
-    game.load.audio('AcornSound', 'sounds/collect_coin3.wav');
+    game.load.audio('BoostSound', 'sounds/jetpack 4.mp3');
+    game.load.audio('AcornSound', 'sounds/acorn 1.mp3');
   },
   create: function(){
     backgroundWidth = 2735;

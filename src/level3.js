@@ -50,8 +50,8 @@ var Level3 = {
   preload: function(){
     game.load.image('Snake', 'imgs/Snake.png')
 
-    game.load.audio('LiftSound', 'sounds/Lift_Dodge.mp3');
-    game.load.audio('SnakeSound', 'sounds/Eat_Apple.mp3');
+    game.load.audio('LiftSound', 'sounds/the lift 7.mp3');
+    game.load.audio('SnakeSound', 'sounds/snake 1.mp3');
 
   },
   create: function(){
