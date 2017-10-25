@@ -24,9 +24,7 @@ var credits = {
 
     text1 = game.add.text(250, 230, "Eric Rose", {fontSize: '30px', fill: "#FFF", align: "center"});
     text2 = game.add.text(250, 270, "Graphics: Lisa Wong", {fontSize: '30px', fill: "#FFF", align: "center"});
-    text3 = game.add.text(250, 310, "Music: Wallpaper - Kevin MacLoed (incompetech.com)", {fontSize: '30px', fill: "#FFF", align: "center"});
-    text4 = game.add.text(250, 350, "Licensed under Creative Commons: By Attribution 3.0 License", {fontSize: '30px', fill: "#FFF", align: "center"});
-    text5 = game.add.text(250, 390, "http://creativecommons.org/licenses/by/3.0/", {fontSize: '30px', fill: "#FFF", align: "center"});
+    text3 = game.add.text(250, 310, "Music: Kamaria Fyffe", {fontSize: '30px', fill: "#FFF", align: "center"});
     text6 = game.add.text(250, 470, "Press ENTER or click the screen to return to the menu", {fontSize: '30px', fill: "#FFF", align: "center"});
   }
 };
