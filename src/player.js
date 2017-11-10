@@ -8,12 +8,16 @@ function Player(game, squirrel, terrain, level){
   this.squirrel = squirrel;
   this.terrain = terrain;
   this.level = level;
+  //this.prevFeatures = [];
+  this.prevFeatures = Array.apply(null, new Array(3*numFeatures)).map(Number.prototype.valueOf,0);
   //this.prevAction = 0;
   //this.consecActions = 0;
 };
 
 Player.prototype.stateToFeatures = function() {
-  features = [];
+
+  features = this.prevFeatures.slice(-2*numFeatures)
+  //features = [];
 
   squirrelX = this.squirrel.getPositionX();
   squirrelY = this.squirrel.getPositionY();
@@ -196,6 +200,7 @@ Player.prototype.stateToFeatures = function() {
   // console.log(this.terrain.hillFn.at(futureSquirrelX/PTM)*PTM);
   //diveLandingPoint =
 
+  this.prevFeatures = features;
   return features;
 
 };
