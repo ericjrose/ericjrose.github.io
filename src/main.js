@@ -22,6 +22,7 @@ game.state.add('tutorialComplete', tutorialComplete);
 game.state.add('Level1', Level1);
 game.state.add('Level2', Level2);
 game.state.add('Level3', Level3);
+game.state.add('TestAI', TestAI);
 game.state.add('Level', Level);
 game.state.add('menu', menu);
 game.state.add('levelFailed', levelFailed);
@@ -29,6 +30,7 @@ game.state.add('level1Complete', level1Complete);
 game.state.add('level2Complete', level2Complete);
 game.state.add('level3Complete', level3Complete);
 game.state.add('levelComplete', levelComplete);
+game.state.add('testAIComplete', testAIComplete);
 game.state.add('autoLevelComplete', autoLevelComplete);
 
 game.state.start('menu');

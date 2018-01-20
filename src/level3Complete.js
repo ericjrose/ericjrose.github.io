@@ -66,5 +66,8 @@ var level3Complete = {
       level += 1;
       game.state.start('Level');
     }
+    if (game.input.keyboard.isDown(Phaser.Keyboard.T)) {
+      game.state.start('TestAI');
+    }
   }
 };

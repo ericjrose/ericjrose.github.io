@@ -1,9 +1,11 @@
-var levelComplete = {
+var testAIComplete = {
   preload: function() {
       game.stage.backgroundColor = '#000000';
       game.load.image('backgroundImg','imgs/Flying Squirrel Title Screen L0.png')
   },
   create: function() {
+      training = true;
+
       game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
       keyF = game.input.keyboard.addKey(Phaser.Keyboard.F);
       keyF.onDown.add(goFull, this);
@@ -14,8 +16,9 @@ var levelComplete = {
 
       //game.add.tileSprite(0,0, game.width, game.height, 'levelFailed');
 
-      text1 = game.add.text(400, 300, "Level "+ level + " Complete", {fontSize: '48px', fill: "#FFF", align: "center"});
-      text2 = game.add.text(390, 380, "Press ENTER to Start the Next Level", {fontSize: '24px', fill: "#FFF", align: "center"});
+      text1 = game.add.text(400, 300, "Time Left: " + minutesRemaining.substr(-2) + ":" + secondsRemaining.substr(-2), {fontSize: '48px', fill: "#FFF", align: "center"});
+      text1 = game.add.text(250, 380, "Percentage of Time Diving: " + (framesDiving/totalFrames).toFixed(3), {fontSize: '48px', fill: "#FFF", align: "center"});
+      text2 = game.add.text(390, 480, "Press ENTER to Start the Next Level", {fontSize: '24px', fill: "#FFF", align: "center"});
       text1.scale.setTo(1/zoom);
       text1.fixedToCamera = true;
       text2.scale.setTo(1/zoom);
@@ -63,11 +66,16 @@ var levelComplete = {
   },
   update: function() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {
-      level += 1;
-      game.state.start('Level');
-    }
-    if (game.input.keyboard.isDown(Phaser.Keyboard.T)) {
-      game.state.start('TestAI');
+      if (level == 1){
+        level = 2;
+        game.state.start('Level2');
+      } else if (level == 2){
+        level = 3;
+        game.state.start('Level3');
+      } else {
+        level += 1;
+        game.state.start('Level');
+      }
     }
   }
 };
