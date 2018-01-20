@@ -17,7 +17,7 @@ var testAIComplete = {
       //game.add.tileSprite(0,0, game.width, game.height, 'levelFailed');
 
       text1 = game.add.text(400, 300, "Time Left: " + minutesRemaining.substr(-2) + ":" + secondsRemaining.substr(-2), {fontSize: '48px', fill: "#FFF", align: "center"});
-      text1 = game.add.text(250, 380, "Percentage of Time Diving: " + (framesDiving/totalFrames).toFixed(3), {fontSize: '48px', fill: "#FFF", align: "center"});
+      text1 = game.add.text(250, 380, "Percentage of Time Diving: " + (framesDiving/totalFramesAI).toFixed(3), {fontSize: '48px', fill: "#FFF", align: "center"});
       text2 = game.add.text(390, 480, "Press ENTER to Start the Next Level", {fontSize: '24px', fill: "#FFF", align: "center"});
       text1.scale.setTo(1/zoom);
       text1.fixedToCamera = true;

@@ -1,7 +1,7 @@
 var minutesRemaining;
 var secondsRemaining;
 var framesDiving;
-var totalFrames;
+var totalFramesAI;
 
 var TestAI = {
   preload: function(){
@@ -10,7 +10,7 @@ var TestAI = {
     console.log(level);
 
     framesDiving = 0;
-    totalFrames = 0;
+    totalFramesAI = 0;
 
     backgroundWidth = 2735;
     backgroundHeight = 2305;
@@ -740,7 +740,7 @@ var TestAI = {
         }
       };
 
-      totalFrames += 1;
+      totalFramesAI += 1;
 
       if (isDiving == 1){
         downArrow.destroy();
